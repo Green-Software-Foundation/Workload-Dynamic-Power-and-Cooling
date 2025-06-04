@@ -10,11 +10,7 @@ This standard defines communication protocols, hardware interfaces, and operatio
 
 The standard applies to data centers with power capacities from 1MW to 1000MW+, supporting traditional cloud workloads, high-performance computing, and AI/ML training and inference operations. It covers single-phase and two-phase liquid cooling systems, battery energy storage integration, and district heating network interfaces.
 
-**In Scope:** Communication protocols between software workloads and infrastructure controllers; hardware interface specifications for power, thermal, and monitoring systems; grid operator integration for demand response and renewable energy coordination; municipal heat network integration protocols; security and authentication frameworks for critical infrastructure communications; conformance testing and certification procedures.
-
-**Out of Scope:** Electrical safety standards for high-voltage systems (refer to IEC 61936); mechanical design specifications for cooling system components (refer to ASHRAE standards); grid interconnection technical requirements (refer to IEEE 1547); building codes and municipal heating system design standards; cybersecurity frameworks for operational technology networks (refer to NIST guidelines); environmental compliance and refrigerant regulations (refer to local environmental authorities).
-
-### 1.2 Purpose
+### Purpose
 
 This standard addresses critical challenges arising from the rapid deployment of high-power-density computational workloads, particularly artificial intelligence and machine learning applications, which create unprecedented operational demands on data center infrastructure and electrical grid systems. Modern AI training workloads can generate power swings exceeding 200 megawatts within 40-millisecond timeframes, creating grid-destabilizing events that threaten electrical system stability and impose significant costs on utility operators. Traditional data center infrastructure operates reactively, responding to power and thermal events after they occur, resulting in inefficient resource utilization, increased energy consumption, and missed opportunities for renewable energy integration.
 
@@ -22,9 +18,9 @@ The DCPI standard establishes a proactive, intelligence-driven approach that ena
 
 The standard's implementation supports three primary objectives: **Grid Stability and Integration** - eliminating power quality issues while enabling data centers to participate in grid services and renewable energy markets; **Infrastructure Efficiency** - reducing parasitic power consumption from cooling systems while extending equipment lifecycle through predictive thermal management; and **Environmental Sustainability** - maximizing renewable energy utilization, enabling waste heat recovery for municipal use, and reducing overall carbon footprint through intelligent workload scheduling aligned with grid carbon intensity.
 
-## 2. Architecture Overview
+## Architecture Overview
 
-### 2.1 System Components
+### System Components
 
 The DCPI architecture consists of interconnected components that enable seamless communication between computational workloads and physical infrastructure systems. **Application Workloads** represent the computational processes (AI training jobs, inference engines, traditional cloud services) that generate power and thermal demands; these workloads implement DCPI-WL protocol endpoints to announce their resource requirements, timing constraints, and operational flexibility. The **DCPI Controller Hub** serves as the central intelligence layer, hosting three specialized modules: the **Power Management Module** coordinates electrical load balancing, battery storage operations, and grid interface signaling; the **Thermal Management Module** orchestrates cooling system operations, heat recovery processes, and temperature optimization across single-phase and two-phase liquid cooling systems; and the **Energy Storage Module** manages battery charge/discharge cycles, peak shaving operations, and grid services participation.
 
@@ -32,7 +28,28 @@ External integration occurs through standardized interfaces: the **Grid Operator
 
 The architecture employs a federated control model where the DCPI Controller Hub maintains autonomous operation capabilities while participating in broader grid and municipal coordination activities. This design ensures system resilience through graceful degradation when external communications are interrupted, while maximizing efficiency and sustainability benefits when full system integration is available.
 
-### 2.2 Communication Layers
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Application   │    │  Grid Operator  │    │  Municipal      │
+│   Workloads     │    │   Interface     │    │  Heat Network   │
+└─────────┬───────┘    └─────────┬───────┘    └─────────┬───────┘
+          │                      │                      │
+          │ DCPI-WL              │ DCPI-GRID           │ DCPI-HEAT
+          │                      │                      │
+┌─────────▼──────────────────────▼──────────────────────▼───────┐
+│                DCPI Controller Hub                            │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐             │
+│  │Power Mgmt   │ │Thermal Mgmt │ │Energy Store │             │
+│  │  Module     │ │   Module    │ │   Module    │             │
+│  └─────────────┘ └─────────────┘ └─────────────┘             │
+└─────────┬──────────────────────────────────────────────────────┘
+          │ DCPI-HW
+          │
+┌─────────▼───────┐  ┌─────────────┐  ┌─────────────┐
+│ Cooling Systems │  │Power Systems│  │ Monitoring  │
+│   (Liquid/Air)  │  │  (UPS/Batt) │  │ Sensors     │
+└─────────────────┘  └─────────────┘  └─────────────┘
+
+### Communication Layers
 
 **Layer 1: Physical Interface (DCPI-HW)**
 - Hardware abstraction for cooling, power, and monitoring systems
@@ -47,11 +64,11 @@ The architecture employs a federated control model where the DCPI Controller Hub
 - Municipal system interfaces (DCPI-HEAT)
 - Workload interfaces (DCPI-WL)
 
-## 3. Core Protocols
+## Core Protocols
 
-### 3.1 Workload Signaling Protocol (DCPI-WL)
+### Workload Signalling Protocol (DCPI-WL)
 
-#### 3.1.1 Workload Announcement Message
+#### Workload Announcement Message
 ```json
 {
   "dcpi_version": "1.0",
@@ -80,7 +97,7 @@ The architecture employs a federated control model where the DCPI Controller Hub
 }
 ```
 
-#### 3.1.2 Infrastructure Response Message
+#### Infrastructure Response Message
 ```json
 {
   "dcpi_version": "1.0",
@@ -104,9 +121,9 @@ The architecture employs a federated control model where the DCPI Controller Hub
 }
 ```
 
-### 3.2 Power Management Protocol (DCPI-PWR)
+### Power Management Protocol (DCPI-PWR)
 
-#### 3.2.1 Real-time Power Control
+#### Real-time Power Control
 ```json
 {
   "dcpi_version": "1.0",
@@ -130,9 +147,9 @@ The architecture employs a federated control model where the DCPI Controller Hub
 }
 ```
 
-### 3.3 Thermal Management Protocol (DCPI-THERM)
+### Thermal Management Protocol (DCPI-THERM)
 
-#### 3.3.1 Cooling System Coordination
+#### Cooling System Coordination
 ```json
 {
   "dcpi_version": "1.0",
@@ -157,11 +174,11 @@ The architecture employs a federated control model where the DCPI Controller Hub
 }
 ```
 
-## 4. Hardware Interface Specifications
+## Hardware Interface Specifications
 
-### 4.1 Extended BMC Requirements
+### Extended BMC Requirements
 
-#### 4.1.1 Mandatory DCPI Endpoints
+#### Mandatory DCPI Endpoints
 All DCPI-compliant BMCs must implement:
 
 ```
@@ -173,24 +190,24 @@ GET /redfish/v1/dcpi/grid/status
 POST /redfish/v1/dcpi/grid/signal
 ```
 
-#### 4.1.2 Power Monitoring Extensions
+#### Power Monitoring Extensions
 - Sub-second power measurement capability (≤100ms intervals)
 - Power quality monitoring (THD, power factor)
 - Predictive load analytics
 
-#### 4.1.3 Thermal Interface Extensions
+#### Thermal Interface Extensions
 - Real-time coolant temperature and flow monitoring
 - Phase-change detection for two-phase systems
 - Heat recovery system integration points
 
-### 4.2 Liquid Cooling Interface Standards
+### Liquid Cooling Interface Standards
 
-#### 4.2.1 Connector Specifications
+#### Connector Specifications
 - **Single-phase systems:** G1/2" threaded connections with DCPI sensor integration
 - **Two-phase systems:** Custom quick-disconnect with vapor return monitoring
 - **Municipal interface:** DN50 flanged connections with smart flow control
 
-#### 4.2.2 Sensor Requirements
+#### Sensor Requirements
 ```yaml
 temperature_sensors:
   inlet: ±0.1°C accuracy, 1Hz minimum sampling
@@ -208,11 +225,11 @@ pressure_sensors:
   temperature_compensation: true
 ```
 
-## 5. Grid Integration Protocol (DCPI-GRID)
+## Grid Integration Protocol (DCPI-GRID)
 
-### 5.1 Grid Operator Interface
+### Grid Operator Interface
 
-#### 5.1.1 Load Forecast Sharing
+#### Load Forecast Sharing
 ```json
 {
   "dcpi_version": "1.0",
@@ -238,7 +255,7 @@ pressure_sensors:
 }
 ```
 
-#### 5.1.2 Demand Response Integration
+#### Demand Response Integration
 ```json
 {
   "dcpi_version": "1.0",
@@ -253,18 +270,18 @@ pressure_sensors:
 }
 ```
 
-### 5.2 Battery Energy Storage Integration
+### Battery Energy Storage Integration
 
-#### 5.2.1 Peak Shaving Protocol
+#### Peak Shaving Protocol
 - Automatic battery discharge during workload spikes >threshold
 - Grid-friendly power delivery with configurable ramp rates
 - State-of-charge management for grid services
 
-## 6. Municipal Heat Integration (DCPI-HEAT)
+## Municipal Heat Integration (DCPI-HEAT)
 
-### 6.1 District Heating Interface
+### District Heating Interface
 
-#### 6.1.1 Heat Network Signaling
+#### Heat Network Signaling
 ```json
 {
   "dcpi_version": "1.0",
@@ -279,7 +296,7 @@ pressure_sensors:
 }
 ```
 
-#### 6.1.2 Municipal Heat Demand Response
+#### Municipal Heat Demand Response
 ```json
 {
   "dcpi_version": "1.0",
@@ -294,26 +311,26 @@ pressure_sensors:
 }
 ```
 
-## 7. Security Considerations
+## Security Considerations
 
-### 7.1 Authentication and Authorization
+### Authentication and Authorization
 - mTLS for all DCPI communications
 - Role-based access control (workload operators, infrastructure managers, grid operators)
 - Hardware security module (HSM) integration for critical operations
 
-### 7.2 Data Integrity
+### Data Integrity
 - Message signing using Ed25519 signatures
 - Replay attack prevention with timestamp validation
 - Encrypted storage of sensitive operational data
 
-### 7.3 Availability and Resilience
+### Availability and Resilience
 - Graceful degradation when DCPI services are unavailable
 - Local override capabilities for safety-critical operations
 - Distributed controller architecture with consensus protocols
 
-## 8. Implementation Guidelines
+## Implementation Guidelines
 
-### 8.1 Phased Deployment Approach
+### Phased Deployment Approach
 
 **Phase 1: Basic Power Signaling**
 - Implement workload announcement and infrastructure response
@@ -330,37 +347,37 @@ pressure_sensors:
 - Municipal heat network integration
 - Advanced demand response participation
 
-### 8.2 Backward Compatibility
+### Backward Compatibility
 - Legacy systems operate normally when DCPI is unavailable
 - Gradual migration path from existing BMC implementations
 - Configurable feature enablement
 
-### 8.3 Testing and Validation
+### Testing and Validation
 
-#### 8.3.1 Conformance Testing
+#### Conformance Testing
 - Reference implementation test suite
 - Hardware compatibility testing framework
 - Interoperability certification process
 
-#### 8.3.2 Performance Benchmarks
+#### Performance Benchmarks
 - Sub-second response time validation
 - Power quality impact assessment
 - Thermal efficiency measurements
 
-## 9. Compliance and Certification
+## Compliance and Certification
 
-### 9.1 Certification Levels
+### Certification Levels
 
 **DCPI-Basic:** Power signaling and basic thermal management
 **DCPI-Advanced:** Grid integration and demand response
 **DCPI-Premium:** Municipal heat integration and full optimization
 
-### 9.2 Testing Requirements
+### Testing Requirements
 - Functional testing of all protocol endpoints
 - Load testing under realistic AI workload scenarios
 - Safety testing for thermal and electrical systems
 
-## 10. Conclusion
+## Conclusion
 
 The DCPI standard provides a comprehensive framework for transforming data centers from passive power consumers into intelligent, grid-friendly infrastructure. By enabling real-time communication between workloads, infrastructure, and external systems, DCPI addresses the challenges of modern AI computing while creating opportunities for renewable energy optimization and waste heat recovery.
 
