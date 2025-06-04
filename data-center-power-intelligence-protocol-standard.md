@@ -95,29 +95,23 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 The DCPI system shall implement a federated control architecture consisting of the components specified in 5.1.1 to 5.1.4.
 
 #### Workload interface layer
-
 The workload interface layer shall provide communication endpoints enabling computational workloads to signal power requirements, timing constraints, and operational flexibility to infrastructure management systems.
 
 #### Infrastructure control layer
-
 The infrastructure control layer shall coordinate power management, thermal management, and energy storage operations based on workload signals and external system requirements.
 
 #### External integration layer
-
 The external integration layer shall provide interfaces for grid operator coordination, municipal utility integration, and renewable energy optimization.
 
 #### Hardware abstraction layer
-
 The hardware abstraction layer shall provide standardized interfaces for monitoring and control of power systems, cooling systems, and environmental sensors.
 
 ### Communication requirements
 
 #### Protocol specifications
-
 All DCPI communications shall utilize structured message formats based on JSON (JavaScript Object Notation) syntax conforming to IETF RFC 7159.
 
 #### Temporal requirements
-
 DCPI systems shall meet the temporal requirements specified in Table 1.
 
 **Temporal requirements for DCPI operations**
