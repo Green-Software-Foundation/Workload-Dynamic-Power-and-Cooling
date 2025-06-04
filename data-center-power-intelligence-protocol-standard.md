@@ -54,7 +54,7 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 
 — IEC Electropedia: available at https://www.electropedia.org/
 
-**Table — Terms and definitions**
+**Terms and definitions**
 
 | Term | Definition | Notes |
 |---|---|---|
@@ -73,7 +73,7 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 
 ## Abbreviated terms
 
-**Table — Abbreviated terms**
+**Abbreviated terms**
 
 | Abbreviation | Full term |
 |---|---|
