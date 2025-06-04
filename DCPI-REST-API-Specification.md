@@ -1,4 +1,4 @@
-# DCPI REST API Specification v1.0
+# DCPI REST API Specification vx.y
 
 ## Authentication
 
