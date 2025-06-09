@@ -1,4 +1,4 @@
-# DCPI REST API Specification vx.y
+# PIMP REST API Specification vx.y
 
 ## Authentication
 
