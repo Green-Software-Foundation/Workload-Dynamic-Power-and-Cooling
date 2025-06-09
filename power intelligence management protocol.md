@@ -13,25 +13,7 @@ The protocol addresses three primary objectives: elimination of grid-destabilizi
 
 ## 1 Scope
 
-This document specifies communication protocols, hardware interfaces, and operational procedures for intelligent coordination between computational workloads and data center infrastructure systems.
-
-This document covers:
-
-a) real-time power management signaling, including workload power profiling, infrastructure capacity negotiation, and grid-compatible load smoothing;
-
-b) advanced thermal management coordination for air-based and liquid-based cooling systems;
-
-c) integration interfaces with electrical grid operators and municipal utility networks;
-
-d) optimization frameworks for renewable energy utilization and waste heat recovery;
-
-e) security frameworks for critical infrastructure communications;
-
-f) conformance testing and certification procedures.
-
-This document applies to data centers with power capacities from 1 MW to 1 000 MW, supporting cloud computing workloads, high-performance computing applications, and AI/ML training and inference operations.
-
-This document covers single-phase and two-phase liquid cooling systems, battery energy storage integration, and district heating network interfaces.
+This document specifies communication protocols, hardware interfaces, and operational procedures for intelligent coordination between computational workloads and data center infrastructure systems, covering real-time power management signaling including workload power profiling, infrastructure capacity negotiation, and grid-compatible load smoothing; advanced thermal management coordination for air-based and liquid-based cooling systems; integration interfaces with electrical grid operators and municipal utility networks; optimization frameworks for renewable energy utilization and waste heat recovery; security frameworks for critical infrastructure communications; and conformance testing and certification procedures. The specification applies to data centers with power capacities from 1 MW to 1,000 MW supporting cloud computing workloads, high-performance computing applications, and AI/ML training and inference operations, encompassing single-phase and two-phase liquid cooling systems, battery energy storage integration, and district heating network interfaces to enable transformation of data centers from unpredictable power consumers into intelligent grid assets capable of coordinated infrastructure management, renewable energy optimization, and municipal utility partnership.
 
 This document does not cover:
 
