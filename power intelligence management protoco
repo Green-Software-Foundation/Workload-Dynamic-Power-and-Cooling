@@ -1,3 +1,4 @@
+# Power Intelligence Management Protocol
 ## Introduction
 
 Modern computational workloads, particularly artificial intelligence (AI) and machine learning (ML) applications, create unprecedented operational demands on data center infrastructure and electrical grid systems. AI training workloads can generate power fluctuations exceeding 200 MW within temporal intervals of 40 ms, creating grid-destabilizing events that threaten electrical system stability.
