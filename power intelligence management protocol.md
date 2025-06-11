@@ -1,5 +1,14 @@
-# Power Source to Workload Dynamics (PSWD) — Communication protocols for intelligent coordination between computational workloads and energy infrastructure
+# Power Source to Workload Dynamics (PSWD) 
 
+## Introduction
+Modern artificial intelligence (AI) and machine learning (ML) workloads create unprecedented challenges for data center infrastructure and electrical grids. AI training applications can generate power fluctuations exceeding 200 MW within 40 ms intervals, creating grid-destabilizing events equivalent to a quarter-million people suddenly appearing on the electrical grid.
+Traditional data center infrastructure operates reactively, responding to power and thermal events after occurrence. Current communication approaches rely on RESTful API patterns inadequate for sub-second response requirements at megawatt scales. Grid operators operate with limited real-time visibility into data center consumption patterns, relying on 24-hour predictive models 
+that prevent effective coordination with renewable energy availability.
+
+This Technical Specification establishes the Power Source to Workload Dynamics (PSWD) framework for intelligent coordination between computational workloads, infrastructure systems, and external utility networks. PSWD transforms data centers from passive power consumers into intelligent grid assets capable of demand response services, renewable energy optimization, and municipal waste heat recovery.
+
+The framework addresses three primary objectives: elimination of grid-destabilizing power events while enabling grid services participation; reduction of parasitic power consumption through predictive thermal management; and maximization of renewable energy utilization through intelligent workload scheduling coordinated with grid carbon intensity.
+PSWD establishes standardized communication protocols, hardware interface requirements, and security frameworks for coordinated infrastructure management across traditional organizational boundaries, requiring cooperation between software engineering, hardware manufacturing, power systems engineering, and municipal utility management sectors.
 
 ## 1 Scope
 
