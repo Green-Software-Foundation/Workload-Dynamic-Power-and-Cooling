@@ -1,4 +1,4 @@
-# PIMP REST API Specification vx.y
+# PSWD REST API Specification vx.y
 
 ## Authentication
 
