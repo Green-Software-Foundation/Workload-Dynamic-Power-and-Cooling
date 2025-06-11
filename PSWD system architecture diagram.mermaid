@@ -1,145 +1,95 @@
 ```mermaid
-graph TB
-    %% External Systems
+flowchart TD
+    %% Start
+    START([🚀 Start PSWD])
+    
+    %% Authentication
+    AUTH[🔐 Authenticate<br/>JWT + Role Assignment]
+    
+    %% Workload Management
+    ANNOUNCE[📢 Workload Announcement<br/>Power Profile + Requirements]
+    CHECK[🔍 Infrastructure Check<br/>Capacity + Grid Status]
+    APPROVE{Approve<br/>Workload?}
+    
+    %% Execution Phase
+    EXECUTE[⚡ Execute Workload<br/>Real-time Monitoring]
+    
+    %% Parallel Real-time Operations
+    subgraph REALTIME[" Real-time Operations "]
+        POWER[⚡ Power Monitoring<br/>100ms Resolution]
+        BATTERY[🔋 Battery Smoothing<br/>250ms Response]
+        THERMAL[🌡️ Thermal Control<br/>1s Response]
+        GRID[🌐 Grid Coordination<br/>5s Response]
+    end
+    
+    %% External Integration
     subgraph EXTERNAL[" External Systems "]
-        GRID["🌐 Grid Operators<br/>• Load Forecasting<br/>• Demand Response<br/>• IEC 61850-90-4"]
-        MUNICIPAL["🏘️ Municipal Utilities<br/>• District Heating<br/>• Waste Heat Recovery<br/>• 70-90°C Supply"]
-        RENEWABLE["🌱 Renewable Sources<br/>• Solar/Wind Generation<br/>• Carbon Intensity Data<br/>• Generation Forecasts"]
+        DEMAND[📡 Demand Response<br/>Grid Operator]
+        MUNICIPAL[🏘️ Municipal Heat<br/>Waste Recovery]
+        CARBON[🌱 Carbon Optimization<br/>Renewable Energy]
     end
-
-    %% PSWD Four-Layer Architecture
-    subgraph PSWD[" PSWD System Architecture "]
-        
-        %% External Integration Layer
-        subgraph EIL[" 🔗 External Integration Layer "]
-            GRID_INT["Grid Integration<br/>• Real-time Coordination<br/>• Demand Response<br/>• Frequency Regulation"]
-            CARBON_OPT["Carbon Optimization<br/>• Renewable Tracking<br/>• Workload Scheduling<br/>• Emissions Reporting"]
-            HEAT_COORD["Heat Coordination<br/>• Municipal Integration<br/>• Temperature Control<br/>• Flow Management"]
-        end
-
-        %% Infrastructure Control Layer
-        subgraph ICL[" 🏗️ Infrastructure Control Layer "]
-            POWER_CTRL["Power Management<br/>• Load Balancing<br/>• Peak Shaving<br/>• Emergency Response"]
-            BATTERY_CTRL["Battery Systems<br/>• Energy Storage<br/>• Load Smoothing<br/>• <250ms Response"]
-            THERMAL_CTRL["Thermal Management<br/>• Cooling Control<br/>• Heat Recovery<br/>• Phase Change"]
-            PREDICT["Predictive Engine<br/>• Load Analytics<br/>• Capacity Planning<br/>• AI Optimization"]
-        end
-
-        %% Hardware Abstraction Layer
-        subgraph HAL[" 🔧 Hardware Abstraction Layer "]
-            BMC["Enhanced BMC<br/>• Redfish Extensions<br/>• Sub-second Monitoring<br/>• Sensor Aggregation"]
-            POWER_MON["Power Monitoring<br/>• 100ms Resolution<br/>• ±0.5% Accuracy<br/>• Quality Metrics"]
-            THERMAL_SEN["Thermal Sensors<br/>• ±0.1°C Temperature<br/>• ±1% Flow Rate<br/>• ±0.25% Pressure"]
-            COOLING_HW["Cooling Hardware<br/>• Single/Two-Phase<br/>• Liquid Circulation<br/>• Heat Exchangers"]
-        end
-
-        %% Workload Interface Layer
-        subgraph WIL[" 💻 Workload Interface Layer "]
-            WORKLOAD_API["Workload API<br/>• Event-driven Messaging<br/>• <500ms Response<br/>• JSON/JWT Security"]
-            SCHEDULER["Scheduler Integration<br/>• Kubernetes<br/>• Resource Managers<br/>• Container Orchestration"]
-            FLEXIBILITY["Flexibility Management<br/>• Throttling Control<br/>• Migration Support<br/>• Priority Handling"]
-        end
-
-    end
-
-    %% Computational Workloads
-    subgraph WORKLOADS[" 🧠 Computational Workloads "]
-        AI_TRAIN["🤖 AI Training<br/>• 200+ MW Swings<br/>• 40ms Transitions<br/>• Critical Priority"]
-        AI_INFER["⚡ AI Inference<br/>• Real-time Serving<br/>• Variable Load<br/>• Low Latency"]
-        HPC["🔬 HPC Applications<br/>• Scientific Computing<br/>• Batch Processing<br/>• Predictable Load"]
-        TRADITIONAL["🖥️ Traditional Compute<br/>• Web Services<br/>• Databases<br/>• Steady State"]
-    end
-
-    %% Physical Infrastructure
-    subgraph PHYSICAL[" ⚙️ Physical Infrastructure "]
-        POWER_DIST["Power Distribution<br/>• 1MW - 1000MW<br/>• Transformers<br/>• UPS Systems"]
-        BATTERY_PHYS["Battery Storage<br/>• Li-ion Arrays<br/>• Inverters<br/>• Safety Systems"]
-        COOLING_SYS["Cooling Systems<br/>• Liquid Loops<br/>• Heat Exchangers<br/>• Municipal Integration"]
-        FACILITIES["Building Systems<br/>• HVAC Integration<br/>• Fire Safety<br/>• Environmental Control"]
-    end
-
-    %% Security Framework (Cross-cutting)
-    subgraph SECURITY[" 🔒 Security Framework "]
-        AUTH["Authentication<br/>• X.509 Certificates<br/>• JWT Tokens<br/>• Role-based Access"]
-        ENCRYPTION["Message Security<br/>• TLS 1.3<br/>• HMAC-SHA256<br/>• Digital Signatures"]
-        NETWORK_SEC["Network Security<br/>• VLAN Isolation<br/>• Intrusion Detection<br/>• Emergency Disconnect"]
-    end
-
-    %% External System Connections
-    GRID <--> GRID_INT
-    MUNICIPAL <--> HEAT_COORD
-    RENEWABLE --> CARBON_OPT
-
-    %% External Integration to Infrastructure Control
-    GRID_INT --> POWER_CTRL
-    CARBON_OPT --> PREDICT
-    HEAT_COORD --> THERMAL_CTRL
-    GRID_INT <--> BATTERY_CTRL
-
-    %% Infrastructure Control Layer Internal
-    POWER_CTRL <--> BATTERY_CTRL
-    POWER_CTRL <--> THERMAL_CTRL
-    PREDICT --> POWER_CTRL
-    PREDICT --> THERMAL_CTRL
-    PREDICT --> BATTERY_CTRL
-
-    %% Infrastructure Control to Hardware Abstraction
-    POWER_CTRL <--> POWER_MON
-    BATTERY_CTRL <--> BMC
-    THERMAL_CTRL <--> THERMAL_SEN
-    THERMAL_CTRL <--> COOLING_HW
-    PREDICT <-- POWER_MON
-    PREDICT <-- THERMAL_SEN
-
-    %% Hardware Abstraction to Physical
-    POWER_MON <--> POWER_DIST
-    BMC <--> BATTERY_PHYS
-    THERMAL_SEN <--> COOLING_SYS
-    COOLING_HW <--> COOLING_SYS
-    THERMAL_SEN <--> FACILITIES
-
-    %% Workload Interface to Infrastructure Control
-    WORKLOAD_API <--> POWER_CTRL
-    WORKLOAD_API <--> THERMAL_CTRL
-    WORKLOAD_API <--> PREDICT
-    SCHEDULER --> WORKLOAD_API
-    FLEXIBILITY --> WORKLOAD_API
-
-    %% Workloads to Interface
-    AI_TRAIN --> WORKLOAD_API
-    AI_INFER --> WORKLOAD_API
-    HPC --> WORKLOAD_API
-    TRADITIONAL --> WORKLOAD_API
-
-    %% Security Integration (Cross-cutting)
-    AUTH -.-> WORKLOAD_API
-    AUTH -.-> GRID_INT
-    ENCRYPTION -.-> WORKLOAD_API
-    ENCRYPTION -.-> GRID_INT
-    NETWORK_SEC -.-> BMC
-    NETWORK_SEC -.-> POWER_MON
-
-    %% Critical Path and Performance Indicators
-    style AI_TRAIN fill:#ff9999,stroke:#ff0000,stroke-width:3px
-    style POWER_MON fill:#ff9999,stroke:#ff0000,stroke-width:2px
-    style BATTERY_CTRL fill:#ff9999,stroke:#ff0000,stroke-width:2px
     
-    style WORKLOAD_API fill:#99ff99,stroke:#00aa00,stroke-width:2px
-    style BMC fill:#99ff99,stroke:#00aa00,stroke-width:2px
-    style THERMAL_SEN fill:#99ff99,stroke:#00aa00,stroke-width:2px
+    %% Completion
+    COMPLETE[🏆 Workload Complete]
+    REPORT[📊 Performance Report<br/>Energy + Carbon Metrics]
+    END([✅ End])
     
-    style GRID fill:#9999ff,stroke:#0000ff,stroke-width:2px
-    style MUNICIPAL fill:#9999ff,stroke:#0000ff,stroke-width:2px
-    style RENEWABLE fill:#9999ff,stroke:#0000ff,stroke-width:2px
+    %% Flow Connections
+    START --> AUTH
+    AUTH --> ANNOUNCE
+    ANNOUNCE --> CHECK
+    CHECK --> APPROVE
     
-    style AUTH fill:#ffff99,stroke:#ffaa00,stroke-width:2px
-    style ENCRYPTION fill:#ffff99,stroke:#ffaa00,stroke-width:2px
-    style NETWORK_SEC fill:#ffff99,stroke:#ffaa00,stroke-width:2px
-
-    %% Response Time Annotations
-    WORKLOAD_API -.- |"<500ms"| POWER_CTRL
-    POWER_MON -.- |"100ms"| PREDICT
-    BATTERY_CTRL -.- |"<250ms"| BATTERY_PHYS
-    THERMAL_CTRL -.- |"<1s"| COOLING_SYS
-    GRID_INT -.- |"<5s"| GRID
+    APPROVE -->|Yes| EXECUTE
+    APPROVE -->|No| ANNOUNCE
+    
+    EXECUTE --> REALTIME
+    
+    %% Real-time Operations Flow
+    POWER --> BATTERY
+    BATTERY --> THERMAL
+    THERMAL --> GRID
+    
+    %% External System Integration
+    GRID --> DEMAND
+    THERMAL --> MUNICIPAL
+    GRID --> CARBON
+    
+    %% Completion Flow
+    REALTIME --> COMPLETE
+    EXTERNAL --> COMPLETE
+    COMPLETE --> REPORT
+    REPORT --> END
+    
+    %% Continuous Loops
+    POWER -.->|Continuous| POWER
+    DEMAND -.->|Grid Events| BATTERY
+    CARBON -.->|Optimization| EXECUTE
+    
+    %% Performance Annotations
+    ANNOUNCE -.->|"<500ms"| APPROVE
+    POWER -.->|"100ms"| BATTERY
+    BATTERY -.->|"<250ms"| THERMAL
+    THERMAL -.->|"<1s"| GRID
+    GRID -.->|"<5s"| DEMAND
+    
+    %% Styling
+    style START fill:#90EE90,stroke:#006400,stroke-width:3px
+    style END fill:#90EE90,stroke:#006400,stroke-width:3px
+    
+    style AUTH fill:#FFE4B5,stroke:#FF8C00,stroke-width:2px
+    style ANNOUNCE fill:#E6F3FF,stroke:#0066CC,stroke-width:2px
+    style CHECK fill:#E6F3FF,stroke:#0066CC,stroke-width:2px
+    
+    style POWER fill:#FFEB9C,stroke:#B8860B,stroke-width:2px
+    style BATTERY fill:#FFEB9C,stroke:#B8860B,stroke-width:2px
+    style THERMAL fill:#FFEB9C,stroke:#B8860B,stroke-width:2px
+    style GRID fill:#FFEB9C,stroke:#B8860B,stroke-width:2px
+    
+    style DEMAND fill:#E0E0FF,stroke:#4169E1,stroke-width:2px
+    style MUNICIPAL fill:#E0E0FF,stroke:#4169E1,stroke-width:2px
+    style CARBON fill:#E0E0FF,stroke:#4169E1,stroke-width:2px
+    
+    style COMPLETE fill:#98FB98,stroke:#32CD32,stroke-width:2px
+    style REPORT fill:#98FB98,stroke:#32CD32,stroke-width:2px
 ```
