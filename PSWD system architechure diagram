@@ -1,0 +1,115 @@
+graph TB
+    %% External Systems
+    subgraph EXT ["🌐 External Systems"]
+        GRID["⚡ Grid Operators<br/>• Load Forecasting<br/>• Demand Response<br/>• Renewable Coordination"]
+        MUNICIPAL["🏘️ Municipal Utilities<br/>• District Heating<br/>• Waste Heat Recovery<br/>• Heat Quality Control"]
+        RENEWABLE["🌱 Renewable Sources<br/>• Solar/Wind Generation<br/>• Carbon Intensity Data<br/>• Generation Forecasts"]
+    end
+
+    %% External Integration Layer
+    subgraph EIL ["🔗 External Integration Layer"]
+        GRID_INT["Grid Integration API<br/>• IEC 61850-90-4<br/>• Real-time Capacity<br/>• Frequency Regulation"]
+        CARBON_TRACK["Carbon Tracking<br/>• Intensity Monitoring<br/>• Renewable Optimization<br/>• Emissions Reporting"]
+        HEAT_COORD["Heat Coordination<br/>• Municipal Integration<br/>• Temperature Control<br/>• Flow Management"]
+    end
+
+    %% Infrastructure Control Layer
+    subgraph ICL ["🏗️ Infrastructure Control Layer"]
+        POWER_MGT["Power Management<br/>• Load Balancing<br/>• Peak Shaving<br/>• Emergency Response"]
+        BATTERY_SYS["Battery Systems<br/>• Energy Storage<br/>• Load Smoothing<br/>• Grid Services"]
+        THERMAL_MGT["Thermal Management<br/>• Cooling Control<br/>• Heat Recovery<br/>• Phase Change"]
+        PREDICT_ENG["Predictive Engine<br/>• Load Analytics<br/>• Capacity Planning<br/>• Optimization"]
+    end
+
+    %% Hardware Abstraction Layer
+    subgraph HAL ["🔧 Hardware Abstraction Layer"]
+        BMC_SYS["Enhanced BMC<br/>• Redfish API Extension<br/>• Sub-second Monitoring<br/>• Sensor Aggregation"]
+        POWER_MON["Power Monitoring<br/>• 100ms Resolution<br/>• ±0.5% Accuracy<br/>• Quality Metrics"]
+        THERMAL_SEN["Thermal Sensors<br/>• Temperature: ±0.1°C<br/>• Flow: ±1% Accuracy<br/>• Pressure Control"]
+        COOLING_HW["Cooling Hardware<br/>• Single/Two-Phase<br/>• Liquid Circulation<br/>• Heat Exchangers"]
+    end
+
+    %% Workload Interface Layer
+    subgraph WIL ["💻 Workload Interface Layer"]
+        WL_API["Workload API<br/>• Event-driven Messaging<br/>• Sub-second Response<br/>• JSON Web Tokens"]
+        SCHED_INT["Scheduler Integration<br/>• Kubernetes<br/>• Resource Managers<br/>• Container Orchestration"]
+        FLEX_MGT["Flexibility Management<br/>• Throttling Control<br/>• Migration Support<br/>• Priority Handling"]
+    end
+
+    %% Computational Workloads
+    subgraph WORKLOADS ["🧠 Computational Workloads"]
+        AI_TRAIN["AI Training<br/>• 200+ MW Swings<br/>• 40ms Transitions<br/>• High Priority"]
+        AI_INFER["AI Inference<br/>• Real-time Serving<br/>• Variable Load<br/>• Low Latency"]
+        HPC["HPC Applications<br/>• Scientific Computing<br/>• Batch Processing<br/>• Predictable Load"]
+        TRAD_COMP["Traditional Compute<br/>• Web Services<br/>• Databases<br/>• Steady State"]
+    end
+
+    %% Physical Infrastructure
+    subgraph PHYS ["⚙️ Physical Infrastructure"]
+        POWER_DIST["Power Distribution<br/>• Transformers<br/>• Circuit Breakers<br/>• UPS Systems"]
+        BATTERY_PHYS["Battery Storage<br/>• Li-ion Arrays<br/>• Inverters<br/>• Safety Systems"]
+        COOLING_PHYS["Cooling Systems<br/>• Liquid Loops<br/>• Heat Exchangers<br/>• Pumps & Valves"]
+        BUILDING["Building Systems<br/>• HVAC Integration<br/>• Fire Safety<br/>• Environmental Control"]
+    end
+
+    %% Security Layer (Cross-cutting)
+    subgraph SEC ["🔒 Security Framework"]
+        AUTH["Authentication<br/>• X.509 Certificates<br/>• JWT Tokens<br/>• Role-based Access"]
+        CRYPTO["Message Security<br/>• TLS 1.3<br/>• HMAC-SHA256<br/>• Digital Signatures"]
+        NETWORK["Network Security<br/>• VLAN Isolation<br/>• Intrusion Detection<br/>• Emergency Disconnect"]
+    end
+
+    %% Data Flows and Control Signals
+    GRID -.->|Grid Status & Signals| GRID_INT
+    RENEWABLE -.->|Generation Data| CARBON_TRACK
+    MUNICIPAL -.->|Heat Demand| HEAT_COORD
+    
+    GRID_INT -->|Demand Response| POWER_MGT
+    CARBON_TRACK -->|Optimization Signals| PREDICT_ENG
+    HEAT_COORD -->|Heat Recovery Control| THERMAL_MGT
+    
+    POWER_MGT -->|Battery Commands| BATTERY_SYS
+    POWER_MGT -->|Load Control| POWER_MON
+    THERMAL_MGT -->|Cooling Commands| THERMAL_SEN
+    PREDICT_ENG -->|Forecasts| POWER_MGT
+    PREDICT_ENG -->|Thermal Prep| THERMAL_MGT
+    
+    BMC_SYS -->|Hardware Status| POWER_MGT
+    POWER_MON -->|Real-time Data| PREDICT_ENG
+    THERMAL_SEN -->|Temperature Data| THERMAL_MGT
+    COOLING_HW -->|System Status| THERMAL_SEN
+    
+    WL_API -->|Workload Announcements| POWER_MGT
+    WL_API -->|Resource Requests| THERMAL_MGT
+    SCHED_INT -->|Job Scheduling| WL_API
+    FLEX_MGT -->|Control Commands| WL_API
+    
+    AI_TRAIN -->|Power Profile| WL_API
+    AI_INFER -->|Resource Needs| WL_API
+    HPC -->|Batch Requests| WL_API
+    TRAD_COMP -->|Steady Load| WL_API
+    
+    POWER_MGT -.->|Infrastructure Response| WL_API
+    THERMAL_MGT -.->|Thermal Status| WL_API
+    BATTERY_SYS -.->|Storage Status| WL_API
+    
+    POWER_MON -->|Measurements| POWER_DIST
+    BATTERY_SYS -->|Charge/Discharge| BATTERY_PHYS
+    THERMAL_SEN -->|Control Signals| COOLING_PHYS
+    THERMAL_MGT -->|Building Integration| BUILDING
+    
+    %% Security Integration (shown as protective layer)
+    AUTH -.->|Secure Access| WL_API
+    CRYPTO -.->|Message Integrity| GRID_INT
+    NETWORK -.->|Traffic Isolation| BMC_SYS
+    
+    %% Critical Performance Requirements
+    classDef criticalPath fill:#ff9999,stroke:#ff0000,stroke-width:2px
+    classDef realTime fill:#99ff99,stroke:#00ff00,stroke-width:2px
+    classDef external fill:#9999ff,stroke:#0000ff,stroke-width:2px
+    classDef security fill:#ffff99,stroke:#ffaa00,stroke-width:2px
+    
+    class AI_TRAIN,POWER_MON,BATTERY_SYS criticalPath
+    class WL_API,BMC_SYS,THERMAL_SEN realTime
+    class GRID,MUNICIPAL,RENEWABLE external
+    class AUTH,CRYPTO,NETWORK security
