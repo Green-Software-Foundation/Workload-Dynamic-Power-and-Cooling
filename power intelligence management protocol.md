@@ -1,11 +1,11 @@
-# Power Intelligence Management Protocol
+# Power Source to Workload Dynamics
 ## Introduction
 
 Modern computational workloads, particularly artificial intelligence (AI) and machine learning (ML) applications, create unprecedented operational demands on data center infrastructure and electrical grid systems. AI training workloads can generate power fluctuations exceeding 200 MW within temporal intervals of 40 ms, creating grid-destabilizing events that threaten electrical system stability.
 
 Traditional data center infrastructure operates reactively, responding to power and thermal events after occurrence, resulting in inefficient resource utilization, increased energy consumption, and reduced opportunities for renewable energy integration. The rapid adoption of high-power-density computational workloads necessitates a fundamental paradigm shift toward proactive, intelligence-driven infrastructure coordination.
 
-This document establishes the Power Intelligence Management Protocol (PIMP), a comprehensive framework enabling real-time communication between computational workloads, infrastructure systems, and external utility networks. PIMP transforms data centers from passive power consumers into intelligent grid assets capable of providing demand response services, optimizing renewable energy consumption, and contributing waste heat to municipal district heating systems.
+This document establishes the Power Source to Workload Dynamics (PSWD), a comprehensive framework enabling real-time communication between computational workloads, infrastructure systems, and external utility networks. PSWD transforms data centers from passive power consumers into intelligent grid assets capable of providing demand response services, optimizing renewable energy consumption, and contributing waste heat to municipal district heating systems.
 
 The protocol addresses three primary objectives: elimination of grid-destabilizing power events while enabling grid services participation; reduction of parasitic power consumption through predictive thermal management; and maximization of renewable energy utilization through intelligent workload scheduling coordinated with grid carbon intensity.
 
@@ -37,12 +37,12 @@ The following documents are referred to in the text in such a way that some or a
 
 **Table — Normative references**
 
-| Standard | Title | Relevance to PIMP |
+| Standard | Title | Relevance to PSWD |
 |---|---|---|
 | IEC 61850-90-4 | *Communication networks and systems for power utility automation — Part 90-4: Network engineering guidelines* | Grid operator communication protocols and power system automation interfaces |
 | IEC 62443-3-3 | *Industrial communication networks — Network and system security — Part 3-3: System security requirements and security levels* | Security framework for critical infrastructure communications and operational technology networks |
 | IEEE 1547.1 | *Standard Conformance Test Procedures for Equipment Interconnecting Distributed Resources with Electric Power Systems* | Grid interconnection testing requirements and distributed energy resource integration |
-| ISO/IEC 27001 | *Information technology — Security techniques — Information security management systems — Requirements* | Information security management framework for PIMP system implementations |
+| ISO/IEC 27001 | *Information technology — Security techniques — Information security management systems — Requirements* | Information security management framework for PSWD system implementations |
 | ISO/IEC 30134-2 | *Information technology — Data centres — Key performance indicators — Part 2: Power usage effectiveness (PUE)* | Energy efficiency measurement and reporting requirements for data center operations |
 | ITU-T G.8275.1 | *Precision time protocol telecom profile for phase/time synchronization with full timing support from the network* | Time synchronization requirements for coordinated power and thermal management operations |
 | DMTF DSP0266 | *Redfish Scalable Platforms Management API Specification* | Hardware management interface protocols and baseboard management controller (BMC) API specifications |
@@ -92,7 +92,7 @@ All sections and appendixes, except "Scope" and "Introduction", are normative un
 |---|---|
 | API | Application Programming Interface |
 | BMC | Baseboard Management Controller |
-| PIMP | Power Intelligence Management Protocol |
+| PSWD | Power Source to Workload Dynamics |
 | HVAC | Heating, Ventilation, and Air Conditioning |
 | ML | Machine Learning |
 | PUE | Power Usage Effectiveness |
@@ -105,7 +105,7 @@ All sections and appendixes, except "Scope" and "Introduction", are normative un
 
 ### System architecture
 
-The PIMP system shall implement a federated control architecture consisting of the components specified in 5.1.1 to 5.1.4.
+The PSWD system shall implement a federated control architecture consisting of the components specified in 5.1.1 to 5.1.4.
 
 #### Workload interface layer
 
@@ -121,19 +121,19 @@ The external integration layer shall provide interfaces for grid operator coordi
 
 #### Hardware abstraction layer
 
-The hardware abstraction layer shall provide standardized interfaces for monitoring and control of power systems, cooling systems, and environmental sensors. This layer shall implement extensions to DMTF Redfish specifications enabling PIMP-specific monitoring and control capabilities including sub-second power measurement, real-time thermal monitoring, and phase-change detection for two-phase cooling systems. Hardware abstraction interfaces shall support sensor data aggregation with temporal synchronization accuracy of ±1 millisecond across facility systems and shall provide fault-tolerant operation through redundant sensor configurations. The hardware abstraction layer shall maintain compatibility with existing BMC implementations while enabling PIMP-enhanced functionality through firmware extensions.
+The hardware abstraction layer shall provide standardized interfaces for monitoring and control of power systems, cooling systems, and environmental sensors. This layer shall implement extensions to DMTF Redfish specifications enabling PSWD-specific monitoring and control capabilities including sub-second power measurement, real-time thermal monitoring, and phase-change detection for two-phase cooling systems. Hardware abstraction interfaces shall support sensor data aggregation with temporal synchronization accuracy of ±1 millisecond across facility systems and shall provide fault-tolerant operation through redundant sensor configurations. The hardware abstraction layer shall maintain compatibility with existing BMC implementations while enabling PSWD-enhanced functionality through firmware extensions.
 
 ### Communication requirements
 
 #### Protocol specifications
 
-All PIMP communications shall utilize structured message formats based on JSON (JavaScript Object Notation) syntax conforming to IETF RFC 7159. Transport layer communications shall implement HTTPS protocol utilizing TLS version 1.3 or later for encrypted data transmission. RESTful API endpoints shall conform to HTTP/1.1 or HTTP/2 specifications with support for both request-response operations and WebSocket connections for real-time streaming data. Message authentication shall utilize JSON Web Tokens (JWT) conforming to IETF RFC 7519 with RSA-256 or ECDSA-256 cryptographic signatures. All PIMP messages shall include standardized header fields for timestamp synchronization (ISO 8601 format with UTC timezone), message versioning, facility identification, and request correlation identifiers to enable distributed system traceability.
+All PSWD communications shall utilize structured message formats based on JSON (JavaScript Object Notation) syntax conforming to IETF RFC 7159. Transport layer communications shall implement HTTPS protocol utilizing TLS version 1.3 or later for encrypted data transmission. RESTful API endpoints shall conform to HTTP/1.1 or HTTP/2 specifications with support for both request-response operations and WebSocket connections for real-time streaming data. Message authentication shall utilize JSON Web Tokens (JWT) conforming to IETF RFC 7519 with RSA-256 or ECDSA-256 cryptographic signatures. All PSWD messages shall include standardized header fields for timestamp synchronization (ISO 8601 format with UTC timezone), message versioning, facility identification, and request correlation identifiers to enable distributed system traceability.
 
 #### Temporal requirements
 
-PIMP systems shall meet the temporal requirements specified in Table 1 to enable coordinated response to rapid AI workload power transitions and maintain grid stability during computational load changes.
+PSWD systems shall meet the temporal requirements specified in Table 1 to enable coordinated response to rapid AI workload power transitions and maintain grid stability during computational load changes.
 
-**Table 1 — Temporal requirements for PIMP operations**
+**Table 1 — Temporal requirements for PSWD operations**
 
 | Operation type | Maximum response time | Measurement interval | Rationale |
 |---|---|---|---|
@@ -142,13 +142,13 @@ PIMP systems shall meet the temporal requirements specified in Table 1 to enable
 | Thermal control | 1 s | 1 s | Coordinate cooling system response to workload heat generation |
 | Grid coordination | 5 s | 15 min | Maintain grid operator communication for stability services |
 
-Temporal synchronization across all PIMP components shall achieve accuracy within ±1 millisecond utilizing Network Time Protocol (NTP) or Precision Time Protocol (PTP) conforming to ITU-T G.8275.1. Communication latency between PIMP components shall not exceed 50% of the specified maximum response time to ensure adequate processing time for control algorithms. System components shall implement timestamp validation to prevent replay attacks and ensure temporal ordering of control sequences.
+Temporal synchronization across all PSWD components shall achieve accuracy within ±1 millisecond utilizing Network Time Protocol (NTP) or Precision Time Protocol (PTP) conforming to ITU-T G.8275.1. Communication latency between PSWD components shall not exceed 50% of the specified maximum response time to ensure adequate processing time for control algorithms. System components shall implement timestamp validation to prevent replay attacks and ensure temporal ordering of control sequences.
 
 #### Accuracy requirements
 
-PIMP systems shall achieve the measurement accuracy specified in Table 2 under normal operational conditions including ambient temperature variations between 18°C and 27°C, relative humidity between 20% and 80%, and electromagnetic interference levels typical of data center environments.
+PSWD systems shall achieve the measurement accuracy specified in Table 2 under normal operational conditions including ambient temperature variations between 18°C and 27°C, relative humidity between 20% and 80%, and electromagnetic interference levels typical of data center environments.
 
-**Table 2 — Accuracy requirements for PIMP measurements**
+**Table 2 — Accuracy requirements for PSWD measurements**
 
 | Measurement type | Accuracy requirement | Operating range | Calibration interval | Environmental compensation |
 |---|---|---|---|---|
@@ -161,21 +161,21 @@ Measurement accuracy shall be maintained across the full operating range with de
 
 #### Reliability and availability requirements
 
-PIMP communication systems shall achieve minimum 99.9% availability measured over 30-day rolling periods, with planned maintenance windows excluded from availability calculations. Communication failures shall trigger automatic failover to redundant communication paths within 5 seconds of failure detection. Message delivery reliability shall implement acknowledgment protocols with automatic retry mechanisms for critical control messages, achieving delivery success rates exceeding 99.99% for power and thermal control operations. Communication system redundancy shall include diverse network paths, multiple communication protocols (primary and backup), and distributed controller architectures to prevent single points of failure in critical coordination scenarios.
+PSWD communication systems shall achieve minimum 99.9% availability measured over 30-day rolling periods, with planned maintenance windows excluded from availability calculations. Communication failures shall trigger automatic failover to redundant communication paths within 5 seconds of failure detection. Message delivery reliability shall implement acknowledgment protocols with automatic retry mechanisms for critical control messages, achieving delivery success rates exceeding 99.99% for power and thermal control operations. Communication system redundancy shall include diverse network paths, multiple communication protocols (primary and backup), and distributed controller architectures to prevent single points of failure in critical coordination scenarios.
 
 #### Interoperability requirements
 
-PIMP implementations shall demonstrate interoperability across equipment from different manufacturers through standardized protocol conformance and message format compatibility. Protocol versioning shall support backward compatibility for minimum 24 months during technology transitions, with deprecation notices provided 12 months in advance of compatibility removal. Cross-vendor integration shall be validated through standardized test suites covering message format compliance, temporal performance requirements, and coordination scenario execution. PIMP communication interfaces shall integrate with existing data center management protocols including SNMP, Redfish, and IPMI while maintaining protocol isolation to prevent interference with legacy systems.
+PSWD implementations shall demonstrate interoperability across equipment from different manufacturers through standardized protocol conformance and message format compatibility. Protocol versioning shall support backward compatibility for minimum 24 months during technology transitions, with deprecation notices provided 12 months in advance of compatibility removal. Cross-vendor integration shall be validated through standardized test suites covering message format compliance, temporal performance requirements, and coordination scenario execution. PSWD communication interfaces shall integrate with existing data center management protocols including SNMP, Redfish, and IPMI while maintaining protocol isolation to prevent interference with legacy systems.
 
 #### 5.2.6 Security communication requirements
 
-All PIMP communications involving critical infrastructure coordination shall implement mutual authentication using X.509 digital certificates issued by approved certificate authorities. Message integrity verification shall utilize HMAC-SHA256 or equivalent cryptographic signatures to prevent unauthorized message modification. Network communications shall implement network segmentation with dedicated VLANs or overlay networks for PIMP traffic isolation from general data center network traffic. Security event logging shall capture all authentication attempts, authorization decisions, and control command execution with tamper-evident storage meeting FIPS 140-2 Level 2 requirements or equivalent international standards.
+All PSWD communications involving critical infrastructure coordination shall implement mutual authentication using X.509 digital certificates issued by approved certificate authorities. Message integrity verification shall utilize HMAC-SHA256 or equivalent cryptographic signatures to prevent unauthorized message modification. Network communications shall implement network segmentation with dedicated VLANs or overlay networks for PSWD traffic isolation from general data center network traffic. Security event logging shall capture all authentication attempts, authorization decisions, and control command execution with tamper-evident storage meeting FIPS 140-2 Level 2 requirements or equivalent international standards.
 
 ### Performance requirements
 
 #### System response characteristics
 
-PIMP systems shall demonstrate predictable response characteristics under varying operational loads including peak computational demand periods, grid stability events, and multi-system coordination scenarios. System performance shall maintain specified response times during facility power levels ranging from 10% to 100% of rated capacity and during ambient temperature variations from 18°C to 35°C.
+PSWD systems shall demonstrate predictable response characteristics under varying operational loads including peak computational demand periods, grid stability events, and multi-system coordination scenarios. System performance shall maintain specified response times during facility power levels ranging from 10% to 100% of rated capacity and during ambient temperature variations from 18°C to 35°C.
 
 Performance requirements shall include:
 
@@ -189,7 +189,7 @@ d) **resource utilization efficiency** achieving control system power consumptio
 
 #### Predictive accuracy requirements
 
-PIMP predictive analytics systems shall achieve minimum accuracy thresholds specified in Table 3 for power consumption forecasting, thermal load prediction, and grid coordination optimization under normal operational conditions.
+PSWD predictive analytics systems shall achieve minimum accuracy thresholds specified in Table 3 for power consumption forecasting, thermal load prediction, and grid coordination optimization under normal operational conditions.
 
 **Table 3 — Predictive accuracy requirements**
 
@@ -204,7 +204,7 @@ Predictive accuracy shall be measured against actual operational data with rolli
 
 #### Availability and reliability requirements
 
-PIMP systems shall achieve minimum availability and reliability targets specified in Table 4 to ensure consistent coordination capabilities for critical infrastructure operations.
+PSWD systems shall achieve minimum availability and reliability targets specified in Table 4 to ensure consistent coordination capabilities for critical infrastructure operations.
 
 **Table 4 — Availability and reliability requirements**
 
@@ -221,7 +221,7 @@ System availability shall be measured through automated monitoring with fault de
 
 #### Environmental operating conditions
 
-PIMP systems shall operate within environmental conditions typical of data center facilities while maintaining specified performance and accuracy requirements under varying environmental stresses.
+PSWD systems shall operate within environmental conditions typical of data center facilities while maintaining specified performance and accuracy requirements under varying environmental stresses.
 
 Environmental operating requirements shall include:
 
@@ -235,7 +235,7 @@ d) **vibration and shock resistance** withstanding operational vibrations from c
 
 #### Power supply requirements
 
-PIMP control systems shall operate from standard data center power infrastructure with resilience to power quality variations typical of high-power computational environments.
+PSWD control systems shall operate from standard data center power infrastructure with resilience to power quality variations typical of high-power computational environments.
 
 Power supply requirements shall include:
 
@@ -245,11 +245,11 @@ b) **power quality immunity** operating during total harmonic distortion (THD) u
 
 c) **uninterruptible power supply integration** coordinating with facility UPS systems for graceful shutdown during extended power outages and automatic restart upon power restoration;
 
-d) **energy efficiency requirements** achieving minimum 90% power conversion efficiency for PIMP control system power supplies with automatic power management during low-activity periods.
+d) **energy efficiency requirements** achieving minimum 90% power conversion efficiency for PSWD control system power supplies with automatic power management during low-activity periods.
 
 #### 5.4.3 Installation and maintenance requirements
 
-PIMP system installation and ongoing maintenance shall follow standardized procedures enabling deployment across diverse data center configurations with minimal operational disruption.
+PSWD system installation and ongoing maintenance shall follow standardized procedures enabling deployment across diverse data center configurations with minimal operational disruption.
 
 Installation and maintenance requirements shall include:
 
@@ -265,7 +265,7 @@ d) **documentation and training requirements** including installation guides, op
 
 #### Electrical safety requirements
 
-PIMP systems interfacing with high-voltage power infrastructure shall implement comprehensive electrical safety measures protecting personnel and equipment while maintaining operational functionality.
+PSWD systems interfacing with high-voltage power infrastructure shall implement comprehensive electrical safety measures protecting personnel and equipment while maintaining operational functionality.
 
 Electrical safety requirements shall include:
 
@@ -279,7 +279,7 @@ d) **electrical code compliance** conforming to applicable national electrical c
 
 #### Functional safety requirements
 
-PIMP systems shall implement functional safety measures preventing hazardous conditions during normal operation, fault conditions, and emergency scenarios while maintaining critical infrastructure protection.
+PSWD systems shall implement functional safety measures preventing hazardous conditions during normal operation, fault conditions, and emergency scenarios while maintaining critical infrastructure protection.
 
 Functional safety requirements shall include:
 
@@ -293,7 +293,7 @@ d) **emergency response coordination** integrating with facility emergency syste
 
 #### Regulatory compliance requirements
 
-PIMP implementations shall comply with applicable regulatory frameworks governing critical infrastructure operation, data protection, and environmental management.
+PSWD implementations shall comply with applicable regulatory frameworks governing critical infrastructure operation, data protection, and environmental management.
 
 Regulatory compliance requirements shall include:
 
@@ -309,7 +309,7 @@ d) **grid interconnection standards** meeting utility interconnection requiremen
 
 #### Testing and validation requirements
 
-PIMP systems shall undergo comprehensive testing and validation procedures ensuring reliable operation under realistic deployment conditions and compliance with all specified requirements.
+PSWD systems shall undergo comprehensive testing and validation procedures ensuring reliable operation under realistic deployment conditions and compliance with all specified requirements.
 
 Testing and validation requirements shall include:
 
@@ -323,7 +323,7 @@ d) **ongoing performance monitoring** implementing continuous validation of accu
 
 #### Documentation requirements
 
-PIMP implementations shall provide comprehensive documentation enabling proper installation, operation, maintenance, and troubleshooting across the complete system lifecycle.
+PSWD implementations shall provide comprehensive documentation enabling proper installation, operation, maintenance, and troubleshooting across the complete system lifecycle.
 
 Documentation requirements shall include:
 
@@ -337,7 +337,7 @@ d) **maintenance documentation** including preventive maintenance schedules, spa
 
 #### Training and certification requirements
 
-Organizations implementing PIMP systems shall establish training and certification programs ensuring operational staff competency in system operation, maintenance, and emergency response procedures.
+Organizations implementing PSWD systems shall establish training and certification programs ensuring operational staff competency in system operation, maintenance, and emergency response procedures.
 
 Training and certification requirements shall include:
 
@@ -345,7 +345,7 @@ a) **operator training programs** covering system operation, workload coordinati
 
 b) **maintenance training programs** providing technical training for system installation, calibration, troubleshooting, and repair procedures with hands-on practical assessment;
 
-c) **management training programs** educating facility managers on PIMP capabilities, performance optimization, regulatory compliance, and business integration opportunities;
+c) **management training programs** educating facility managers on PSWD capabilities, performance optimization, regulatory compliance, and business integration opportunities;
 
 d) **continuing education requirements** implementing ongoing training updates for software upgrades, regulatory changes, and operational improvements with recertification requirements.
 
@@ -495,7 +495,7 @@ d) **system fault detection** identifying flow instabilities, inadequate phase c
 
 #### Authentication protocols
 
-PIMP authentication shall implement multi-factor authentication combining X.509 digital certificates for device authentication and JSON Web Tokens for session management with role-based authorization controls.
+PSWD authentication shall implement multi-factor authentication combining X.509 digital certificates for device authentication and JSON Web Tokens for session management with role-based authorization controls.
 
 Authentication protocol requirements shall include:
 
@@ -509,7 +509,7 @@ d) **multi-factor authentication** requiring certificate-based device authentica
 
 #### Message integrity protocols
 
-All PIMP control messages shall implement cryptographic integrity verification preventing unauthorized modification and ensuring authentic command execution.
+All PSWD control messages shall implement cryptographic integrity verification preventing unauthorized modification and ensuring authentic command execution.
 
 Message integrity protocols shall provide:
 
@@ -523,23 +523,23 @@ d) **end-to-end encryption** implementing AES-256-GCM for message payload protec
 
 #### Network security protocols
 
-PIMP network communications shall implement defense-in-depth security architecture with network segmentation, intrusion detection, and anomaly monitoring capabilities.
+PSWD network communications shall implement defense-in-depth security architecture with network segmentation, intrusion detection, and anomaly monitoring capabilities.
 
 Network security protocol implementation shall include:
 
-a) **network segmentation** isolating PIMP traffic through dedicated VLANs, overlay networks, or physically separate network infrastructure;
+a) **network segmentation** isolating PSWD traffic through dedicated VLANs, overlay networks, or physically separate network infrastructure;
 
 b) **intrusion detection systems** monitoring network traffic patterns, detecting anomalous behavior, and triggering automatic security responses;
 
 c) **rate limiting and DDoS protection** implementing per-client connection limits, bandwidth throttling, and distributed denial-of-service attack mitigation;
 
-d) **security event correlation** aggregating security events across multiple PIMP components and integrating with facility-wide security information and event management (SIEM) systems.
+d) **security event correlation** aggregating security events across multiple PSWD components and integrating with facility-wide security information and event management (SIEM) systems.
 
 ### Protocol versioning and compatibility
 
 #### Version management
 
-PIMP protocol implementations shall support version negotiation enabling interoperability across different protocol versions during system upgrades and multi-vendor deployments.
+PSWD protocol implementations shall support version negotiation enabling interoperability across different protocol versions during system upgrades and multi-vendor deployments.
 
 Protocol versioning requirements shall include:
 
@@ -549,7 +549,7 @@ b) **capability negotiation** enabling systems to advertise supported features a
 
 c) **deprecation management** providing minimum 12-month notification periods for deprecated features with migration guidance and compatibility bridges;
 
-d) **protocol discovery** implementing automatic detection of PIMP-enabled systems and their supported protocol versions through standardized discovery mechanisms.
+d) **protocol discovery** implementing automatic detection of PSWD-enabled systems and their supported protocol versions through standardized discovery mechanisms.
 
 #### 6.5.2 Interoperability testing
 
@@ -571,20 +571,20 @@ d) **fault tolerance and recovery** verifying graceful degradation capabilities,
 
 ### Baseboard Management Controller (BMC) requirements
 
-#### PIMP endpoint implementation
+#### PSWD endpoint implementation
 
 BMCs shall implement the API endpoints specified in Table 3.
 
-**Table 3 — Mandatory PIMP API endpoints**
+**Table 3 — Mandatory PSWD API endpoints**
 
 | Endpoint | Method | Function |
 |---|---|---|
-| /PIMP/power/realtime | GET | Real-time power measurement |
-| /PIMP/workload/announce | POST | Workload announcement |
-| /PIMP/thermal/status | GET | Thermal system status |
-| /PIMP/thermal/control | POST | Thermal control commands |
-| /PIMP/grid/status | GET | Grid interface status |
-| /PIMP/grid/signal | POST | Grid coordination signals |
+| /PSWD/power/realtime | GET | Real-time power measurement |
+| /PSWD/workload/announce | POST | Workload announcement |
+| /PSWD/thermal/status | GET | Thermal system status |
+| /PSWD/thermal/control | POST | Thermal control commands |
+| /PSWD/grid/status | GET | Grid interface status |
+| /PSWD/grid/signal | POST | Grid coordination signals |
 
 #### Power monitoring extensions
 
@@ -730,17 +730,17 @@ Heat recovery systems should achieve minimum 60 % thermal energy recovery effici
 
 ### General security framework
 
-PIMP implementations shall implement security measures conforming to IEC 62443-3-3 for industrial communication networks.
+PSWD implementations shall implement security measures conforming to IEC 62443-3-3 for industrial communication networks.
 
 ### Authentication and authorization
 
 #### Mutual authentication
 
-All PIMP communications shall implement mutual authentication using X.509 digital certificates.
+All PSWD communications shall implement mutual authentication using X.509 digital certificates.
 
 #### Role-based access control
 
-PIMP systems shall implement role-based access control enabling differentiated access for:
+PSWD systems shall implement role-based access control enabling differentiated access for:
 
 a) workload operators;
 
@@ -754,11 +754,11 @@ d) municipal utility partners.
 
 #### Encryption
 
-All PIMP communications shall utilize transport layer security (TLS) version 1.3 or later.
+All PSWD communications shall utilize transport layer security (TLS) version 1.3 or later.
 
 #### Message integrity
 
-PIMP messages shall include cryptographic signatures preventing unauthorized modification.
+PSWD messages shall include cryptographic signatures preventing unauthorized modification.
 
 ### Grid interface security
 
@@ -776,7 +776,7 @@ c) emergency disconnection capabilities maintaining facility safety.
 
 ### Conformity assessment framework
 
-Conformity assessment for PIMP implementations shall include the testing requirements specified in 11.2 to 11.4.
+Conformity assessment for PSWD implementations shall include the testing requirements specified in 11.2 to 11.4.
 
 ### Protocol conformance testing
 
@@ -867,7 +867,7 @@ c) security framework effectiveness.
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
-    "PIMP_version": {
+    "PSWD_version": {
       "type": "string",
       "enum": ["1.0"]
     },
@@ -893,7 +893,7 @@ c) security framework effectiveness.
       "required": ["peak_power_mw", "baseline_power_mw"]
     }
   },
-  "required": ["PIMP_version", "message_type", "timestamp", "workload_id", "power_profile"]
+  "required": ["PSWD_version", "message_type", "timestamp", "workload_id", "power_profile"]
 }
 ```
 
@@ -904,7 +904,7 @@ c) security framework effectiveness.
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
-    "PIMP_version": {
+    "PSWD_version": {
       "type": "string",
       "enum": ["1.0"]
     },
@@ -924,7 +924,7 @@ c) security framework effectiveness.
       "enum": ["approved", "approved_with_conditions", "rejected"]
     }
   },
-  "required": ["PIMP_version", "message_type", "timestamp", "workload_id", "approval_status"]
+  "required": ["PSWD_version", "message_type", "timestamp", "workload_id", "approval_status"]
 }
 ```
 
@@ -934,7 +934,7 @@ c) security framework effectiveness.
 
 ### B.1 Phased deployment approach
 
-PIMP implementation should follow a phased approach beginning with basic power signaling capabilities and progressing to advanced grid integration and municipal heat recovery.
+PSWD implementation should follow a phased approach beginning with basic power signaling capabilities and progressing to advanced grid integration and municipal heat recovery.
 
 **Phase 1**: Basic power signaling and battery-based peak shaving  
 **Phase 2**: Advanced thermal management and liquid cooling integration  
@@ -942,7 +942,7 @@ PIMP implementation should follow a phased approach beginning with basic power s
 
 ### B.2 Training and certification
 
-Organizations implementing PIMP should develop training programs covering:
+Organizations implementing PSWD should develop training programs covering:
 
 a) grid interaction protocols and utility coordination;
 
@@ -958,7 +958,7 @@ d) emergency response procedures for multi-system coordination.
 
 ### C.1 Carbon footprint reduction
 
-PIMP implementation can achieve significant carbon footprint reductions through:
+PSWD implementation can achieve significant carbon footprint reductions through:
 
 a) renewable energy optimization reducing average grid carbon intensity;
 
