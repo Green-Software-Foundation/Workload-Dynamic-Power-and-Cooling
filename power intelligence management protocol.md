@@ -11,7 +11,7 @@ The protocol addresses three primary objectives: elimination of grid-destabilizi
 
 ---
 
-## 1 Scope
+## Scope
 
 This document specifies communication protocols, hardware interfaces, and operational procedures for intelligent coordination between computational workloads and data center infrastructure systems, covering real-time power management signaling including workload power profiling, infrastructure capacity negotiation, and grid-compatible load smoothing; advanced thermal management coordination for air-based and liquid-based cooling systems; integration interfaces with electrical grid operators and municipal utility networks; optimization frameworks for renewable energy utilization and waste heat recovery; security frameworks for critical infrastructure communications; and conformance testing and certification procedures. The specification applies to data centers with power capacities from 1 MW to 1,000 MW supporting cloud computing workloads, high-performance computing applications, and AI/ML training and inference operations, encompassing single-phase and two-phase liquid cooling systems, battery energy storage integration, and district heating network interfaces to enable transformation of data centers from unpredictable power consumers into intelligent grid assets capable of coordinated infrastructure management, renewable energy optimization, and municipal utility partnership.
 
@@ -31,7 +31,7 @@ This document does not cover:
 
 ---
 
-## 2 Normative references
+## Normative references
 
 The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this document. For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
 
@@ -49,7 +49,7 @@ The following documents are referred to in the text in such a way that some or a
 
 ---
 
-## 3 Terms and definitions
+## Terms and definitions
 
 For the purposes of this document, the following terms and definitions apply.
 
@@ -76,7 +76,15 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 
 ---
 
-## 4 Abbreviated terms
+## Terminology and Conventions
+### Conventions
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC2119].
+
+All sections and appendixes, except "Scope" and "Introduction", are normative unless they are explicitly indicated to be informative.
+
+---
+## Abbreviated terms
 
 **Table — Abbreviated terms**
 
@@ -93,35 +101,35 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 
 ---
 
-## 5 General requirements
+## General requirements
 
-### 5.1 System architecture
+### System architecture
 
-The DCPI system shall implement a federated control architecture consisting of the components specified in 5.1.1 to 5.1.4.
+The PIMP system shall implement a federated control architecture consisting of the components specified in 5.1.1 to 5.1.4.
 
-#### 5.1.1 Workload interface layer
+#### Workload interface layer
 
 The workload interface layer shall provide communication endpoints enabling computational workloads to signal power requirements, timing constraints, and operational flexibility to infrastructure management systems. This layer shall implement RESTful API interfaces utilizing JSON message formats for workload announcement, status reporting, and real-time control operations. The workload interface shall support power profile specification with temporal resolution of 1 minute or finer, thermal characteristic declaration, and flexibility parameter communication including throttling capabilities, delay tolerance, and priority classification. Communication protocols shall achieve response times not exceeding 1 second for workload signaling operations and shall maintain authentication and authorization controls for workload operator access.
 
-#### 5.1.2 Infrastructure control layer
+#### Infrastructure control layer
 
 The infrastructure control layer shall coordinate power management, thermal management, and energy storage operations based on workload signals and external system requirements. This layer shall implement decision-making algorithms for infrastructure capacity allocation, predictive resource preparation, and multi-system coordination across power distribution, cooling systems, and energy storage arrays. The infrastructure control layer shall maintain real-time optimization engines capable of sub-second response to workload power transitions while coordinating battery discharge operations for grid-compatible load smoothing. Control algorithms shall integrate workload flexibility parameters with infrastructure constraints to optimize system efficiency and maintain operational safety margins.
 
-#### 5.1.3 External integration layer
+#### External integration layer
 
 The external integration layer shall provide interfaces for grid operator coordination, municipal utility integration, and renewable energy optimization. This layer shall implement communication protocols conforming to IEC 61850-90-4 for grid operator interfaces, enabling load forecasting transmission, demand response participation, and renewable energy coordination signaling. Municipal utility integration shall support district heating network coordination through thermal energy quality verification, supply temperature control, and flow rate management protocols. The external integration layer shall maintain carbon intensity tracking capabilities and implement workload scheduling optimization algorithms for renewable energy utilization maximization.
 
-#### 5.1.4 Hardware abstraction layer
+#### Hardware abstraction layer
 
 The hardware abstraction layer shall provide standardized interfaces for monitoring and control of power systems, cooling systems, and environmental sensors. This layer shall implement extensions to DMTF Redfish specifications enabling DCPI-specific monitoring and control capabilities including sub-second power measurement, real-time thermal monitoring, and phase-change detection for two-phase cooling systems. Hardware abstraction interfaces shall support sensor data aggregation with temporal synchronization accuracy of ±1 millisecond across facility systems and shall provide fault-tolerant operation through redundant sensor configurations. The hardware abstraction layer shall maintain compatibility with existing BMC implementations while enabling DCPI-enhanced functionality through firmware extensions.
 
-### 5.2 Communication requirements
+### Communication requirements
 
-#### 5.2.1 Protocol specifications
+#### Protocol specifications
 
 All DCPI communications shall utilize structured message formats based on JSON (JavaScript Object Notation) syntax conforming to IETF RFC 7159. Transport layer communications shall implement HTTPS protocol utilizing TLS version 1.3 or later for encrypted data transmission. RESTful API endpoints shall conform to HTTP/1.1 or HTTP/2 specifications with support for both request-response operations and WebSocket connections for real-time streaming data. Message authentication shall utilize JSON Web Tokens (JWT) conforming to IETF RFC 7519 with RSA-256 or ECDSA-256 cryptographic signatures. All DCPI messages shall include standardized header fields for timestamp synchronization (ISO 8601 format with UTC timezone), message versioning, facility identification, and request correlation identifiers to enable distributed system traceability.
 
-#### 5.2.2 Temporal requirements
+#### Temporal requirements
 
 DCPI systems shall meet the temporal requirements specified in Table 1 to enable coordinated response to rapid AI workload power transitions and maintain grid stability during computational load changes.
 
@@ -136,7 +144,7 @@ DCPI systems shall meet the temporal requirements specified in Table 1 to enable
 
 Temporal synchronization across all DCPI components shall achieve accuracy within ±1 millisecond utilizing Network Time Protocol (NTP) or Precision Time Protocol (PTP) conforming to ITU-T G.8275.1. Communication latency between DCPI components shall not exceed 50% of the specified maximum response time to ensure adequate processing time for control algorithms. System components shall implement timestamp validation to prevent replay attacks and ensure temporal ordering of control sequences.
 
-#### 5.2.3 Accuracy requirements
+#### Accuracy requirements
 
 DCPI systems shall achieve the measurement accuracy specified in Table 2 under normal operational conditions including ambient temperature variations between 18°C and 27°C, relative humidity between 20% and 80%, and electromagnetic interference levels typical of data center environments.
 
@@ -151,11 +159,11 @@ DCPI systems shall achieve the measurement accuracy specified in Table 2 under n
 
 Measurement accuracy shall be maintained across the full operating range with degradation not exceeding 50% of specified accuracy at range extremes. Sensor calibration shall utilize traceable reference standards conforming to national measurement institutes. Environmental compensation algorithms shall automatically adjust readings for temperature, pressure, and electromagnetic interference effects to maintain specified accuracy under varying operational conditions.
 
-#### 5.2.4 Reliability and availability requirements
+#### Reliability and availability requirements
 
 DCPI communication systems shall achieve minimum 99.9% availability measured over 30-day rolling periods, with planned maintenance windows excluded from availability calculations. Communication failures shall trigger automatic failover to redundant communication paths within 5 seconds of failure detection. Message delivery reliability shall implement acknowledgment protocols with automatic retry mechanisms for critical control messages, achieving delivery success rates exceeding 99.99% for power and thermal control operations. Communication system redundancy shall include diverse network paths, multiple communication protocols (primary and backup), and distributed controller architectures to prevent single points of failure in critical coordination scenarios.
 
-#### 5.2.5 Interoperability requirements
+#### Interoperability requirements
 
 DCPI implementations shall demonstrate interoperability across equipment from different manufacturers through standardized protocol conformance and message format compatibility. Protocol versioning shall support backward compatibility for minimum 24 months during technology transitions, with deprecation notices provided 12 months in advance of compatibility removal. Cross-vendor integration shall be validated through standardized test suites covering message format compliance, temporal performance requirements, and coordination scenario execution. DCPI communication interfaces shall integrate with existing data center management protocols including SNMP, Redfish, and IPMI while maintaining protocol isolation to prevent interference with legacy systems.
 
@@ -163,9 +171,9 @@ DCPI implementations shall demonstrate interoperability across equipment from di
 
 All DCPI communications involving critical infrastructure coordination shall implement mutual authentication using X.509 digital certificates issued by approved certificate authorities. Message integrity verification shall utilize HMAC-SHA256 or equivalent cryptographic signatures to prevent unauthorized message modification. Network communications shall implement network segmentation with dedicated VLANs or overlay networks for DCPI traffic isolation from general data center network traffic. Security event logging shall capture all authentication attempts, authorization decisions, and control command execution with tamper-evident storage meeting FIPS 140-2 Level 2 requirements or equivalent international standards.
 
-### 5.3 Performance requirements
+### Performance requirements
 
-#### 5.3.1 System response characteristics
+#### System response characteristics
 
 DCPI systems shall demonstrate predictable response characteristics under varying operational loads including peak computational demand periods, grid stability events, and multi-system coordination scenarios. System performance shall maintain specified response times during facility power levels ranging from 10% to 100% of rated capacity and during ambient temperature variations from 18°C to 35°C.
 
@@ -179,7 +187,7 @@ c) **scaling characteristics** demonstrating linear performance scaling across d
 
 d) **resource utilization efficiency** achieving control system power consumption not exceeding 0.1% of total facility power consumption under normal operational conditions.
 
-#### 5.3.2 Predictive accuracy requirements
+#### Predictive accuracy requirements
 
 DCPI predictive analytics systems shall achieve minimum accuracy thresholds specified in Table 3 for power consumption forecasting, thermal load prediction, and grid coordination optimization under normal operational conditions.
 
@@ -194,7 +202,7 @@ DCPI predictive analytics systems shall achieve minimum accuracy thresholds spec
 
 Predictive accuracy shall be measured against actual operational data with rolling accuracy assessments updated daily. Accuracy degradation below minimum thresholds shall trigger automatic algorithm retraining and calibration procedures. Forecast confidence intervals shall be validated through statistical analysis of prediction error distributions over minimum 30-day evaluation periods.
 
-#### 5.3.3 Availability and reliability requirements
+#### Availability and reliability requirements
 
 DCPI systems shall achieve minimum availability and reliability targets specified in Table 4 to ensure consistent coordination capabilities for critical infrastructure operations.
 
@@ -209,9 +217,9 @@ DCPI systems shall achieve minimum availability and reliability targets specifie
 
 System availability shall be measured through automated monitoring with fault detection capabilities identifying component failures within 30 seconds of occurrence. Reliability requirements shall be validated through accelerated aging tests, environmental stress testing, and continuous operational monitoring. Mean time to repair targets shall include automatic diagnostic capabilities, remote troubleshooting support, and standardized repair procedures.
 
-### 5.4 Environmental and operational requirements
+### Environmental and operational requirements
 
-#### 5.4.1 Environmental operating conditions
+#### Environmental operating conditions
 
 DCPI systems shall operate within environmental conditions typical of data center facilities while maintaining specified performance and accuracy requirements under varying environmental stresses.
 
@@ -225,7 +233,7 @@ c) **electromagnetic compatibility** conforming to IEC 61000 series standards wi
 
 d) **vibration and shock resistance** withstanding operational vibrations from cooling equipment, seismic activity up to 0.2g horizontal acceleration, and transportation shock during installation.
 
-#### 5.4.2 Power supply requirements
+#### Power supply requirements
 
 DCPI control systems shall operate from standard data center power infrastructure with resilience to power quality variations typical of high-power computational environments.
 
@@ -253,9 +261,9 @@ c) **remote diagnostic capabilities** providing comprehensive system health moni
 
 d) **documentation and training requirements** including installation guides, operational procedures, troubleshooting manuals, and certified training programs for operational staff.
 
-### 5.5 Safety and compliance requirements
+### Safety and compliance requirements
 
-#### 5.5.1 Electrical safety requirements
+#### Electrical safety requirements
 
 DCPI systems interfacing with high-voltage power infrastructure shall implement comprehensive electrical safety measures protecting personnel and equipment while maintaining operational functionality.
 
@@ -269,7 +277,7 @@ c) **personnel safety interlocks** preventing access to energized circuits durin
 
 d) **electrical code compliance** conforming to applicable national electrical codes including NEC (USA), IEC 60364 (International), and local electrical safety regulations.
 
-#### 5.5.2 Functional safety requirements
+#### Functional safety requirements
 
 DCPI systems shall implement functional safety measures preventing hazardous conditions during normal operation, fault conditions, and emergency scenarios while maintaining critical infrastructure protection.
 
@@ -283,7 +291,7 @@ c) **hazard analysis and risk assessment** conducting systematic safety analysis
 
 d) **emergency response coordination** integrating with facility emergency systems including fire suppression, emergency lighting, and emergency communication systems through standardized interfaces.
 
-#### 5.5.3 Regulatory compliance requirements
+#### Regulatory compliance requirements
 
 DCPI implementations shall comply with applicable regulatory frameworks governing critical infrastructure operation, data protection, and environmental management.
 
@@ -297,9 +305,9 @@ c) **environmental regulations** complying with applicable environmental protect
 
 d) **grid interconnection standards** meeting utility interconnection requirements including IEEE 1547 series standards, local grid codes, and utility-specific technical requirements.
 
-### 5.6 Quality assurance requirements
+### Quality assurance requirements
 
-#### 5.6.1 Testing and validation requirements
+#### Testing and validation requirements
 
 DCPI systems shall undergo comprehensive testing and validation procedures ensuring reliable operation under realistic deployment conditions and compliance with all specified requirements.
 
@@ -313,7 +321,7 @@ c) **field acceptance testing** demonstrating operational performance under actu
 
 d) **ongoing performance monitoring** implementing continuous validation of accuracy requirements, response time compliance, and predictive analytics performance with automated reporting.
 
-#### 5.6.2 Documentation requirements
+#### Documentation requirements
 
 DCPI implementations shall provide comprehensive documentation enabling proper installation, operation, maintenance, and troubleshooting across the complete system lifecycle.
 
@@ -327,7 +335,7 @@ c) **compliance documentation** providing test certificates, regulatory complian
 
 d) **maintenance documentation** including preventive maintenance schedules, spare parts lists, calibration procedures, and performance trending reports.
 
-#### 5.6.3 Training and certification requirements
+#### Training and certification requirements
 
 Organizations implementing DCPI systems shall establish training and certification programs ensuring operational staff competency in system operation, maintenance, and emergency response procedures.
 
@@ -343,15 +351,15 @@ d) **continuing education requirements** implementing ongoing training updates f
 
 ---
 
-## 6 Communication protocols
+## Communication protocols
 
-### 6.1 Workload signaling protocol
+### Workload signaling protocol
 
-#### 6.1.1 General
+#### General
 
 The workload signaling protocol shall enable computational workloads to communicate power requirements and operational constraints to infrastructure management systems through standardized message exchanges that facilitate proactive resource allocation and grid coordination.
 
-#### 6.1.2 Workload announcement message
+#### Workload announcement message
 
 Computational workloads shall announce power requirements using the message structure specified in Annex A.1. The workload announcement protocol shall implement a request-response pattern with infrastructure acknowledgment and conditional approval mechanisms.
 
@@ -367,7 +375,7 @@ d) **operational flexibility parameters** including delay tolerance, throttling 
 
 e) **timing constraints and priority levels** with deadline specifications, earliest/latest start times, business criticality classification, and dependency relationships with other workloads.
 
-#### 6.1.3 Infrastructure response message
+#### Infrastructure response message
 
 Infrastructure management systems shall respond to workload announcements using the message structure specified in Annex A.2 within the temporal requirements defined in Table 1. Response messages shall implement tri-state approval mechanisms: approved, approved with conditions, or rejected with alternative recommendations.
 
@@ -381,7 +389,7 @@ c) **thermal management coordination parameters** specifying cooling system prep
 
 d) **grid status and renewable energy availability** providing carbon intensity forecasts, renewable energy windows, and demand response coordination opportunities.
 
-#### 6.1.4 Workload control protocol
+#### Workload control protocol
 
 Active workload control shall implement real-time adjustment capabilities through standardized control message formats enabling throttling, pausing, resuming, and terminating operations in response to infrastructure constraints or external system requirements.
 
@@ -395,9 +403,9 @@ c) **termination commands** with graceful shutdown procedures and checkpoint com
 
 d) **migration commands** for workload relocation across infrastructure resources with state transfer protocols.
 
-### 6.2 Power management protocol
+### Power management protocol
 
-#### 6.2.1 Real-time power control
+#### Real-time power control
 
 Power management systems shall implement real-time control capabilities with response times not exceeding 1 s for critical operations and 100 ms for emergency safety interventions. Power control protocols shall coordinate across multiple system components including battery energy storage, grid interface equipment, and load distribution systems.
 
@@ -411,7 +419,7 @@ c) **load distribution management** coordinating power allocation across facilit
 
 d) **emergency power management** providing automatic load shedding, critical system protection, and safety system coordination.
 
-#### 6.2.2 Predictive analytics protocol
+#### Predictive analytics protocol
 
 Power management systems shall implement predictive analytics protocols achieving minimum performance targets specified in 6.1.3 for forecast accuracy and confidence interval reporting.
 
@@ -425,7 +433,7 @@ c) **grid integration forecasts** predicting facility participation in demand re
 
 d) **infrastructure capacity forecasts** projecting cooling requirements, energy storage needs, and maintenance scheduling coordination.
 
-#### 6.2.3 Grid coordination protocol
+#### Grid coordination protocol
 
 Grid coordination protocols shall implement bidirectional communication with utility operators conforming to IEC 61850-90-4 standards for distributed energy resource integration and grid stability services.
 
@@ -439,9 +447,9 @@ c) **renewable energy coordination** enabling preferential scheduling during hig
 
 d) **grid stability services** providing frequency regulation, voltage support, and emergency reserve capacity coordination.
 
-### 6.3 Thermal management protocol
+### Thermal management protocol
 
-#### 6.3.1 Cooling system coordination
+#### Cooling system coordination
 
 Thermal management systems shall coordinate cooling operations across air-based and liquid-based cooling systems through standardized control protocols enabling proactive thermal preparation and real-time optimization.
 
@@ -455,7 +463,7 @@ c) **phase-change detection** for two-phase systems monitoring vapor formation, 
 
 d) **heat recovery system integration** coordinating waste heat capture, municipal heat network delivery, and thermal energy quality verification.
 
-#### 6.3.2 Municipal heat integration protocol
+#### Municipal heat integration protocol
 
 Systems providing municipal heat integration shall implement coordination protocols enabling district heating network participation through standardized thermal energy delivery interfaces.
 
@@ -469,7 +477,7 @@ c) **flow rate coordination** matching municipal demand schedules with data cent
 
 d) **thermal energy metering** providing accurate heat transfer measurement (±2% accuracy) for commercial billing and carbon offset quantification.
 
-#### 6.3.3 Advanced cooling control
+#### Advanced cooling control
 
 Advanced cooling systems utilizing two-phase heat transfer shall implement specialized monitoring and control protocols for phase-change optimization and heat recovery maximization.
 
@@ -483,9 +491,9 @@ c) **heat recovery optimization** maximizing thermal energy capture for municipa
 
 d) **system fault detection** identifying flow instabilities, inadequate phase change, and system performance degradation with automatic corrective actions.
 
-### 6.4 Security protocol implementation
+### Security protocol implementation
 
-#### 6.4.1 Authentication protocols
+#### Authentication protocols
 
 DCPI authentication shall implement multi-factor authentication combining X.509 digital certificates for device authentication and JSON Web Tokens for session management with role-based authorization controls.
 
@@ -499,7 +507,7 @@ c) **role-based access control** defining differentiated access permissions for 
 
 d) **multi-factor authentication** requiring certificate-based device authentication combined with time-based one-time passwords (TOTP) for human operator access.
 
-#### 6.4.2 Message integrity protocols
+#### Message integrity protocols
 
 All DCPI control messages shall implement cryptographic integrity verification preventing unauthorized modification and ensuring authentic command execution.
 
@@ -513,7 +521,7 @@ c) **replay attack prevention** utilizing timestamp validation, sequence numbers
 
 d) **end-to-end encryption** implementing AES-256-GCM for message payload protection with perfect forward secrecy through ephemeral key exchange.
 
-#### 6.4.3 Network security protocols
+#### Network security protocols
 
 DCPI network communications shall implement defense-in-depth security architecture with network segmentation, intrusion detection, and anomaly monitoring capabilities.
 
@@ -527,9 +535,9 @@ c) **rate limiting and DDoS protection** implementing per-client connection limi
 
 d) **security event correlation** aggregating security events across multiple DCPI components and integrating with facility-wide security information and event management (SIEM) systems.
 
-### 6.5 Protocol versioning and compatibility
+### Protocol versioning and compatibility
 
-#### 6.5.1 Version management
+#### Version management
 
 DCPI protocol implementations shall support version negotiation enabling interoperability across different protocol versions during system upgrades and multi-vendor deployments.
 
@@ -559,11 +567,11 @@ d) **fault tolerance and recovery** verifying graceful degradation capabilities,
 
 ---
 
-## 7 Hardware interface specifications
+## Hardware interface specifications
 
-### 7.1 Baseboard Management Controller (BMC) requirements
+### Baseboard Management Controller (BMC) requirements
 
-#### 7.1.1 DCPI endpoint implementation
+#### DCPI endpoint implementation
 
 BMCs shall implement the API endpoints specified in Table 3.
 
@@ -578,7 +586,7 @@ BMCs shall implement the API endpoints specified in Table 3.
 | /dcpi/grid/status | GET | Grid interface status |
 | /dcpi/grid/signal | POST | Grid coordination signals |
 
-#### 7.1.2 Power monitoring extensions
+#### Power monitoring extensions
 
 BMCs shall provide power monitoring capabilities including:
 
@@ -588,7 +596,7 @@ b) power quality monitoring including total harmonic distortion (THD) and power 
 
 c) predictive load analytics with accuracy requirements specified in 6.2.2.
 
-#### 7.1.3 Thermal interface extensions
+#### Thermal interface extensions
 
 BMCs shall provide thermal monitoring capabilities including:
 
@@ -598,9 +606,9 @@ b) phase-change detection for two-phase cooling systems;
 
 c) heat recovery system integration points.
 
-### 7.2 Sensor requirements
+### Sensor requirements
 
-#### 7.2.1 Temperature sensors
+#### Temperature sensors
 
 Temperature sensors shall meet the specifications in Table 4.
 
@@ -612,25 +620,25 @@ Temperature sensors shall meet the specifications in Table 4.
 | Outlet coolant | ±0.1 °C | 1 Hz minimum | 15 °C to 95 °C |
 | Silicon junction | ±0.5 °C | 10 Hz minimum | 0 °C to 125 °C |
 
-#### 7.2.2 Flow sensors
+#### Flow sensors
 
 Flow sensors shall achieve ±1 % accuracy across 0 L/min to 5 000 L/min range with response times not exceeding 1 s.
 
-#### 7.2.3 Pressure sensors
+#### Pressure sensors
 
 Pressure sensors shall achieve ±0.25 % full-scale accuracy across 0 bar to 10 bar range with temperature compensation capabilities.
 
 ---
 
-## 8 Grid integration requirements
+## Grid integration requirements
 
-### 8.1 Load forecasting
+### Load forecasting
 
-#### 8.1.1 Forecast provision
+#### Forecast provision
 
-Data center facilities shall provide grid operators with electrical load forecasts meeting the requirements specified in 8.1.2 to 8.1.4.
+Data center facilities shall provide grid operators with electrical load forecasts meeting the requirements specified in Temporal resolution to Flexibility quantification.
 
-#### 8.1.2 Temporal resolution
+#### Temporal resolution
 
 Load forecasts shall provide:
 
@@ -640,7 +648,7 @@ b) 15 min resolution for 4 h ahead;
 
 c) 1 min resolution for immediate scheduling.
 
-#### 8.1.3 Accuracy requirements
+#### Accuracy requirements
 
 Load forecasts shall achieve:
 
@@ -650,7 +658,7 @@ b) minimum 70 % accuracy for 1 h forecasts;
 
 c) confidence interval reporting with 90 % confidence bounds.
 
-#### 8.1.4 Flexibility quantification
+#### Flexibility quantification
 
 Load forecasts shall specify available load adjustment capabilities including:
 
@@ -660,27 +668,27 @@ b) downward flexibility (load reduction capacity);
 
 c) response time characteristics for flexibility activation.
 
-### 8.2 Demand response
+### Demand response
 
-#### 8.2.1 Response capability
+#### Response capability
 
 Data center facilities shall provide demand response capabilities enabling load adjustment within time intervals specified by grid operators.
 
-#### 8.2.2 Communication protocols
+#### Communication protocols
 
 Demand response communications shall utilize secure, authenticated protocols conforming to IEC 61850-90-4.
 
-### 8.3 Renewable energy coordination
+### Renewable energy coordination
 
 Data center facilities should implement renewable energy coordination enabling preferential consumption of low-carbon electricity when available on the grid.
 
 ---
 
-## 9 Thermal management specifications
+## Thermal management specifications
 
-### 9.1 Liquid cooling systems
+### Liquid cooling systems
 
-#### 9.1.1 Single-phase systems
+#### Single-phase systems
 
 Single-phase liquid cooling systems shall provide:
 
@@ -690,7 +698,7 @@ b) inlet temperature control within ±0.5 °C of setpoint;
 
 c) heat recovery capabilities for municipal integration where applicable.
 
-#### 9.1.2 Two-phase systems
+#### Two-phase systems
 
 Two-phase liquid cooling systems shall provide:
 
@@ -700,9 +708,9 @@ b) vapor quality control and condensation management;
 
 c) pressure regulation within specified operating ranges.
 
-### 9.2 Heat recovery systems
+### Heat recovery systems
 
-#### 9.2.1 Municipal integration
+#### Municipal integration
 
 Heat recovery systems providing municipal integration shall:
 
@@ -712,25 +720,25 @@ b) maintain heat quality standards preventing contamination of municipal systems
 
 c) provide thermal energy measurement with accuracy of ±2 %.
 
-#### 9.2.2 Efficiency requirements
+#### Efficiency requirements
 
 Heat recovery systems should achieve minimum 60 % thermal energy recovery efficiency for waste heat utilization.
 
 ---
 
-## 10 Security requirements
+## Security requirements
 
-### 10.1 General security framework
+### General security framework
 
 DCPI implementations shall implement security measures conforming to IEC 62443-3-3 for industrial communication networks.
 
-### 10.2 Authentication and authorization
+### Authentication and authorization
 
-#### 10.2.1 Mutual authentication
+#### Mutual authentication
 
 All DCPI communications shall implement mutual authentication using X.509 digital certificates.
 
-#### 10.2.2 Role-based access control
+#### Role-based access control
 
 DCPI systems shall implement role-based access control enabling differentiated access for:
 
@@ -742,17 +750,17 @@ c) grid operators;
 
 d) municipal utility partners.
 
-### 10.3 Communication security
+### Communication security
 
-#### 10.3.1 Encryption
+#### Encryption
 
 All DCPI communications shall utilize transport layer security (TLS) version 1.3 or later.
 
-#### 10.3.2 Message integrity
+#### Message integrity
 
 DCPI messages shall include cryptographic signatures preventing unauthorized modification.
 
-### 10.4 Grid interface security
+### Grid interface security
 
 Grid operator communications shall implement additional security measures including:
 
@@ -764,13 +772,13 @@ c) emergency disconnection capabilities maintaining facility safety.
 
 ---
 
-## 11 Conformity assessment
+## Conformity assessment
 
-### 11.1 Conformity assessment framework
+### Conformity assessment framework
 
 Conformity assessment for DCPI implementations shall include the testing requirements specified in 11.2 to 11.4.
 
-### 11.2 Protocol conformance testing
+### Protocol conformance testing
 
 Protocol conformance testing shall verify:
 
@@ -780,7 +788,7 @@ b) compliance with temporal requirements specified in Table 1;
 
 c) accuracy requirements specified in Table 2.
 
-### 11.3 Hardware compatibility testing
+### Hardware compatibility testing
 
 Hardware compatibility testing shall verify:
 
@@ -790,7 +798,7 @@ b) communication interface compatibility;
 
 c) environmental resilience including temperature cycling and vibration testing.
 
-### 11.4 Interoperability testing
+### Interoperability testing
 
 Interoperability testing shall verify multi-vendor coordination capabilities including:
 
@@ -802,11 +810,11 @@ c) municipal system integration functionality.
 
 ---
 
-## 12 Test methods
+## Test methods
 
-### 12.1 Protocol testing procedures
+### Protocol testing procedures
 
-#### 12.1.1 Message format verification
+#### Message format verification
 
 Protocol implementations shall be tested using standardized test vectors validating:
 
@@ -816,7 +824,7 @@ b) required field presence and data types;
 
 c) value range validation.
 
-#### 12.1.2 Temporal performance testing
+#### Temporal performance testing
 
 Temporal performance shall be verified using:
 
@@ -826,9 +834,9 @@ b) grid operator demand response scenarios;
 
 c) thermal management coordination sequences.
 
-### 12.2 Hardware testing procedures
+### Hardware testing procedures
 
-#### 12.2.1 Sensor accuracy verification
+#### Sensor accuracy verification
 
 Sensor accuracy shall be verified using:
 
@@ -838,7 +846,7 @@ b) environmental testing across specified operating ranges;
 
 c) long-term stability assessment.
 
-#### 12.2.2 System integration testing
+#### System integration testing
 
 System integration testing shall validate:
 
