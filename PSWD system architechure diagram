@@ -1,6 +1,3 @@
-# PSWD System Architecture
-
-```mermaid
 graph TB
     %% External Systems Layer
     subgraph External ["🌐 External Systems"]
@@ -123,52 +120,3 @@ graph TB
     class WorkloadAPI,BMC,ThermalSensor realtime
     class Grid,Municipal,Renewable external
     class Auth,Crypto,Network security
-```
-
-## Key Components
-
-### External Systems
-- **Grid Operators**: Interface with electrical grid for demand response and load forecasting
-- **Municipal Utilities**: Integration with district heating and waste heat recovery systems
-- **Renewable Sources**: Real-time data from solar, wind, and other renewable energy sources
-
-### Integration Layer
-- **Grid Integration API**: Standards-compliant interface (IEC 61850-90-4) for grid coordination
-- **Carbon Tracking**: Monitors carbon intensity and optimizes for renewable energy usage
-- **Heat Coordination**: Manages thermal integration with municipal heating systems
-
-### Control Systems
-- **Power Management**: Core system for load balancing, peak shaving, and emergency response
-- **Battery Systems**: Energy storage management for load smoothing and grid services
-- **Thermal Management**: Advanced cooling control with heat recovery capabilities
-- **Predictive Engine**: ML-driven analytics for capacity planning and optimization
-
-### Hardware Layer
-- **Enhanced BMC**: Extended Redfish API with sub-second monitoring capabilities
-- **Power Monitoring**: High-precision power measurement (100ms resolution, ±0.5% accuracy)
-- **Thermal Sensors**: Precise temperature, flow, and pressure monitoring
-- **Cooling Hardware**: Single and two-phase liquid cooling systems
-
-### Workload Interface
-- **Workload API**: Event-driven messaging system with sub-second response times
-- **Scheduler Integration**: Support for Kubernetes and other container orchestration platforms
-- **Flexibility Management**: Dynamic workload control and migration capabilities
-
-### Security Framework
-- **Authentication**: Certificate-based authentication with role-based access control
-- **Message Security**: End-to-end encryption using TLS 1.3 and HMAC-SHA256
-- **Network Security**: VLAN isolation and intrusion detection systems
-
-## Performance Characteristics
-
-- **AI Training Workloads**: Support for 200+ MW power swings with 40ms transition times
-- **Real-time Response**: Sub-second API response times for critical control operations
-- **Monitoring Precision**: Power monitoring at 100ms intervals with ±0.5% accuracy
-- **Thermal Control**: Temperature sensing accuracy of ±0.1°C for precise cooling management
-
-## Integration Standards
-
-- **IEC 61850-90-4**: Grid communication protocol compliance
-- **Redfish API**: Industry-standard BMC interface extensions
-- **JSON Web Tokens**: Secure API authentication and authorization
-- **TLS 1.3**: Modern encryption for all external communications
