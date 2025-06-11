@@ -1,122 +1,126 @@
-graph TB
-    %% External Systems Layer
-    subgraph External ["🌐 External Systems"]
-        Grid["⚡ Grid Operators<br/>Load Forecasting<br/>Demand Response<br/>Renewable Coordination"]
-        Municipal["🏘️ Municipal Utilities<br/>District Heating<br/>Waste Heat Recovery<br/>Heat Quality Control"]
-        Renewable["🌱 Renewable Sources<br/>Solar/Wind Generation<br/>Carbon Intensity Data<br/>Generation Forecasts"]
-    end
+```mermaid
+graph TD
+    %% External Systems
+    GRID[Grid Operators<br/>Load Forecasting<br/>Demand Response]
+    MUNICIPAL[Municipal Utilities<br/>District Heating<br/>Waste Heat Recovery]
+    RENEWABLE[Renewable Sources<br/>Solar/Wind<br/>Carbon Intensity]
 
     %% External Integration Layer
-    subgraph Integration ["🔗 External Integration Layer"]
-        GridAPI["Grid Integration API<br/>IEC 61850-90-4<br/>Real-time Capacity<br/>Frequency Regulation"]
-        CarbonTrack["Carbon Tracking<br/>Intensity Monitoring<br/>Renewable Optimization<br/>Emissions Reporting"]
-        HeatCoord["Heat Coordination<br/>Municipal Integration<br/>Temperature Control<br/>Flow Management"]
+    subgraph EIL[External Integration Layer]
+        GRID_API[Grid Integration API<br/>IEC 61850-90-4]
+        CARBON_TRACK[Carbon Tracking<br/>Renewable Optimization]
+        HEAT_COORD[Heat Coordination<br/>Municipal Integration]
     end
 
-    %% Infrastructure Control Layer
-    subgraph Control ["🏗️ Infrastructure Control Layer"]
-        PowerMgmt["Power Management<br/>Load Balancing<br/>Peak Shaving<br/>Emergency Response"]
-        BatterySystem["Battery Systems<br/>Energy Storage<br/>Load Smoothing<br/>Grid Services"]
-        ThermalMgmt["Thermal Management<br/>Cooling Control<br/>Heat Recovery<br/>Phase Change"]
-        PredictiveEngine["Predictive Engine<br/>Load Analytics<br/>Capacity Planning<br/>Optimization"]
+    %% Infrastructure Control Layer  
+    subgraph ICL[Infrastructure Control Layer]
+        POWER_MGT[Power Management<br/>Load Balancing<br/>Peak Shaving]
+        BATTERY_SYS[Battery Systems<br/>Energy Storage<br/>Load Smoothing]
+        THERMAL_MGT[Thermal Management<br/>Cooling Control<br/>Heat Recovery]
+        PREDICT_ENG[Predictive Engine<br/>Load Analytics<br/>Optimization]
     end
 
     %% Hardware Abstraction Layer
-    subgraph Hardware ["🔧 Hardware Abstraction Layer"]
-        BMC["Enhanced BMC<br/>Redfish API Extension<br/>Sub-second Monitoring<br/>Sensor Aggregation"]
-        PowerMon["Power Monitoring<br/>100ms Resolution<br/>±0.5% Accuracy<br/>Quality Metrics"]
-        ThermalSensor["Thermal Sensors<br/>Temperature: ±0.1°C<br/>Flow: ±1% Accuracy<br/>Pressure Control"]
-        CoolingHW["Cooling Hardware<br/>Single/Two-Phase<br/>Liquid Circulation<br/>Heat Exchangers"]
+    subgraph HAL[Hardware Abstraction Layer]
+        BMC[Enhanced BMC<br/>Redfish API<br/>Sub-second Monitoring]
+        POWER_MON[Power Monitoring<br/>100ms Resolution<br/>±0.5% Accuracy]
+        THERMAL_SEN[Thermal Sensors<br/>±0.1°C Temperature<br/>±1% Flow Accuracy]
     end
 
     %% Workload Interface Layer
-    subgraph Interface ["💻 Workload Interface Layer"]
-        WorkloadAPI["Workload API<br/>Event-driven Messaging<br/>Sub-second Response<br/>JSON Web Tokens"]
-        SchedulerInt["Scheduler Integration<br/>Kubernetes<br/>Resource Managers<br/>Container Orchestration"]
-        FlexMgmt["Flexibility Management<br/>Throttling Control<br/>Migration Support<br/>Priority Handling"]
+    subgraph WIL[Workload Interface Layer]
+        WORKLOAD_API[Workload API<br/>Event-driven Messaging<br/>Sub-500ms Response]
+        SCHEDULER[Scheduler Integration<br/>Kubernetes<br/>Resource Managers]
+        FLEXIBILITY[Flexibility Management<br/>Throttling<br/>Migration]
     end
 
     %% Computational Workloads
-    subgraph Workloads ["🧠 Computational Workloads"]
-        AITrain["AI Training<br/>200+ MW Swings<br/>40ms Transitions<br/>High Priority"]
-        AIInfer["AI Inference<br/>Real-time Serving<br/>Variable Load<br/>Low Latency"]
-        HPC["HPC Applications<br/>Scientific Computing<br/>Batch Processing<br/>Predictable Load"]
-        Traditional["Traditional Compute<br/>Web Services<br/>Databases<br/>Steady State"]
-    end
+    AI_TRAINING[AI Training<br/>200+ MW Swings<br/>40ms Transitions]
+    AI_INFERENCE[AI Inference<br/>Real-time Serving<br/>Variable Load]
+    HPC[HPC Applications<br/>Scientific Computing<br/>Batch Processing]
+    TRADITIONAL[Traditional Compute<br/>Web Services<br/>Steady State]
 
     %% Physical Infrastructure
-    subgraph Physical ["⚙️ Physical Infrastructure"]
-        PowerDist["Power Distribution<br/>Transformers<br/>Circuit Breakers<br/>UPS Systems"]
-        BatteryPhys["Battery Storage<br/>Li-ion Arrays<br/>Inverters<br/>Safety Systems"]
-        CoolingPhys["Cooling Systems<br/>Liquid Loops<br/>Heat Exchangers<br/>Pumps & Valves"]
-        Building["Building Systems<br/>HVAC Integration<br/>Fire Safety<br/>Environmental Control"]
+    POWER_DIST[Power Distribution<br/>Transformers<br/>UPS Systems]
+    BATTERY_PHYS[Battery Storage<br/>Li-ion Arrays<br/>Inverters]
+    COOLING_PHYS[Cooling Systems<br/>Liquid Loops<br/>Heat Exchangers]
+
+    %% Security Layer
+    subgraph SEC[Security Framework]
+        AUTH[Authentication<br/>X.509 Certificates<br/>JWT Tokens]
+        CRYPTO[Message Security<br/>TLS 1.3<br/>HMAC-SHA256]
+        NETWORK[Network Security<br/>VLAN Isolation<br/>Intrusion Detection]
     end
 
-    %% Security Framework
-    subgraph Security ["🔒 Security Framework"]
-        Auth["Authentication<br/>X.509 Certificates<br/>JWT Tokens<br/>Role-based Access"]
-        Crypto["Message Security<br/>TLS 1.3<br/>HMAC-SHA256<br/>Digital Signatures"]
-        Network["Network Security<br/>VLAN Isolation<br/>Intrusion Detection<br/>Emergency Disconnect"]
-    end
+    %% External Connections
+    GRID --> GRID_API
+    MUNICIPAL --> HEAT_COORD
+    RENEWABLE --> CARBON_TRACK
 
-    %% External Data Flows
-    Grid -.->|Grid Status & Signals| GridAPI
-    Renewable -.->|Generation Data| CarbonTrack
-    Municipal -.->|Heat Demand| HeatCoord
-    
-    %% Integration to Control
-    GridAPI -->|Demand Response| PowerMgmt
-    CarbonTrack -->|Optimization Signals| PredictiveEngine
-    HeatCoord -->|Heat Recovery Control| ThermalMgmt
-    
-    %% Control Layer Interactions
-    PowerMgmt -->|Battery Commands| BatterySystem
-    PowerMgmt -->|Load Control| PowerMon
-    ThermalMgmt -->|Cooling Commands| ThermalSensor
-    PredictiveEngine -->|Forecasts| PowerMgmt
-    PredictiveEngine -->|Thermal Prep| ThermalMgmt
-    
-    %% Hardware to Control Feedback
-    BMC -->|Hardware Status| PowerMgmt
-    PowerMon -->|Real-time Data| PredictiveEngine
-    ThermalSensor -->|Temperature Data| ThermalMgmt
-    CoolingHW -->|System Status| ThermalSensor
-    
-    %% Workload Interface
-    WorkloadAPI -->|Workload Announcements| PowerMgmt
-    WorkloadAPI -->|Resource Requests| ThermalMgmt
-    SchedulerInt -->|Job Scheduling| WorkloadAPI
-    FlexMgmt -->|Control Commands| WorkloadAPI
-    
-    %% Workload Connections
-    AITrain -->|Power Profile| WorkloadAPI
-    AIInfer -->|Resource Needs| WorkloadAPI
-    HPC -->|Batch Requests| WorkloadAPI
-    Traditional -->|Steady Load| WorkloadAPI
-    
-    %% Infrastructure Response
-    PowerMgmt -.->|Infrastructure Response| WorkloadAPI
-    ThermalMgmt -.->|Thermal Status| WorkloadAPI
-    BatterySystem -.->|Storage Status| WorkloadAPI
-    
-    %% Physical Implementation
-    PowerMon -->|Measurements| PowerDist
-    BatterySystem -->|Charge/Discharge| BatteryPhys
-    ThermalSensor -->|Control Signals| CoolingPhys
-    ThermalMgmt -->|Building Integration| Building
-    
+    %% External Integration to Infrastructure Control
+    GRID_API --> POWER_MGT
+    CARBON_TRACK --> PREDICT_ENG
+    HEAT_COORD --> THERMAL_MGT
+
+    %% Infrastructure Control Layer Connections
+    POWER_MGT --> BATTERY_SYS
+    PREDICT_ENG --> POWER_MGT
+    PREDICT_ENG --> THERMAL_MGT
+    POWER_MGT <--> THERMAL_MGT
+
+    %% Hardware Abstraction Connections
+    BMC --> POWER_MGT
+    POWER_MON --> PREDICT_ENG
+    THERMAL_SEN --> THERMAL_MGT
+    POWER_MGT --> POWER_MON
+    THERMAL_MGT --> THERMAL_SEN
+
+    %% Workload Interface Connections
+    WORKLOAD_API --> POWER_MGT
+    WORKLOAD_API --> THERMAL_MGT
+    SCHEDULER --> WORKLOAD_API
+    FLEXIBILITY --> WORKLOAD_API
+
+    %% Workload to Interface Connections
+    AI_TRAINING --> WORKLOAD_API
+    AI_INFERENCE --> WORKLOAD_API
+    HPC --> WORKLOAD_API
+    TRADITIONAL --> WORKLOAD_API
+
+    %% Hardware Connections
+    POWER_MON --> POWER_DIST
+    BATTERY_SYS --> BATTERY_PHYS
+    THERMAL_SEN --> COOLING_PHYS
+
+    %% Infrastructure Response (feedback)
+    POWER_MGT -.-> WORKLOAD_API
+    THERMAL_MGT -.-> WORKLOAD_API
+    BATTERY_SYS -.-> WORKLOAD_API
+
+    %% Grid Response (feedback)
+    POWER_MGT -.-> GRID_API
+    GRID_API -.-> GRID
+
+    %% Municipal Heat Response (feedback)
+    THERMAL_MGT -.-> HEAT_COORD
+    HEAT_COORD -.-> MUNICIPAL
+
     %% Security Integration
-    Auth -.->|Secure Access| WorkloadAPI
-    Crypto -.->|Message Integrity| GridAPI
-    Network -.->|Traffic Isolation| BMC
+    AUTH --> WORKLOAD_API
+    CRYPTO --> GRID_API
+    NETWORK --> BMC
 
-    %% Styling for GitHub compatibility
-    classDef critical fill:#ffcccc,stroke:#ff0000,stroke-width:2px
-    classDef realtime fill:#ccffcc,stroke:#00aa00,stroke-width:2px
-    classDef external fill:#ccccff,stroke:#0000aa,stroke-width:2px
-    classDef security fill:#ffffcc,stroke:#aaaa00,stroke-width:2px
-    
-    class AITrain,PowerMon,BatterySystem critical
-    class WorkloadAPI,BMC,ThermalSensor realtime
-    class Grid,Municipal,Renewable external
-    class Auth,Crypto,Network security
+    %% Critical Path Styling
+    style AI_TRAINING fill:#ffcccc
+    style POWER_MON fill:#ffcccc
+    style BATTERY_SYS fill:#ffcccc
+    style WORKLOAD_API fill:#ccffcc
+    style BMC fill:#ccffcc
+    style THERMAL_SEN fill:#ccffcc
+    style GRID fill:#ccccff
+    style MUNICIPAL fill:#ccccff
+    style RENEWABLE fill:#ccccff
+    style AUTH fill:#ffffcc
+    style CRYPTO fill:#ffffcc
+    style NETWORK fill:#ffffcc
+```
