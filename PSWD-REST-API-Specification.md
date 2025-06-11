@@ -1,786 +1,1048 @@
-# PSWD REST API Specification vx.y
-
-## Authentication
-
-### POST /auth/token
-Obtain JWT access token using mTLS client certificate authentication.
-
-**Request Headers:**
-```http
-Content-Type: application/json
-X-Client-Certificate-CN: workload-scheduler-01.example.com
-```
-
-**Request Body:**
-```json
-{
-  "client_id": "workload-scheduler-01",
-  "scope": ["workload:announce", "power:read", "thermal:read"],
-  "facility_id": "datacenter-campus-primary"
-}
-```
-
-**Response (200 OK):**
-```json
-{
-  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "token_type": "Bearer",
-  "expires_in": 3600,
-  "scope": ["workload:announce", "power:read", "thermal:read"],
-  "facility_id": "datacenter-campus-primary"
-}
-```
-
-### POST /auth/refresh
-Refresh expired access token.
-
-**Request Body:**
-```json
-{
-  "refresh_token": "refresh_token_string"
-}
-```
-
----
-
-## Workload Management
-
-### POST /workloads/announce
-Announce new computational workload with power and thermal requirements.
-
-**Required Scope:** `workload:announce`
-
-**Request Body:**
-```json
-{
-  "workload_id": "ai-training-job-12345",
-  "workload_type": "ai_training",
-  "classification": {
-    "category": "machine_learning",
-    "subcategory": "transformer_training",
-    "model_size": "175B_parameters"
-  },
-  "power_profile": {
-    "peak_power_mw": 180.5,
-    "baseline_power_mw": 20.0,
-    "average_power_mw": 145.2,
-    "ramp_rate_mw_per_sec": 45.0,
-    "duration_estimate_sec": 3600,
-    "power_schedule": [
-      {
-        "timestamp": "2025-06-04T15:00:00Z",
-        "power_mw": 20.0,
-        "phase": "data_loading"
-      },
-      {
-        "timestamp": "2025-06-04T15:05:00Z", 
-        "power_mw": 180.5,
-        "phase": "forward_pass"
-      },
-      {
-        "timestamp": "2025-06-04T15:10:00Z",
-        "power_mw": 200.0,
-        "phase": "backward_pass"
-      }
-    ]
-  },
-  "thermal_profile": {
-    "heat_generation_mw": 175.0,
-    "preferred_coolant_temp_c": 65.0,
-    "max_silicon_temp_c": 85.0,
-    "critical_temp_c": 95.0,
-    "heat_distribution": {
-      "gpu_percent": 80,
-      "cpu_percent": 15,
-      "memory_percent": 5
-    }
-  },
-  "flexibility": {
-    "can_delay": true,
-    "max_delay_sec": 1800,
-    "can_throttle": true,
-    "min_power_mw": 90.0,
-    "can_pause": true,
-    "max_pause_duration_sec": 900,
-    "can_migrate": false
-  },
-  "timing_constraints": {
-    "priority": "high",
-    "deadline": "2025-06-05T08:00:00Z",
-    "earliest_start": "2025-06-04T15:00:00Z",
-    "latest_start": "2025-06-04T18:00:00Z",
-    "business_criticality": "research_training",
-    "preemption_allowed": false
-  },
-  "dependencies": [
-    "data-preprocessing-job-11223"
-  ],
-  "resource_requirements": {
-    "compute_nodes": 64,
-    "gpu_count": 512,
-    "memory_gb": 40960,
-    "storage_tb": 50
-  }
-}
-```
-
-**Response (202 Accepted):**
-```json
-{
-  "workload_id": "ai-training-job-12345",
-  "status": "pending_approval",
-  "request_id": "req-789012",
-  "estimated_response_time_sec": 5,
-  "message": "Workload announcement received and under evaluation"
-}
-```
-
-### GET /workloads/{workload_id}/status
-Get current status of announced workload.
-
-**Response (200 OK):**
-```json
-{
-  "workload_id": "ai-training-job-12345",
-  "status": "approved_with_conditions",
-  "approval_timestamp": "2025-06-04T14:30:05Z",
-  "conditions": {
-    "start_time": "2025-06-04T15:05:00Z",
-    "max_power_mw": 150.0,
-    "duration_limit_sec": 3000
-  },
-  "infrastructure_allocation": {
-    "cooling_loop": "liquid_cooling_loop_a",
-    "power_circuit": "circuit_7",
-    "thermal_capacity_mw": 145.0
-  },
-  "grid_status": {
-    "green_energy_available": true,
-    "carbon_intensity_g_co2_kwh": 45,
-    "grid_stability": "normal"
-  }
-}
-```
-
-### PUT /workloads/{workload_id}/control
-Control running workload (throttle, pause, resume, terminate).
-
-**Required Scope:** `workload:control`
-
-**Request Body:**
-```json
-{
-  "action": "throttle",
-  "parameters": {
-    "target_power_mw": 120.0,
-    "ramp_rate_mw_per_sec": 10.0,
-    "reason": "grid_stability_request"
-  }
-}
-```
-
----
-
-## Power Management
-
-### GET /power/realtime
-Get real-time power measurements with sub-second resolution.
-
-**Required Scope:** `power:read`
-
-**Query Parameters:**
-- `resolution_ms`: Temporal resolution (100-1000ms, default: 100)
-- `duration_sec`: Measurement window (1-300sec, default: 60)
-
-**Response (200 OK):**
-```json
-{
-  "facility_id": "datacenter-campus-primary",
-  "measurement_timestamp": "2025-06-04T14:35:00.100Z",
-  "total_power_mw": 145.7,
-  "power_quality": {
-    "thd_percent": 2.1,
-    "power_factor": 0.97,
-    "voltage_stability": "normal"
-  },
-  "power_breakdown": {
-    "compute_load_mw": 125.5,
-    "cooling_systems_mw": 15.2,
-    "infrastructure_mw": 5.0
-  },
-  "measurements": [
-    {
-      "timestamp": "2025-06-04T14:35:00.000Z",
-      "power_mw": 145.7,
-      "voltage_v": 480.2,
-      "current_a": 175.1,
-      "frequency_hz": 60.0
-    }
-  ]
-}
-```
-
-### POST /power/control
-Execute power management control commands.
-
-**Required Scope:** `power:control`
-
-**Request Body:**
-```json
-{
-  "commands": [
-    {
-      "target": "battery_system_1",
-      "action": "discharge",
-      "parameters": {
-        "power_mw": 75.0,
-        "duration_sec": 1800,
-        "ramp_rate_mw_per_sec": 25.0
-      }
-    },
-    {
-      "target": "grid_interface",
-      "action": "signal_load_change",
-      "parameters": {
-        "delta_power_mw": 50.0,
-        "notification_time_sec": 300
-      }
-    }
-  ]
-}
-```
-
-### GET /power/forecast
-Get power consumption forecast with confidence intervals.
-
-**Required Scope:** `power:read`
-
-**Query Parameters:**
-- `horizon_hours`: Forecast horizon (1-48 hours, default: 24)
-- `resolution_minutes`: Temporal resolution (1-60 minutes, default: 15)
-
-**Response (200 OK):**
-```json
-{
-  "forecast_generated": "2025-06-04T14:00:00Z",
-  "forecast_horizon_hours": 24,
-  "baseline_load_mw": 95.0,
-  "forecast_accuracy": {
-    "fifteen_min_percent": 85,
-    "one_hour_percent": 78
-  },
-  "forecast_data": [
-    {
-      "timestamp": "2025-06-04T15:00:00Z",
-      "predicted_load_mw": 145.0,
-      "confidence_percent": 85,
-      "confidence_interval": {
-        "lower_bound_mw": 135.0,
-        "upper_bound_mw": 155.0
-      },
-      "flexibility": {
-        "up_mw": 45.0,
-        "down_mw": 25.0,
-        "response_time_sec": 30
-      },
-      "workload_composition": {
-        "ai_training_mw": 85.0,
-        "inference_serving_mw": 35.0,
-        "traditional_compute_mw": 25.0
-      }
-    }
-  ]
-}
-```
-
----
-
-## Thermal Management
-
-### GET /thermal/status
-Get real-time thermal system status.
-
-**Required Scope:** `thermal:read`
-
-**Response (200 OK):**
-```json
-{
-  "facility_id": "datacenter-campus-primary",
-  "measurement_timestamp": "2025-06-04T14:35:00Z",
-  "cooling_systems": [
-    {
-      "system_id": "liquid_cooling_loop_a",
-      "type": "single_phase",
-      "status": "operational",
-      "inlet_temp_c": 12.1,
-      "outlet_temp_c": 18.7,
-      "flow_rate_lpm": 2500,
-      "pressure_bar": 3.2,
-      "heat_load_mw": 120.5,
-      "efficiency_percent": 92.1
-    },
-    {
-      "system_id": "two_phase_cooling_b",
-      "type": "two_phase", 
-      "status": "operational",
-      "phase_change_detected": true,
-      "vapor_quality_percent": 15.2,
-      "condensation_temp_c": 78.5,
-      "heat_recovery_mw": 95.0
-    }
-  ],
-  "heat_recovery": {
-    "municipal_interface_active": true,
-    "heat_delivered_mw": 95.0,
-    "supply_temp_c": 82.1,
-    "return_temp_c": 65.3,
-    "municipal_demand_mw": 120.0
-  }
-}
-```
-
-### POST /thermal/control
-Execute thermal management control commands.
-
-**Required Scope:** `thermal:control`
-
-**Request Body:**
-```json
-{
-  "system_id": "liquid_cooling_loop_a",
-  "commands": [
-    {
-      "parameter": "flow_rate",
-      "target_value": 3000,
-      "unit": "lpm",
-      "ramp_rate_per_sec": 100
-    },
-    {
-      "parameter": "inlet_temperature",
-      "target_value": 10.0,
-      "unit": "celsius",
-      "tolerance": 0.2
-    }
-  ],
-  "coordination": {
-    "prepare_for_workload": "ai-training-job-12345",
-    "estimated_heat_load_mw": 175.0,
-    "preparation_time_sec": 120
-  }
-}
-```
-
-### GET /thermal/sensors
-Get detailed sensor readings from thermal monitoring systems.
-
-**Required Scope:** `thermal:read`
-
-**Query Parameters:**
-- `system_id`: Specific cooling system (optional)
-- `sensor_type`: Temperature, flow, pressure (optional)
-- `resolution_sec`: Sampling resolution (1-60sec, default: 1)
-
-**Response (200 OK):**
-```json
-{
-  "sensors": [
-    {
-      "sensor_id": "temp_inlet_001",
-      "type": "temperature",
-      "location": "coolant_inlet",
-      "value": 12.1,
-      "unit": "celsius",
-      "accuracy": 0.1,
-      "timestamp": "2025-06-04T14:35:00Z",
-      "status": "normal"
-    },
-    {
-      "sensor_id": "flow_main_001", 
-      "type": "flow_rate",
-      "location": "main_circulation",
-      "value": 2500,
-      "unit": "lpm",
-      "accuracy": 25,
-      "timestamp": "2025-06-04T14:35:00Z",
-      "status": "normal"
-    }
-  ]
-}
-```
-
----
-
-## Grid Integration
-
-### POST /grid/forecast
-Submit load forecast to grid operators.
-
-**Required Scope:** `grid:communicate`
-
-**Request Body:**
-```json
-{
-  "facility_id": "datacenter-campus-primary",
-  "forecast_horizon_hours": 24,
-  "baseline_load_mw": 95.0,
-  "forecast_data": [
-    {
-      "timestamp": "2025-06-04T15:00:00Z",
-      "predicted_load_mw": 145.0,
-      "confidence_percent": 85,
-      "flexibility_up_mw": 45.0,
-      "flexibility_down_mw": 25.0,
-      "response_time_sec": 30
-    }
-  ]
-}
-```
-
-### GET /grid/status
-Get current grid conditions and renewable energy availability.
-
-**Required Scope:** `grid:read`
-
-**Response (200 OK):**
-```json
-{
-  "grid_operator": "utility-company-west",
-  "timestamp": "2025-06-04T14:35:00Z",
-  "grid_frequency_hz": 60.001,
-  "stability_status": "normal",
-  "carbon_intensity_g_co2_kwh": 45,
-  "renewable_generation": {
-    "total_available_mw": 500,
-    "wind_mw": 325,
-    "solar_mw": 150,
-    "hydro_mw": 25,
-    "percentage_of_total": 78
-  },
-  "electricity_pricing": {
-    "current_price_per_mwh": 45.50,
-    "next_hour_forecast": 42.30,
-    "peak_time_active": false
-  },
-  "demand_response_active": false
-}
-```
-
-### POST /grid/demand-response
-Respond to grid operator demand response request.
-
-**Required Scope:** `grid:respond`
-
-**Request Body:**
-```json
-{
-  "event_id": "dr-event-2025-154",
-  "response": "accept",
-  "commitment": {
-    "load_reduction_mw": 75.0,
-    "duration_hours": 2,
-    "response_time_sec": 300,
-    "affected_workloads": [
-      "ai-training-job-12345",
-      "research-simulation-67890"
-    ]
-  }
-}
-```
-
----
-
-## Municipal Heat Integration
-
-### GET /heat/municipal/status
-Get status of municipal heat network integration.
-
-**Required Scope:** `heat:read`
-
-**Response (200 OK):**
-```json
-{
-  "municipal_partner": "berlin-district-heating",
-  "connection_status": "active",
-  "heat_delivery": {
-    "current_output_mw": 95.0,
-    "supply_temperature_c": 82.1,
-    "return_temperature_c": 65.3,
-    "flow_rate_m3h": 1200,
-    "heat_quality": "district_heating_grade"
-  },
-  "municipal_demand": {
-    "current_request_mw": 120.0,
-    "peak_demand_forecast_mw": 150.0,
-    "seasonal_profile": "winter_heating"
-  },
-  "economic_metrics": {
-    "heat_price_eur_per_mwh": 25.00,
-    "carbon_offset_tons_co2": 45.2,
-    "revenue_today_eur": 2280.50
-  }
-}
-```
-
-### POST /heat/municipal/availability
-Signal heat availability to municipal heat network.
-
-**Required Scope:** `heat:communicate`
-
-**Request Body:**
-```json
-{
-  "availability_window": {
-    "start_time": "2025-06-04T15:00:00Z",
-    "end_time": "2025-06-04T21:00:00Z"
-  },
-  "heat_profile": {
-    "available_heat_mw": 120.0,
-    "supply_temperature_c": 85.0,
-    "maximum_flow_rate_m3h": 1500,
-    "reliability_percent": 95
-  },
-  "coordination": {
-    "workload_dependent": true,
-    "affected_workloads": ["ai-training-job-12345"],
-    "flexibility_mw": 30.0
-  }
-}
-```
-
----
-
-## System Monitoring
-
-### GET /system/health
-Get overall DCPI system health status.
-
-**Required Scope:** `system:read`
-
-**Response (200 OK):**
-```json
-{
-  "overall_status": "healthy",
-  "timestamp": "2025-06-04T14:35:00Z",
-  "subsystems": {
-    "power_management": {
-      "status": "operational",
-      "response_time_ms": 75,
-      "accuracy_percent": 99.2
-    },
-    "thermal_management": {
-      "status": "operational", 
-      "cooling_efficiency_percent": 92.1,
-      "sensor_availability_percent": 98.5
-    },
-    "grid_integration": {
-      "status": "operational",
-      "last_communication": "2025-06-04T14:34:30Z",
-      "forecast_accuracy_percent": 85.2
-    },
-    "security": {
-      "status": "secure",
-      "certificate_expiry": "2025-12-04T14:35:00Z",
-      "intrusion_attempts": 0
-    }
-  },
-  "performance_metrics": {
-    "api_response_time_ms": 125,
-    "uptime_percent": 99.97,
-    "error_rate_percent": 0.03
-  }
-}
-```
-
-### GET /system/metrics
-Get detailed system performance metrics.
-
-**Required Scope:** `system:read`
-
-**Query Parameters:**
-- `metric_type`: power, thermal, grid, security (optional)
-- `time_range`: 1h, 24h, 7d (default: 1h)
-
-**Response (200 OK):**
-```json
-{
-  "metrics_window": {
-    "start_time": "2025-06-04T13:35:00Z",
-    "end_time": "2025-06-04T14:35:00Z",
-    "resolution": "1_minute"
-  },
-  "power_metrics": {
-    "average_load_mw": 142.5,
-    "peak_load_mw": 185.2,
-    "load_factor": 0.77,
-    "power_quality_score": 0.95
-  },
-  "thermal_metrics": {
-    "cooling_efficiency": 0.921,
-    "heat_recovery_rate": 0.68,
-    "temperature_stability": 0.98
-  },
-  "coordination_metrics": {
-    "workload_approval_rate": 0.94,
-    "forecast_accuracy": 0.85,
-    "response_time_compliance": 0.99
-  }
-}
-```
-
----
-
-## Error Handling
-
-### Standard Error Response Format
-
-```json
-{
-  "error": {
-    "code": "INSUFFICIENT_COOLING_CAPACITY",
-    "message": "Requested workload exceeds available thermal management capacity",
-    "details": {
-      "requested_heat_mw": 200.0,
-      "available_capacity_mw": 150.0,
-      "suggested_alternatives": [
-        "Reduce workload power consumption to 135MW",
-        "Delay start time by 45 minutes"
-      ]
-    },
-    "timestamp": "2025-06-04T14:35:00Z",
-    "request_id": "req-789012"
-  }
-}
-```
-
-### Error Codes
-
-| Code | HTTP Status | Description |
-|---|---|---|
-| `INVALID_WORKLOAD_PROFILE` | 400 | Workload power profile contains invalid data |
-| `INSUFFICIENT_POWER_CAPACITY` | 409 | Requested power exceeds available infrastructure capacity |
-| `INSUFFICIENT_COOLING_CAPACITY` | 409 | Thermal requirements exceed cooling system capacity |
-| `GRID_STABILITY_CONSTRAINT` | 409 | Workload would create grid stability issues |
-| `AUTHENTICATION_FAILED` | 401 | Invalid or expired authentication credentials |
-| `AUTHORIZATION_DENIED` | 403 | Insufficient permissions for requested operation |
-| `RESOURCE_NOT_FOUND` | 404 | Specified workload or resource does not exist |
-| `RATE_LIMIT_EXCEEDED` | 429 | API rate limit exceeded |
-| `SYSTEM_MAINTENANCE` | 503 | DCPI system temporarily unavailable |
-
----
-
-## Rate Limiting
-
-### Standard Rate Limits
-
-| Endpoint Category | Requests per minute | Burst limit |
-|---|---|---|
-| Authentication | 10 | 20 |
-| Workload operations | 60 | 100 |
-| Real-time monitoring | 600 | 1000 |
-| Control operations | 30 | 50 |
-| Grid communications | 20 | 40 |
-
-### Rate Limit Headers
-
-```http
-X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 45
-X-RateLimit-Reset: 1638360000
-```
-
----
-
-## WebSocket Endpoints
-
-### WSS /stream/power/realtime
-Real-time power monitoring stream with sub-second updates.
-
-**Connection:**
-```javascript
-const ws = new WebSocket('wss://dcpi-controller.example.com/api/v1/stream/power/realtime');
-ws.addEventListener('message', (event) => {
-  const powerData = JSON.parse(event.data);
-  console.log(powerData);
-});
-```
-
-**Message Format:**
-```json
-{
-  "timestamp": "2025-06-04T14:35:00.100Z",
-  "power_mw": 145.7,
-  "power_quality": {
-    "thd_percent": 2.1,
-    "power_factor": 0.97
-  },
-  "workload_breakdown": {
-    "ai-training-job-12345": 85.2,
-    "inference-cluster-01": 35.8,
-    "baseline_infrastructure": 24.7
-  }
-}
-```
-
-### WSS /stream/thermal/realtime
-Real-time thermal monitoring stream.
-
-**Message Format:**
-```json
-{
-  "timestamp": "2025-06-04T14:35:00Z",
-  "cooling_systems": [
-    {
-      "system_id": "liquid_cooling_loop_a",
-      "inlet_temp_c": 12.1,
-      "outlet_temp_c": 18.7,
-      "flow_rate_lpm": 2500,
-      "heat_load_mw": 120.5
-    }
-  ]
-}
-```
-
-### WSS /stream/grid/events
-Grid operator event notifications and demand response requests.
-
-**Message Format:**
-```json
-{
-  "event_type": "demand_response_request",
-  "timestamp": "2025-06-04T14:35:00Z",
-  "event_id": "dr-event-2025-154",
-  "parameters": {
-    "requested_reduction_mw": 75.0,
-    "duration_hours": 2,
-    "response_deadline": "2025-06-04T14:40:00Z",
-    "compensation_rate": 150.00
-  }
-}
-```
-
----
-
-## Implementation Notes
-
-### Security Requirements
-- All endpoints require mTLS authentication with valid client certificates
-- JWT tokens must be included in Authorization header: `Bearer <token>`
-- All communications must use TLS 1.3 or higher
-- Rate limiting enforced per client certificate
-
-### Performance Requirements
-- API response times must not exceed 1 second for control operations
-- Real-time monitoring endpoints must respond within 100ms
-- WebSocket streams must provide sub-second updates with <10ms jitter
-
-### Data Validation
-- All timestamps must be in ISO 8601 format with UTC timezone
-- Power values must be non-negative and within facility capacity limits
-- Temperature values must be within sensor operating ranges
-- All numeric values must include appropriate precision and units
-
-### Backward Compatibility
-- API versioning in URL path ensures compatibility during upgrades
-- Deprecated endpoints will be supported for minimum 12 months
-- New optional fields may be added without version changes
-- Breaking changes require new API version
+openapi: 3.0.3
+info:
+  title: Power Source to Workload Dynamics (PSWD) API
+  description: |
+    RESTful API specification for intelligent coordination between computational workloads 
+    and energy infrastructure systems, based on ISO/TS PSWD Technical Specification.
+    
+    This API enables real-time communication between:
+    - Computational workloads and infrastructure systems
+    - Data center infrastructure and grid operators
+    - Cooling systems and thermal management
+    - Battery storage and load smoothing systems
+    
+    **Key Features:**
+    - Sub-second response times for critical operations
+    - Event-driven architecture for real-time coordination
+    - Secure authentication using JWT tokens
+    - Grid integration for demand response and renewable energy optimization
+    - Municipal heat network coordination
+  version: "1.0.0"
+  contact:
+    name: PSWD Technical Committee
+    email: pswd-support@example.org
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.pswd.example.com/v1
+    description: Production PSWD API Server
+  - url: https://staging-api.pswd.example.com/v1
+    description: Staging PSWD API Server
+
+security:
+  - JWT_Auth: []
+  - API_Key: []
+
+paths:
+  # Authentication
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate and obtain JWT token
+      description: Authenticate user credentials and receive JWT token for API access
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - role
+              properties:
+                username:
+                  type: string
+                  example: "infrastructure_manager"
+                password:
+                  type: string
+                  format: password
+                  example: "secure_password_123"
+                role:
+                  type: string
+                  enum: ["workload_operator", "infrastructure_manager", "grid_operator", "municipal_utility"]
+                  example: "infrastructure_manager"
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  token_type:
+                    type: string
+                    example: "Bearer"
+                  expires_in:
+                    type: integer
+                    example: 3600
+                  role:
+                    type: string
+                    example: "infrastructure_manager"
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Workload Management
+  /workload/announce:
+    post:
+      tags:
+        - Workload Management
+      summary: Announce new computational workload
+      description: |
+        Announce a new computational workload to infrastructure systems for 
+        resource allocation and coordination. Response time: <500ms
+      security:
+        - JWT_Auth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkloadAnnouncement'
+      responses:
+        '200':
+          description: Workload announcement processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfrastructureResponse'
+        '400':
+          description: Invalid workload announcement format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Infrastructure capacity unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /workload/{workload_id}/control:
+    post:
+      tags:
+        - Workload Management
+      summary: Send control commands to active workload
+      description: |
+        Send real-time control commands to modify workload behavior 
+        (throttle, pause, resume, terminate). Response time: <250ms
+      security:
+        - JWT_Auth: []
+      parameters:
+        - name: workload_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "wl_ai_training_001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkloadControl'
+      responses:
+        '200':
+          description: Control command executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  workload_id:
+                    type: string
+                  command_status:
+                    type: string
+                    enum: ["executed", "pending", "failed"]
+                  current_power_mw:
+                    type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+        '404':
+          description: Workload not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /workload/{workload_id}/status:
+    get:
+      tags:
+        - Workload Management
+      summary: Get workload status and metrics
+      description: Retrieve current status and performance metrics for active workload
+      security:
+        - JWT_Auth: []
+      parameters:
+        - name: workload_id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "wl_ai_training_001"
+      responses:
+        '200':
+          description: Workload status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkloadStatus'
+
+  # Power Management
+  /power/realtime:
+    get:
+      tags:
+        - Power Management
+      summary: Get real-time power measurements
+      description: |
+        Retrieve real-time power consumption data with 100ms temporal resolution.
+        Response time: <100ms
+      security:
+        - JWT_Auth: []
+      parameters:
+        - name: duration_seconds
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 3600
+            default: 60
+          description: Duration of historical data to retrieve (seconds)
+        - name: resolution_ms
+          in: query
+          schema:
+            type: integer
+            enum: [100, 250, 500, 1000]
+            default: 1000
+          description: Temporal resolution in milliseconds
+      responses:
+        '200':
+          description: Real-time power data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PowerMeasurement'
+
+  /power/forecast:
+    get:
+      tags:
+        - Power Management
+      summary: Get power consumption forecasts
+      description: Retrieve power consumption forecasts for grid coordination
+      security:
+        - JWT_Auth: []
+      parameters:
+        - name: horizon_hours
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 48
+            default: 24
+          description: Forecast time horizon in hours
+      responses:
+        '200':
+          description: Power forecast retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PowerForecast'
+
+  # Battery Management
+  /battery/control:
+    post:
+      tags:
+        - Battery Management
+      summary: Control battery energy storage system
+      description: |
+        Send control commands to battery system for load smoothing and peak shaving.
+        Response time: <250ms
+      security:
+        - JWT_Auth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatteryControl'
+      responses:
+        '200':
+          description: Battery control command executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  command_id:
+                    type: string
+                  status:
+                    type: string
+                    enum: ["executed", "pending", "failed"]
+                  current_charge_level_percent:
+                    type: number
+                    minimum: 0
+                    maximum: 100
+                  power_output_mw:
+                    type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /battery/status:
+    get:
+      tags:
+        - Battery Management
+      summary: Get battery system status
+      description: Retrieve current battery system status and capacity information
+      security:
+        - JWT_Auth: []
+      responses:
+        '200':
+          description: Battery status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatteryStatus'
+
+  # Thermal Management
+  /thermal/status:
+    get:
+      tags:
+        - Thermal Management
+      summary: Get thermal system status
+      description: |
+        Retrieve current thermal management system status including cooling 
+        system performance and heat recovery metrics
+      security:
+        - JWT_Auth: []
+      responses:
+        '200':
+          description: Thermal status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThermalStatus'
+
+  /thermal/control:
+    post:
+      tags:
+        - Thermal Management
+      summary: Control thermal management systems
+      description: |
+        Send control commands to cooling systems and heat recovery infrastructure.
+        Response time: <1s
+      security:
+        - JWT_Auth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThermalControl'
+      responses:
+        '200':
+          description: Thermal control command executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  command_id:
+                    type: string
+                  status:
+                    type: string
+                    enum: ["executed", "pending", "failed"]
+                  current_temperature_c:
+                    type: number
+                  flow_rate_l_per_min:
+                    type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  # Grid Integration
+  /grid/status:
+    get:
+      tags:
+        - Grid Integration
+      summary: Get grid connection status
+      description: Retrieve current grid status including carbon intensity and renewable energy availability
+      security:
+        - JWT_Auth: []
+      responses:
+        '200':
+          description: Grid status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GridStatus'
+
+  /grid/signal:
+    post:
+      tags:
+        - Grid Integration
+      summary: Send signals to grid operators
+      description: |
+        Send load forecasts and demand response signals to grid operators.
+        Response time: <5s
+      security:
+        - JWT_Auth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GridSignal'
+      responses:
+        '200':
+          description: Grid signal sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  signal_id:
+                    type: string
+                  acknowledgment_status:
+                    type: string
+                    enum: ["acknowledged", "pending", "rejected"]
+                  grid_operator_response:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  # Municipal Heat Integration
+  /municipal/heat/status:
+    get:
+      tags:
+        - Municipal Integration
+      summary: Get municipal heat system status
+      description: Retrieve current municipal heat network integration status
+      security:
+        - JWT_Auth: []
+      responses:
+        '200':
+          description: Municipal heat status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MunicipalHeatStatus'
+
+  /municipal/heat/control:
+    post:
+      tags:
+        - Municipal Integration
+      summary: Control municipal heat delivery
+      description: Control waste heat delivery to municipal heating network
+      security:
+        - JWT_Auth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MunicipalHeatControl'
+      responses:
+        '200':
+          description: Municipal heat control executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  control_id:
+                    type: string
+                  delivery_status:
+                    type: string
+                    enum: ["active", "standby", "offline"]
+                  heat_output_kw:
+                    type: number
+                  supply_temperature_c:
+                    type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  # System Health and Monitoring
+  /system/health:
+    get:
+      tags:
+        - System Monitoring
+      summary: Get system health status
+      description: Retrieve overall PSWD system health and component status
+      security:
+        - JWT_Auth: []
+      responses:
+        '200':
+          description: System health retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemHealth'
+
+components:
+  securitySchemes:
+    JWT_Auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    API_Key:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    # Core message schemas from specification
+    WorkloadAnnouncement:
+      type: object
+      required:
+        - PSWD_version
+        - message_type
+        - timestamp
+        - workload_id
+        - workload_type
+        - power_profile
+      properties:
+        PSWD_version:
+          type: string
+          enum: ["1.0"]
+        message_type:
+          type: string
+          enum: ["workload_announcement"]
+        timestamp:
+          type: string
+          format: date-time
+        workload_id:
+          type: string
+          example: "wl_ai_training_001"
+        workload_type:
+          type: string
+          enum: ["ai_training", "ai_inference", "hpc", "traditional_compute"]
+        power_profile:
+          type: object
+          required:
+            - peak_power_mw
+            - baseline_power_mw
+            - ramp_rate_mw_per_sec
+          properties:
+            peak_power_mw:
+              type: number
+              minimum: 0
+              example: 150.5
+            baseline_power_mw:
+              type: number
+              minimum: 0
+              example: 50.2
+            ramp_rate_mw_per_sec:
+              type: number
+              minimum: 0
+              example: 25.0
+            duration_estimate_sec:
+              type: integer
+              minimum: 0
+              example: 7200
+            temporal_resolution_ms:
+              type: integer
+              minimum: 100
+              example: 100
+        thermal_profile:
+          type: object
+          properties:
+            heat_generation_kw:
+              type: number
+              minimum: 0
+              example: 120000
+            preferred_operating_temp_c:
+              type: number
+              example: 65
+            critical_temp_threshold_c:
+              type: number
+              example: 85
+        flexibility_parameters:
+          type: object
+          properties:
+            throttling_capability:
+              type: boolean
+              example: true
+            delay_tolerance_sec:
+              type: integer
+              minimum: 0
+              example: 300
+            migration_capable:
+              type: boolean
+              example: false
+            priority_level:
+              type: string
+              enum: ["critical", "high", "normal", "low"]
+              example: "high"
+        timing_constraints:
+          type: object
+          properties:
+            earliest_start_time:
+              type: string
+              format: date-time
+            latest_completion_time:
+              type: string
+              format: date-time
+            deadline:
+              type: string
+              format: date-time
+
+    InfrastructureResponse:
+      type: object
+      required:
+        - PSWD_version
+        - message_type
+        - timestamp
+        - workload_id
+        - approval_status
+      properties:
+        PSWD_version:
+          type: string
+          enum: ["1.0"]
+        message_type:
+          type: string
+          enum: ["infrastructure_response"]
+        timestamp:
+          type: string
+          format: date-time
+        workload_id:
+          type: string
+        approval_status:
+          type: string
+          enum: ["approved", "approved_with_conditions", "rejected"]
+        approved_power_mw:
+          type: number
+          minimum: 0
+        infrastructure_capacity:
+          type: object
+          properties:
+            available_power_mw:
+              type: number
+              minimum: 0
+            cooling_capacity_kw:
+              type: number
+              minimum: 0
+            battery_storage_available:
+              type: boolean
+        thermal_coordination:
+          type: object
+          properties:
+            cooling_system_type:
+              type: string
+              enum: ["air", "single_phase_liquid", "two_phase_liquid"]
+            heat_recovery_available:
+              type: boolean
+            municipal_heat_integration:
+              type: boolean
+        grid_status:
+          type: object
+          properties:
+            carbon_intensity_g_co2_kwh:
+              type: number
+              minimum: 0
+            renewable_energy_available:
+              type: boolean
+            demand_response_required:
+              type: boolean
+        conditions:
+          type: array
+          items:
+            type: string
+
+    WorkloadControl:
+      type: object
+      required:
+        - command_type
+        - timestamp
+      properties:
+        command_type:
+          type: string
+          enum: ["throttle", "pause", "resume", "terminate", "migrate"]
+        timestamp:
+          type: string
+          format: date-time
+        target_power_mw:
+          type: number
+          minimum: 0
+          description: "Required for throttle commands"
+        ramp_rate_mw_per_sec:
+          type: number
+          minimum: 0
+        pause_duration_sec:
+          type: integer
+          minimum: 0
+          description: "Maximum pause duration for pause commands"
+        migration_target:
+          type: string
+          description: "Target infrastructure for migration commands"
+
+    WorkloadStatus:
+      type: object
+      properties:
+        workload_id:
+          type: string
+        current_status:
+          type: string
+          enum: ["running", "paused", "throttled", "terminated", "migrating"]
+        current_power_mw:
+          type: number
+        peak_power_mw:
+          type: number
+        average_power_mw:
+          type: number
+        current_temperature_c:
+          type: number
+        progress_percent:
+          type: number
+          minimum: 0
+          maximum: 100
+        estimated_completion_time:
+          type: string
+          format: date-time
+        timestamp:
+          type: string
+          format: date-time
+
+    PowerMeasurement:
+      type: object
+      properties:
+        facility_id:
+          type: string
+        measurement_interval_ms:
+          type: integer
+        measurements:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              total_power_mw:
+                type: number
+              power_quality:
+                type: object
+                properties:
+                  thd_percent:
+                    type: number
+                  power_factor:
+                    type: number
+                  voltage_stability:
+                    type: number
+              circuit_breakdown:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    circuit_id:
+                      type: string
+                    power_mw:
+                      type: number
+
+    PowerForecast:
+      type: object
+      properties:
+        facility_id:
+          type: string
+        forecast_horizon_hours:
+          type: integer
+        confidence_level_percent:
+          type: number
+        forecasts:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              predicted_power_mw:
+                type: number
+              confidence_interval_lower:
+                type: number
+              confidence_interval_upper:
+                type: number
+              flexibility_upward_mw:
+                type: number
+              flexibility_downward_mw:
+                type: number
+
+    BatteryControl:
+      type: object
+      required:
+        - command_type
+        - timestamp
+      properties:
+        command_type:
+          type: string
+          enum: ["charge", "discharge", "standby", "load_smooth"]
+        timestamp:
+          type: string
+          format: date-time
+        target_power_mw:
+          type: number
+          description: "Positive for discharge, negative for charge"
+        duration_sec:
+          type: integer
+          minimum: 0
+        ramp_rate_mw_per_sec:
+          type: number
+          minimum: 0
+
+    BatteryStatus:
+      type: object
+      properties:
+        battery_id:
+          type: string
+        current_charge_level_percent:
+          type: number
+          minimum: 0
+          maximum: 100
+        current_power_mw:
+          type: number
+        max_charge_rate_mw:
+          type: number
+        max_discharge_rate_mw:
+          type: number
+        estimated_runtime_hours:
+          type: number
+        operating_status:
+          type: string
+          enum: ["charging", "discharging", "standby", "maintenance", "fault"]
+        temperature_c:
+          type: number
+        timestamp:
+          type: string
+          format: date-time
+
+    ThermalStatus:
+      type: object
+      properties:
+        cooling_system_type:
+          type: string
+          enum: ["air", "single_phase_liquid", "two_phase_liquid", "hybrid"]
+        current_load_percent:
+          type: number
+          minimum: 0
+          maximum: 100
+        inlet_temperature_c:
+          type: number
+        outlet_temperature_c:
+          type: number
+        flow_rate_l_per_min:
+          type: number
+        pressure_bar:
+          type: number
+        heat_recovery_active:
+          type: boolean
+        municipal_heat_delivery_kw:
+          type: number
+        phase_change_efficiency_percent:
+          type: number
+          description: "For two-phase systems only"
+        timestamp:
+          type: string
+          format: date-time
+
+    ThermalControl:
+      type: object
+      required:
+        - command_type
+        - timestamp
+      properties:
+        command_type:
+          type: string
+          enum: ["set_temperature", "adjust_flow", "enable_heat_recovery", "phase_optimization"]
+        timestamp:
+          type: string
+          format: date-time
+        target_temperature_c:
+          type: number
+        target_flow_rate_l_per_min:
+          type: number
+        heat_recovery_enabled:
+          type: boolean
+        ramp_rate_c_per_sec:
+          type: number
+
+    GridStatus:
+      type: object
+      properties:
+        grid_operator_id:
+          type: string
+        carbon_intensity_g_co2_kwh:
+          type: number
+          minimum: 0
+        renewable_energy_percent:
+          type: number
+          minimum: 0
+          maximum: 100
+        grid_frequency_hz:
+          type: number
+        demand_response_active:
+          type: boolean
+        market_price_per_mwh:
+          type: number
+        grid_stability_index:
+          type: number
+          minimum: 0
+          maximum: 10
+        timestamp:
+          type: string
+          format: date-time
+
+    GridSignal:
+      type: object
+      required:
+        - signal_type
+        - timestamp
+      properties:
+        signal_type:
+          type: string
+          enum: ["load_forecast", "demand_response", "frequency_regulation", "capacity_available"]
+        timestamp:
+          type: string
+          format: date-time
+        load_forecast:
+          type: object
+          properties:
+            forecast_horizon_hours:
+              type: integer
+            predicted_load_mw:
+              type: array
+              items:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                  load_mw:
+                    type: number
+        demand_response:
+          type: object
+          properties:
+            available_reduction_mw:
+              type: number
+            response_time_sec:
+              type: integer
+            duration_hours:
+              type: number
+
+    MunicipalHeatStatus:
+      type: object
+      properties:
+        municipal_network_id:
+          type: string
+        heat_delivery_active:
+          type: boolean
+        current_heat_output_kw:
+          type: number
+        supply_temperature_c:
+          type: number
+        return_temperature_c:
+          type: number
+        flow_rate_l_per_min:
+          type: number
+        heat_quality_index:
+          type: number
+          minimum: 0
+          maximum: 10
+        revenue_per_hour:
+          type: number
+        timestamp:
+          type: string
+          format: date-time
+
+    MunicipalHeatControl:
+      type: object
+      required:
+        - command_type
+        - timestamp
+      properties:
+        command_type:
+          type: string
+          enum: ["enable_delivery", "disable_delivery", "adjust_temperature", "adjust_flow"]
+        timestamp:
+          type: string
+          format: date-time
+        target_temperature_c:
+          type: number
+          minimum: 70
+          maximum: 90
+        target_flow_rate_l_per_min:
+          type: number
+        priority_level:
+          type: string
+          enum: ["emergency", "high", "normal", "low"]
+
+    SystemHealth:
+      type: object
+      properties:
+        overall_status:
+          type: string
+          enum: ["healthy", "degraded", "critical", "offline"]
+        component_status:
+          type: object
+          properties:
+            workload_interface:
+              type: string
+              enum: ["healthy", "degraded", "critical", "offline"]
+            power_management:
+              type: string
+              enum: ["healthy", "degraded", "critical", "offline"]
+            thermal_management:
+              type: string
+              enum: ["healthy", "degraded", "critical", "offline"]
+            grid_integration:
+              type: string
+              enum: ["healthy", "degraded", "critical", "offline"]
+            battery_systems:
+              type: string
+              enum: ["healthy", "degraded", "critical", "offline"]
+        performance_metrics:
+          type: object
+          properties:
+            average_response_time_ms:
+              type: number
+            uptime_percent:
+              type: number
+            error_rate_percent:
+              type: number
+        timestamp:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      required:
+        - error_code
+        - message
+        - timestamp
+      properties:
+        error_code:
+          type: string
+          example: "INSUFFICIENT_CAPACITY"
+        message:
+          type: string
+          example: "Insufficient infrastructure capacity for requested workload"
+        details:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        request_id:
+          type: string
