@@ -18,37 +18,23 @@ WDPC provides standardized temporal data formats and interfaces enabling intelli
 - 🌱 **Renewable Optimization** - Carbon-aware workload scheduling data
 - ♨️ **Heat Recovery** - Municipal heating network coordination
 
-## Quick Example
-
-```javascript
-// Workload announces power characteristics
-await wdpc.workload.announce({
-  workload_type: 'ai_training',
-  power_profile: {
-    peak_power_mw: 150,
-    baseline_power_mw: 50,
-    temporal_resolution_ms: 100
-  },
-  metadata_tags: {
-    environmental_preferences: ['low_carbon', 'renewable_energy']
-  }
-});
-
-// Infrastructure responds with capability data
-const response = await wdpc.infrastructure.getCapabilities();
-```
 
 ## Architecture
 
-```mermaid
-graph TD
-    A[🧠 AI/HPC Workloads] --> B[💻 Workload Data Interface]
-    B --> C[🏗️ Infrastructure Data Coordination]
-    C --> D[🔧 Hardware Instrumentation]
-    C --> E[🔗 External Data Integration]
-    E --> F[🌐 Grid Operators]
-    E --> G[🏘️ Municipal Systems]
-```
+![image](https://github.com/user-attachments/assets/cd3a6959-e862-45c4-a54e-9caa95fb2f04)
+
+**Power Metrics by Component**
+
+| Component | Category | Key Power Metrics |
+|-----------|----------|-------------------|
+| GPU | System | Power Usage, Throttle Status/Reason |
+| Memory | System | Memory Metrics: Power Consumption |
+| Power Supply | Chassis | Power Metrics: Average, Peak, Limit |
+| Power Domain | System | Input Power, Output Power, Efficiency |
+| Voltage | Chassis | Current Voltage, Min/Max/Avg, Thresholds |
+| Power Control | Chassis | Power Limit, Allocated Power, Requested Power |
+| Environment Metrics | System/Chassis | Total Power, Power Consumed, Power Limit |
+
 
 ## Technical Specs
 
@@ -60,22 +46,6 @@ graph TD
 | Time Synchronization | ±1ms (NTP/PTP) |
 | Data Format | JSON with metadata |
 
-## Standards Compliance
-
-- **IEC 61850-90-4** - Grid communication
-- **IEC 62443-3-3** - Industrial security
-- **IEEE 1547.1** - Grid interconnection
-- **DMTF Redfish** - Hardware management
-
-## Installation
-
-```bash
-npm install @wdpc/data-client
-```
-
-```bash
-docker run -d --name wdpc-server wdpc/server:latest
-```
 
 ## Use Cases
 
@@ -83,18 +53,6 @@ docker run -d --name wdpc-server wdpc/server:latest
 - **Grid Stability** - Provide load forecasting and demand response data
 - **Municipal Heat** - Coordinate waste heat delivery to district heating
 - **Carbon Optimization** - Enable workload scheduling based on grid carbon intensity
-
-## Development
-
-```bash
-git clone https://github.com/wdpc/wdpc-spec.git
-cd wdpc-spec
-npm install && npm test
-```
-
-## Contributing
-
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
