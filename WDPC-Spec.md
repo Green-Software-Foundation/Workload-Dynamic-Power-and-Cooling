@@ -2,13 +2,13 @@
 
 ## Introduction
 
-Modern artificial intelligence (AI) and machine learning (ML) workloads create unprecedented challenges for data center infrastructure coordination. AI training applications can generate power fluctuations exceeding 200 MW within 40 ms intervals, creating grid-destabilizing events equivalent to a quarter-million people suddenly appearing on the electrical grid.
+Modern artificial intelligence (AI) and machine learning (ML) workloads create unprecedented challenges for data center infrastructure coordination. AI training applications can generate power fluctuations exceeding 200 MW within 40 ms intervals, creating grid-destabilising events equivalent to a quarter of a million people suddenly appearing on the electrical grid.
 
-Current data center infrastructure lacks consistent, coordinated mechanisms for moving critical operational data between workload management systems, power infrastructure, and cooling systems. This absence of standardized data interfaces creates information silos that prevent effective coordination and optimization across the complete workload-to-infrastructure pathway.
+Current data center infrastructure lacks consistent, coordinated mechanisms for moving critical operational data between workload management systems, power infrastructure, and cooling systems. The absence of standardised data interfaces creates information silos that prevent effective coordination and optimisation across the entire workload-to-infrastructure pathway.
 
 This Technical Specification establishes the Workload Dynamic Power and Cooling (WDPC) framework for standardized data movement and coordination between computational workloads and infrastructure systems. WDPC addresses the fundamental challenge of creating consistent, temporal data standards that enable intelligent coordination without prescribing specific control implementations.
 
-The framework establishes three primary objectives: standardization of temporal data formats and metadata structures for power and cooling systems; creation of consistent instrumentation and monitoring interfaces across workload-to-infrastructure pathways; and enablement of coordinated optimization through standardized data availability rather than centralized control.
+The framework establishes three primary objectives: standardization of temporal data formats and metadata structures for power and cooling systems, creation of consistent instrumentation and monitoring interfaces across workload-to-infrastructure pathways, and enablement of coordinated optimization through standardized data availability rather than centralized control.
 
 WDPC provides the foundational data infrastructure necessary for innovation in workload-infrastructure coordination while maintaining flexibility for diverse implementation approaches across traditional organizational boundaries.
 
@@ -32,7 +32,7 @@ e) **metadata and tagging standards** for temporal data sources enabling coordin
 
 f) **security frameworks** for critical infrastructure data communications.
 
-This specification is applicable to data centers with power capacities from 1 MW to 1,000 MW requiring coordinated workload and infrastructure data management for:
+This specification applies to data centers with power capacities from 1 MW to 1,000 MW requiring coordinated workload and infrastructure data management for:
 
 — cloud computing workloads;  
 — high-performance computing applications;  
@@ -61,7 +61,7 @@ The following documents are referred to in the text in such a way that some or a
 
 ## 3 Terms and definitions
 
-For the purposes of this document, the following terms and definitions apply.
+The following terms and definitions apply to this document.
 
 ISO and IEC maintain terminological databases for use in standardization at the following addresses:</br>
 — ISO Online Browsing Platform: available at https://www.iso.org/obp  </br>
@@ -213,7 +213,7 @@ PSWD systems shall achieve the measurement accuracy specified in Table 2.
 
 ### 5.3 Security requirements
 
-WDPC implementations shall implement security measures conforming to IEC 62443-3-3 for industrial communication networks, addressing the critical infrastructure data protection concerns identified in project requirements.
+WDPC implementations shall implement security measures that conform to IEC 62443-3-3 for industrial communication networks, addressing the critical infrastructure data protection concerns identified in the project requirements.
 
 Security implementations shall include:
 
@@ -480,7 +480,7 @@ Heat recovery systems should achieve minimum 60 % thermal energy recovery effici
 
 ### 10.1 General security framework
 
-PSWD implementations shall implement security measures conforming to IEC 62443-3-3 addressing critical infrastructure protection requirements.
+PSWD implementations shall implement security measures that conform to IEC 62443-3-3, addressing critical infrastructure protection requirements.
 
 ### 10.2 Authentication and authorization
 
@@ -518,7 +518,7 @@ a) **network segmentation** isolating PSWD traffic through dedicated VLANs or ov
 
 b) **intrusion detection systems** monitoring traffic patterns and detecting anomalous behavior;
 
-c) **emergency disconnection capabilities** maintaining facility safety during security incidents.
+c) **Emergency disconnection capabilities** to maintain facility safety during security incidents.
 
 ---
 
