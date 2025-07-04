@@ -54,14 +54,8 @@ The following documents are referred to in the text in such a way that some or a
 
 | Standard | Organization | Title |
 |---|---|---|
-| IEC 61850-90-4 | IEC | Communication networks and systems for power utility automation — Part 90-4: Network engineering guidelines |
-| IEC 62443-3-3 | IEC | Industrial communication networks — Network and system security — Part 3-3: System security requirements and security levels |
-| IEEE 1547.1 | IEEE | Standard Conformance Test Procedures for Equipment Interconnecting Distributed Resources with Electric Power Systems |
-| ISO/IEC 27001 | ISO/IEC | Information technology — Security techniques — Information security management systems — Requirements |
-| ITU-T G.8275.1 | ITU-T | Precision time protocol telecom profile for phase/time synchronization with full timing support from the network |
-| DMTF DSP0266 | DMTF | Redfish Scalable Platforms Management API Specification |
-| IETF RFC 7159 | IETF | The JavaScript Object Notation (JSON) Data Interchange Format |
-| IETF RFC 7519 | IETF | JSON Web Token (JWT) |
+| Add here | Add here | Add here |
+
 
 ---
 
@@ -115,7 +109,7 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 
 ### 5.1 System architecture
 
-The WDPC system shall implement a hierarchical data coordination architecture that addresses the fundamental challenge of moving temporal data consistently across workload-to-infrastructure pathways identified in high-performance computing environments.
+The WDPC system shall implement a hierarchical data coordination architecture that addresses the fundamental challenge of consistently moving temporal data across workload-to-infrastructure pathways in high-performance computing environments.
 
 #### 5.1.1 Workload data interface layer
 
@@ -824,22 +818,3 @@ c) **grid efficiency improvements** through enhanced load forecasting and demand
 
 Data standardization enabled by WDPC can improve operational efficiency through consistent monitoring interfaces, reducing operational complexity for facility management staff while enabling coordinated optimization across multiple infrastructure domains.
 
----
-
-## Bibliography
-
-[1] ASHRAE Standard 90.4, *Energy Standard for Data Centers*
-
-[2] IEC 62052-11, *Electricity metering equipment — General requirements, tests and test conditions — Part 11: Metering equipment*
-
-[3] IEEE 802.1AS, *IEEE Standard for Local and Metropolitan Area Networks — Timing and Synchronization for Time-Sensitive Applications*
-
-[4] ISO 50001, *Energy management systems — Requirements with guidance for use*
-
-[5] Open Compute Project, *Advanced Cooling Solutions Working Group Specifications*
-
-[6] The Green Grid, *PUE™: A Comprehensive Examination of the Metric*
-
-[7] NERC CIP Standards, *Critical Infrastructure Protection Standards*
-
-[8] NIS2 Directive, *Directive on measures for a high common level of cybersecurity across the Union*
