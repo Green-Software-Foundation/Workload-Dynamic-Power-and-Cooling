@@ -111,6 +111,18 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 
 The WDPC system shall implement a hierarchical data coordination architecture that addresses the fundamental challenge of consistently moving temporal data across workload-to-infrastructure pathways in high-performance computing environments.
 
+a) **Data Center/Facility:** At this broadest level, a data center or facility measurement comprises the entire compute and supporting infrastructure. There may be multiple systems in a given facility (e.g. different HPC systems within a single building).
+
+b) **System:** The system level may vary by site and architecture, but includes all of the parts of a single system that explicitly participate in performing any workload(s). This might include supporting internal and external power and cooling equipment as well as internal and external communication and storage subsystems.
+
+c) **Platform:** The platform is distinguished from the system so as to differentiate compute from other subsystem equipment (such as external storage) that may be managed distinctly, but together comprise a system.
+
+d) **Cabinet/Rack:** The cabinet (or rack) is the first order discretization of the system measurement. The cabinet may be part of the compute, storage or networking platform. A cabinet or rack is made up of multiple nodes.
+
+e) **Node:** A node consists of the combination of all components that make up a discrete compute unit for the architecture. For example, components may include the CPU, memory and the network interface. The node may be part of the network or storage equipment, such as network switches, disk shelves, and disk controllers.
+
+f) **Component/Device Level:** Components are the physically discrete units that comprise the node. Components can be any devices that are part of a node for a particular architecture (e.g., CPU, GPU, RAM, NIC, SSD).
+
 #### 5.1.1 Workload data interface layer
 
 The workload data interface layer shall provide standardized data endpoints enabling computational workloads to communicate power requirements, thermal characteristics, and operational parameters to infrastructure management systems.
