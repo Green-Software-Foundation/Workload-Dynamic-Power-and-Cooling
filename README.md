@@ -21,7 +21,8 @@ WDPC provides standardized temporal data formats and interfaces enabling intelli
 
 ## Architecture
 
-![image](https://github.com/user-attachments/assets/cd3a6959-e862-45c4-a54e-9caa95fb2f04)
+![image](https://github.com/user-attachments/assets/b4e66342-0ff2-4504-a043-8582f331f6b7)
+
 
 **Power Metrics by Component**
 
