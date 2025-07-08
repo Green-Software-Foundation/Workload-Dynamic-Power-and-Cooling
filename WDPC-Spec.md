@@ -317,9 +317,9 @@ d) **Hybrid communication strategies** utilizing appropriate protocols based on 
 
 #### 5.2.3 Accuracy requirements
 
-PSWD systems shall achieve the measurement accuracy specified in Table 2.
+WDPC systems shall achieve the measurement accuracy specified in Table 2.
 
-**Table 2 — Accuracy requirements for PSWD measurements**
+**Table 2 — Accuracy requirements for WDPC measurements**
 
 | Measurement type | Accuracy requirement | Operating range | Calibration interval |
 |---|---|---|---|
@@ -625,17 +625,17 @@ Heat recovery systems should achieve minimum 60 % thermal energy recovery effici
 
 ### 10.1 General security framework
 
-PSWD implementations shall implement security measures conforming to IEC 62443-3-3 addressing critical infrastructure protection requirements.
+WDPC implementations shall implement security measures conforming to IEC 62443-3-3 addressing critical infrastructure protection requirements.
 
 ### 10.2 Authentication and authorization
 
 #### 10.2.1 Mutual authentication
 
-All PSWD communications shall implement mutual authentication using X.509 digital certificates addressing infrastructure security concerns.
+All WDPC communications shall implement mutual authentication using X.509 digital certificates addressing infrastructure security concerns.
 
 #### 10.2.2 Role-based access control
 
-PSWD systems shall implement role-based access control for:
+WDPC systems shall implement role-based access control for:
 
 a) **workload operators** with workload management permissions;
 
@@ -649,17 +649,17 @@ d) **municipal utility partners** with heat recovery coordination access.
 
 #### 10.3.1 Encryption
 
-All PSWD communications shall utilize transport layer security (TLS) version 1.3 or later addressing data protection requirements.
+All WDPC communications shall utilize transport layer security (TLS) version 1.3 or later addressing data protection requirements.
 
 #### 10.3.2 Message integrity
 
-PSWD messages shall include cryptographic signatures preventing unauthorized modification and ensuring authentic command execution.
+WDPC messages shall include cryptographic signatures preventing unauthorized modification and ensuring authentic command execution.
 
 ### 10.4 Network security
 
 Network security implementations shall include:
 
-a) **network segmentation** isolating PSWD traffic through dedicated VLANs or overlay networks;
+a) **network segmentation** isolating WDPC traffic through dedicated VLANs or overlay networks;
 
 b) **intrusion detection systems** monitoring traffic patterns and detecting anomalous behavior;
 
