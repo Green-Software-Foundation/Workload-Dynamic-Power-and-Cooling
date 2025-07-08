@@ -2,13 +2,13 @@
 
 ## Introduction
 
-Modern artificial intelligence (AI) and machine learning (ML) workloads create unprecedented challenges for data center infrastructure coordination. AI training applications can generate power fluctuations exceeding 200 MW within 40 ms intervals, creating grid-destabilising events equivalent to a quarter of a million people suddenly appearing on the electrical grid.
+Modern artificial intelligence (AI) and machine learning (ML) workloads create unprecedented challenges for data center infrastructure coordination. AI training applications can generate power fluctuations exceeding 200 MW within 40 ms intervals, creating grid-destabilizing events equivalent to a quarter-million people suddenly appearing on the electrical grid.
 
-Current data center infrastructure lacks consistent, coordinated mechanisms for moving critical operational data between workload management systems, power infrastructure, and cooling systems. The absence of standardised data interfaces creates information silos that prevent effective coordination and optimisation across the entire workload-to-infrastructure pathway.
+Current data center infrastructure lacks consistent, coordinated mechanisms for moving critical operational data between workload management systems, power infrastructure, and cooling systems. This absence of standardized data interfaces creates information silos that prevent effective coordination and optimization across the complete workload-to-infrastructure pathway.
 
 This Technical Specification establishes the Workload Dynamic Power and Cooling (WDPC) framework for standardized data movement and coordination between computational workloads and infrastructure systems. WDPC addresses the fundamental challenge of creating consistent, temporal data standards that enable intelligent coordination without prescribing specific control implementations.
 
-The framework establishes three primary objectives: standardization of temporal data formats and metadata structures for power and cooling systems, creation of consistent instrumentation and monitoring interfaces across workload-to-infrastructure pathways, and enablement of coordinated optimization through standardized data availability rather than centralized control.
+The framework establishes three primary objectives: standardization of temporal data formats and metadata structures for power and cooling systems; creation of consistent instrumentation and monitoring interfaces across workload-to-infrastructure pathways; and enablement of coordinated optimization through standardized data availability rather than centralized control.
 
 WDPC provides the foundational data infrastructure necessary for innovation in workload-infrastructure coordination while maintaining flexibility for diverse implementation approaches across traditional organizational boundaries.
 
@@ -32,7 +32,7 @@ e) **metadata and tagging standards** for temporal data sources enabling coordin
 
 f) **security frameworks** for critical infrastructure data communications.
 
-This specification applies to data centers with power capacities from 1 MW to 1,000 MW requiring coordinated workload and infrastructure data management for:
+This specification is applicable to data centers with power capacities from 1 MW to 1,000 MW requiring coordinated workload and infrastructure data management for:
 
 — cloud computing workloads;  
 — high-performance computing applications;  
@@ -52,33 +52,75 @@ This specification focuses on data standardization and movement rather than cont
 
 The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this specification. For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
 
-| Standard | Organization | Title |
-|---|---|---|
-| Add here | Add here | Add here |
+**IEC 61850-90-4**, *Communication networks and systems for power utility automation — Part 90-4: Network engineering guidelines*
 
+**IEC 62443-3-3**, *Industrial communication networks — Network and system security — Part 3-3: System security requirements and security levels*
+
+**IEEE 1547.1**, *Standard Conformance Test Procedures for Equipment Interconnecting Distributed Resources with Electric Power Systems*
+
+**ISO/IEC 27001**, *Information technology — Security techniques — Information security management systems — Requirements*
+
+**ITU-T G.8275.1**, *Precision time protocol telecom profile for phase/time synchronization with full timing support from the network*
+
+**DMTF DSP0266**, *Redfish Scalable Platforms Management API Specification*
+
+**IETF RFC 7159**, *The JavaScript Object Notation (JSON) Data Interchange Format*
+
+**IETF RFC 7519**, *JSON Web Token (JWT)*
 
 ---
 
 ## 3 Terms and definitions
 
-The following terms and definitions apply to this document.
+For the purposes of this document, the following terms and definitions apply.
 
-ISO and IEC maintain terminological databases for use in standardization at the following addresses:</br>
-— ISO Online Browsing Platform: available at https://www.iso.org/obp  </br>
+ISO and IEC maintain terminological databases for use in standardization at the following addresses:
+— ISO Online Browsing Platform: available at https://www.iso.org/obp  
 — IEC Electropedia: available at https://www.electropedia.org/
 
-| Term | Definition | Notes |
-|---|---|---|
-| computational workload | software process or application that consumes computational resources and generates predictable power and thermal demands within a data center facility | |
-| demand response | modification of electrical power consumption in response to grid operator requests or market signals | |
-| grid-destabilizing power event | rapid change in electrical power consumption that exceeds grid operator stability thresholds | Typically characterized by power changes exceeding 50 MW within temporal intervals less than 1 s. |
-| liquid cooling system | thermal management system utilizing liquid coolant for heat transfer from computational hardware | Includes single-phase systems using liquid coolant circulation and two-phase systems utilizing liquid-to-vapor phase transitions. |
-| municipal heat network | district heating system providing thermal energy distribution to municipal buildings and facilities | |
-| phase-change detection | monitoring and verification of proper liquid-to-vapor transitions in two-phase cooling systems | |
-| power quality | electrical characteristics of power supply including total harmonic distortion (THD), power factor, and voltage stability | |
-| predictive load analytics | algorithmic analysis of historical power consumption patterns to forecast future power demands | |
-| renewable energy optimization | coordination of computational workload scheduling with availability of low-carbon electricity generation | |
-| workload flexibility | capability of computational workloads to adjust power consumption, timing, or resource allocation in response to infrastructure constraints or external signals | |
+### 3.1
+**computational workload**  
+software process or application that consumes computational resources and generates predictable power and thermal demands within a data center facility
+
+### 3.2
+**demand response**  
+modification of electrical power consumption in response to grid operator requests or market signals
+
+### 3.3
+**grid-destabilizing power event**  
+rapid change in electrical power consumption that exceeds grid operator stability thresholds
+
+*Note 1 to entry: Typically characterized by power changes exceeding 50 MW within temporal intervals less than 1 s.*
+
+### 3.4
+**liquid cooling system**  
+thermal management system utilizing liquid coolant for heat transfer from computational hardware
+
+*Note 1 to entry: Includes single-phase systems using liquid coolant circulation and two-phase systems utilizing liquid-to-vapor phase transitions.*
+
+### 3.5
+**municipal heat network**  
+district heating system providing thermal energy distribution to municipal buildings and facilities
+
+### 3.6
+**phase-change detection**  
+monitoring and verification of proper liquid-to-vapor transitions in two-phase cooling systems
+
+### 3.7
+**power quality**  
+electrical characteristics of power supply including total harmonic distortion (THD), power factor, and voltage stability
+
+### 3.8
+**predictive load analytics**  
+algorithmic analysis of historical power consumption patterns to forecast future power demands
+
+### 3.9
+**renewable energy optimization**  
+coordination of computational workload scheduling with availability of low-carbon electricity generation
+
+### 3.10
+**workload flexibility**  
+capability of computational workloads to adjust power consumption, timing, or resource allocation in response to infrastructure constraints or external signals
 
 ---
 
@@ -109,19 +151,7 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 
 ### 5.1 System architecture
 
-The WDPC system shall implement a hierarchical data coordination architecture that addresses the fundamental challenge of consistently moving temporal data across workload-to-infrastructure pathways in high-performance computing environments.
-
-a) **Data Center/Facility:** At this broadest level, a data center or facility measurement comprises the entire compute and supporting infrastructure. There may be multiple systems in a given facility (e.g. different HPC systems within a single building).
-
-b) **System:** The system level may vary by site and architecture, but includes all of the parts of a single system that explicitly participate in performing any workload(s). This might include supporting internal and external power and cooling equipment as well as internal and external communication and storage subsystems.
-
-c) **Platform:** The platform is distinguished from the system so as to differentiate compute from other subsystem equipment (such as external storage) that may be managed distinctly, but together comprise a system.
-
-d) **Cabinet/Rack:** The cabinet (or rack) is the first order discretization of the system measurement. The cabinet may be part of the compute, storage or networking platform. A cabinet or rack is made up of multiple nodes.
-
-e) **Node:** A node consists of the combination of all components that make up a discrete compute unit for the architecture. For example, components may include the CPU, memory and the network interface. The node may be part of the network or storage equipment, such as network switches, disk shelves, and disk controllers.
-
-f) **Component/Device Level:** Components are the physically discrete units that comprise the node. Components can be any devices that are part of a node for a particular architecture (e.g., CPU, GPU, RAM, NIC, SSD).
+The WDPC system shall implement a hierarchical data coordination architecture that addresses the fundamental challenge of moving temporal data consistently across workload-to-infrastructure pathways identified in high-performance computing environments.
 
 #### 5.1.1 Workload data interface layer
 
@@ -179,42 +209,117 @@ c) **sensor data standardization** with consistent metadata tagging for temperat
 
 d) **instrumentation point mapping** providing spatial and logical relationship data for coordinated analysis.
 
-### 5.2 Data format requirements
+### 5.2 Component architecture and monitoring requirements
 
-#### 5.2.1 Temporal data structure
+#### 5.2.1 Rack-level architecture
 
-WDPC data shall address the fundamental temporal nature of workload-infrastructure coordination through standardized time-series data formats.
+WDPC systems shall implement hierarchical monitoring from data center facility level down to individual component level, based on established Open Compute Project (OCP) Redfish monitoring frameworks for rack-level data aggregation.
+
+The hierarchy shall consist of:
+
+a) **Data center facility level** - Overall power distribution and environmental control systems;
+
+b) **Rack level** - Collection of nodes with shared power distribution and cooling infrastructure;
+
+c) **Node level** - Individual computational units consisting of system and chassis components;
+
+d) **Component level** - Individual processors, memory modules, power supplies, and environmental sensors.
+
+#### 5.2.2 Node component specifications
+
+Each node shall provide monitoring capabilities for the following core components:
+
+a) **System components**:
+   - Memory modules with power consumption and thermal monitoring
+   - Processors with individual power draw and thermal characteristics
+   - System-level metrics aggregation and ports monitoring
+
+b) **Chassis components**:
+   - Environment metrics sensors for temperature, humidity, and airflow
+   - Power subsystems including Primary Supply Unit (PSU) and Battery Backup Unit (BBU)
+   - Assembly and control systems for chassis-level coordination
+
+c) **Node-level aggregation metrics**:
+   - Specific node power role identification
+   - Cumulative power meter for total node consumption
+   - Idle baseline power measurement
+   - Peak load monitoring and tracking
+
+#### 5.2.3 Monitoring granularity requirements
+
+WDPC implementations shall support multiple granularity levels to address different operational requirements:
+
+a) **Component-level monitoring** for detailed analysis of individual processors, memory modules, and power supplies;
+
+b) **Node-level aggregation** for computational unit management and workload allocation;
+
+c) **Rack-level summaries** for infrastructure planning and capacity management;
+
+d) **Facility-level reporting** for grid integration and external system coordination.
+
+### 5.3 Data format requirements
+
+#### 5.3.1 Temporal data structure and response requirements
+
+WDPC data shall address the fundamental temporal nature of workload-infrastructure coordination through standardized time-series data formats, with particular emphasis on the critical requirement that AI applications demand significantly faster data access and response capabilities than traditional summary data approaches.
 
 All WDPC temporal data shall utilize:
 
-a) **structured message formats** based on JSON syntax conforming to IETF RFC 7159 with mandatory timestamp fields;
+a) **structured message formats** based on JSON syntax conforming to IETF RFC 7159 with mandatory timestamp fields, while recognizing that RESTful API patterns may prove inadequate for high-speed AI application requirements;
 
-b) **metadata tagging structures** enabling data source identification, quality indicators, and spatial relationship mapping;
+b) **alternative communication architectures** including IoT-based messaging patterns for component-level monitoring where traditional API response times cannot meet sub-second requirements;
 
-c) **hierarchical data organization** supporting multiple granularity levels from component monitoring to facility reporting;
+c) **metadata tagging structures** enabling data source identification, quality indicators, and spatial relationship mapping;
 
-d) **data provenance tracking** maintaining source identification and processing history.
+d) **hierarchical data organization** supporting multiple granularity levels from component monitoring to facility reporting;
 
-#### 5.2.2 Temporal requirements
+e) **data provenance tracking** maintaining source identification and processing history.
 
-WDPC systems shall meet the temporal data handling requirements specified in Table 1 to enable coordinated analysis of rapid AI workload power transitions.
+#### 5.3.2 Communication pattern selection
+
+WDPC systems shall evaluate and implement communication patterns based on response time requirements:
+
+a) **RESTful API implementation** as baseline approach for systems where response times meet application requirements;
+
+b) **IoT communication patterns** for chassis monitoring and component-level data collection requiring sub-second response times;
+
+c) **Message bus architectures** for high-frequency data streams between nodes and infrastructure coordination systems;
+
+d) **Hybrid approaches** combining multiple communication patterns optimized for specific monitoring requirements and response time constraints.
+
+#### 5.3.3 Temporal requirements for AI applications
+
+WDPC systems shall meet the temporal data handling requirements specified in Table 1, with particular emphasis on the critical understanding that summary data approaches are insufficient for AI applications that require rapid response loops and high-resolution monitoring capabilities.
 
 **Table 1 — Temporal requirements for WDPC data handling**
 
-| Data type | Temporal resolution | Collection accuracy | Retention period | Rationale |
+| Data type | Temporal resolution | Collection accuracy | Response time requirement | Rationale |
 |---|---|---|---|---|
-| Workload power profiling | 100 ms | ±0.5% | 24 hours | Track 200MW power swings within 40ms intervals |
-| Thermal monitoring | 1 s | ±0.1°C | 24 hours | Coordinate cooling system response to heat generation |
-| Infrastructure status | 1 s | Varies by sensor | 7 days | Maintain facility operational awareness |
-| External coordination | 15 min | Varies by source | 30 days | Support grid operator and utility integration |
+| Node power profiling | 100 ms | ±0.5% | <250 ms | AI workload rapid power transitions require sub-second monitoring |
+| Component-level monitoring | 100 ms | ±0.5% | <500 ms | Individual processor/memory power tracking for optimization |
+| Thermal monitoring | 1 s | ±0.1°C | <1 s | Coordinate cooling system response to heat generation |
+| Infrastructure status | 1 s | Varies by sensor | <2 s | Maintain facility operational awareness |
+| External coordination | 15 min | Varies by source | <5 s | Support grid operator and utility integration |
 
 Temporal synchronization across all WDPC components shall achieve accuracy within ±1 millisecond utilizing Network Time Protocol (NTP) or Precision Time Protocol (PTP) conforming to ITU-T G.8275.1.
 
+#### 5.3.4 Communication architecture requirements
+
+WDPC implementations shall address the identified limitation that traditional RESTful API patterns may be inadequate for AI application requirements by implementing alternative communication approaches:
+
+a) **IoT-based monitoring** for chassis and component-level data collection where API response times cannot meet AI application requirements;
+
+b) **Message bus patterns** for high-frequency node-to-infrastructure coordination requiring sub-second response capabilities;
+
+c) **Streaming data protocols** for continuous monitoring of rapidly changing AI workload power consumption patterns;
+
+d) **Hybrid communication strategies** utilizing appropriate protocols based on specific monitoring requirements and response time constraints.
+
 #### 5.2.3 Accuracy requirements
 
-WDPC systems shall achieve the measurement accuracy specified in Table 2.
+PSWD systems shall achieve the measurement accuracy specified in Table 2.
 
-**Table 2 — Accuracy requirements for WDPC measurements**
+**Table 2 — Accuracy requirements for PSWD measurements**
 
 | Measurement type | Accuracy requirement | Operating range | Calibration interval |
 |---|---|---|---|
@@ -225,7 +330,7 @@ WDPC systems shall achieve the measurement accuracy specified in Table 2.
 
 ### 5.3 Security requirements
 
-WDPC implementations shall implement security measures that conform to IEC 62443-3-3 for industrial communication networks, addressing the critical infrastructure data protection concerns identified in the project requirements.
+WDPC implementations shall implement security measures conforming to IEC 62443-3-3 for industrial communication networks, addressing the critical infrastructure data protection concerns identified in project requirements.
 
 Security implementations shall include:
 
@@ -245,53 +350,81 @@ d) **intrusion detection** with automated response capabilities for anomalous da
 
 #### 6.1.1 General
 
-The workload data coordination protocol shall enable computational workloads to communicate power requirements and operational characteristics through standardized temporal data structures that enable coordinated optimization without prescriptive control implementation.
+The workload data coordination protocol shall enable computational workloads to communicate power requirements and operational characteristics through standardized temporal data structures that enable coordinated optimization without prescriptive control implementation, with particular emphasis on meeting the high-speed response requirements of AI applications.
 
-#### 6.1.2 Workload data announcement message
+#### 6.1.2 Node-level data announcement message
 
-Computational workloads shall announce operational characteristics using the message structure specified in Annex A.1.
+Computational workloads shall announce operational characteristics at the node level using the message structure specified in Annex A.1, including the critical metrics identified for AI workload monitoring.
 
-The workload data announcement message shall include:
+The node-level data announcement message shall include:
 
 a) **workload identification** with standardized taxonomy for computational workload types (AI training, inference serving, HPC applications);
 
-b) **temporal power consumption profile** with resolution of 100 ms, including baseline power, peak power, ramp rates, and phase-specific characteristics;
+b) **node power profiling** including specific node power role, cumulative power meter data, idle baseline power, and peak load characteristics with 100 ms temporal resolution;
 
-c) **thermal generation characteristics** specifying heat generation rates and operational temperature requirements;
+c) **component-level characteristics** specifying individual processor, memory, and chassis power consumption and thermal requirements;
 
-d) **operational characteristics** including performance flexibility, timing tolerance, and resource requirements;
+d) **operational characteristics** including performance flexibility, timing tolerance, and resource scalability at both node and component levels;
 
 e) **metadata tags** for priority classification, resource requirements, and coordination preferences.
 
 #### 6.1.3 Infrastructure data response message
 
-Infrastructure management systems shall respond to workload data announcements using the message structure specified in Annex A.2.
+Infrastructure management systems shall respond to workload data announcements using the message structure specified in Annex A.2, utilizing the most appropriate communication architecture for response time requirements.
 
 The infrastructure data response message shall include:
 
-a) **resource availability data** including power circuit capacity, cooling system availability, and instrumentation coverage;
+a) **resource availability data** including power circuit capacity, cooling system availability, and instrumentation coverage at node and component levels;
 
-b) **infrastructure status data** specifying current utilization, thermal capacity, and monitoring capabilities;
+b) **infrastructure status data** specifying current utilization of processors, memory, power subsystems (PSU, BBU), and chassis components;
 
-c) **coordination capability data** describing available optimization interfaces and data sharing capabilities;
+c) **coordination capability data** describing available optimization interfaces and data sharing capabilities, including IoT-based monitoring where RESTful APIs prove inadequate;
 
 d) **external system status** providing grid conditions, renewable energy availability, and municipal integration status.
 
-### 6.2 Infrastructure data coordination protocol
+### 6.2 Component-level data coordination protocol
 
-#### 6.2.1 Power system data coordination
+#### 6.2.1 High-speed component monitoring
 
-Power management systems shall implement standardized data collection and coordination addressing the identified challenge of 200+ MW power swings tracking and analysis.
+Component-level monitoring systems shall implement standardized data collection and coordination addressing the identified requirement that AI applications demand faster data access and response capabilities than traditional summary data approaches.
+
+Component monitoring protocols shall provide:
+
+a) **processor-level power monitoring** with 100 ms resolution tracking individual CPU and accelerator power consumption;
+
+b) **memory subsystem monitoring** including power consumption, thermal characteristics, and performance metrics for RAM and storage components;
+
+c) **power subsystem coordination** providing real-time data from PSU and BBU systems with sub-second response times;
+
+d) **chassis environmental monitoring** including temperature, airflow, and humidity sensors with IoT-based communication where response time requirements exceed API capabilities.
+
+#### 6.2.2 Communication architecture selection
+
+Component-level data coordination shall implement communication architectures based on specific response time requirements:
+
+a) **IoT communication patterns** for chassis monitoring and high-frequency component data collection requiring sub-500ms response times;
+
+b) **RESTful API interfaces** for component data where response time requirements permit traditional HTTP-based approaches;
+
+c) **message bus architectures** for node-to-infrastructure coordination requiring continuous data streams;
+
+d) **hybrid communication strategies** optimizing protocol selection based on component type, data frequency, and response time constraints.
+
+### 6.3 Infrastructure data coordination protocol
+
+#### 6.3.1 Power system data coordination
+
+Power management systems shall implement standardized data collection and coordination addressing the identified challenge of 200+ MW power swings tracking and analysis at multiple hierarchical levels.
 
 Power data coordination protocols shall provide:
 
-a) **temporal power monitoring data** with 100 ms resolution and accuracy conforming to Table 1;
+a) **temporal power monitoring data** with 100 ms resolution and accuracy conforming to Table 1 at component, node, rack, and facility levels;
 
 b) **power quality data** including total harmonic distortion, power factor, and voltage stability measurements;
 
-c) **instrumentation point data** identifying measurement locations and sensor characteristics;
+c) **instrumentation point data** identifying measurement locations and sensor characteristics across the hierarchical architecture;
 
-d) **aggregation data** providing facility-level and circuit-level power consumption summaries.
+d) **aggregation data** providing facility-level and circuit-level power consumption summaries with drill-down capabilities to component level.
 
 #### 6.2.2 External system data coordination
 
@@ -339,7 +472,7 @@ d) **environmental compliance data** supporting regional regulatory requirements
 
 ---
 
-## 7 Hardware data interface
+## 7 Hardware data interface specifications
 
 ### 7.1 Baseboard Management Controller (BMC) requirements
 
@@ -446,7 +579,7 @@ Data center facilities should implement renewable energy data coordination enabl
 
 ---
 
-## 9 Thermal management Requirements
+## 9 Thermal management specifications
 
 ### 9.1 Liquid cooling systems
 
@@ -488,21 +621,21 @@ Heat recovery systems should achieve minimum 60 % thermal energy recovery effici
 
 ---
 
-## 10 Security Requirements
+## 10 Security requirements
 
 ### 10.1 General security framework
 
-WDPC implementations shall implement security measures that conform to IEC 62443-3-3, addressing critical infrastructure protection requirements.
+PSWD implementations shall implement security measures conforming to IEC 62443-3-3 addressing critical infrastructure protection requirements.
 
 ### 10.2 Authentication and authorization
 
 #### 10.2.1 Mutual authentication
 
-All WDPC communications shall implement mutual authentication using X.509 digital certificates addressing infrastructure security concerns.
+All PSWD communications shall implement mutual authentication using X.509 digital certificates addressing infrastructure security concerns.
 
 #### 10.2.2 Role-based access control
 
-WDPC systems shall implement role-based access control for:
+PSWD systems shall implement role-based access control for:
 
 a) **workload operators** with workload management permissions;
 
@@ -516,21 +649,21 @@ d) **municipal utility partners** with heat recovery coordination access.
 
 #### 10.3.1 Encryption
 
-All WDPC communications shall utilize transport layer security (TLS) version 1.3 or later addressing data protection requirements.
+All PSWD communications shall utilize transport layer security (TLS) version 1.3 or later addressing data protection requirements.
 
 #### 10.3.2 Message integrity
 
-WDPC messages shall include cryptographic signatures preventing unauthorized modification and ensuring authentic command execution.
+PSWD messages shall include cryptographic signatures preventing unauthorized modification and ensuring authentic command execution.
 
 ### 10.4 Network security
 
 Network security implementations shall include:
 
-a) **network segmentation** isolating WDPC traffic through dedicated VLANs or overlay networks;
+a) **network segmentation** isolating PSWD traffic through dedicated VLANs or overlay networks;
 
 b) **intrusion detection systems** monitoring traffic patterns and detecting anomalous behavior;
 
-c) **Emergency disconnection capabilities** to maintain facility safety during security incidents.
+c) **emergency disconnection capabilities** maintaining facility safety during security incidents.
 
 ---
 
@@ -770,37 +903,71 @@ c) **security framework effectiveness** under simulated attack conditions on dat
 
 ### B.1 Phased deployment approach
 
-WDPC implementation should follow a phased approach addressing the identified data coordination challenges in order of complexity:
+WDPC implementation should follow a phased approach addressing the identified data coordination challenges in order of complexity, with particular emphasis on iterative refinement of communication architectures based on performance requirements:
 
-**Phase 1**: Basic temporal data collection and standardization to establish consistent monitoring across workload-to-infrastructure pathways
+**Phase 1**: Basic temporal data collection and standardization to establish consistent monitoring across workload-to-infrastructure pathways using RESTful API implementations as baseline
 
-**Phase 2**: Advanced data correlation and metadata tagging for multi-system coordination and analysis
+**Phase 2**: Performance evaluation and identification of communication bottlenecks, particularly for AI applications requiring sub-second response times, with migration to IoT-based architectures for components where APIs prove inadequate
 
-**Phase 3**: External system data integration for grid services participation and municipal heat integration
+**Phase 3**: Advanced data correlation and metadata tagging for multi-system coordination and analysis using optimized communication patterns
 
-### B.2 Data architecture pattern selection
+**Phase 4**: External system data integration for grid services participation and municipal heat integration
+
+### B.2 Communication architecture selection methodology
+
+Organizations implementing WDPC should evaluate communication architectures using an iterative approach:
+
+a) **baseline implementation** using RESTful APIs for all components to establish functional data collection;
+
+b) **performance assessment** identifying specific components and data types where API response times cannot meet AI application requirements;
+
+c) **selective migration** to IoT communication patterns for chassis monitoring and component-level data collection requiring sub-second response times;
+
+d) **hybrid optimization** combining communication patterns based on specific requirements, such as:
+   - RESTful APIs for facility-level reporting and external system integration
+   - IoT patterns for node-level and component-level high-frequency monitoring
+   - Message bus architectures for continuous data streams between nodes and infrastructure coordination systems
+
+### B.3 Component identification and metrics definition
+
+Organizations implementing WDPC should systematically identify monitoring requirements:
+
+a) **component mapping** following the hierarchical architecture from facility to component level based on Open Compute Project (OCP) Redfish frameworks;
+
+b) **metrics specification** for each component level including:
+   - Node level: specific node power role, cumulative power meter, idle baseline power, peak load
+   - Component level: individual processor power, memory subsystem characteristics, PSU/BBU performance
+   - Chassis level: environmental metrics, sensors, assembly and control systems
+
+c) **communication pattern assignment** based on response time requirements and data frequency for each component type;
+
+d) **alternative solution identification** for components where baseline approaches prove inadequate for AI application requirements.
+
+### B.4 Data architecture pattern selection
 
 Organizations implementing WDPC should evaluate data architecture patterns based on:
 
-a) **temporal data requirements** determining appropriateness of time-series databases versus traditional relational approaches;
+a) **temporal data requirements** determining appropriateness of time-series databases versus traditional relational approaches, with emphasis on sub-second data access capabilities;
 
 b) **system scale** influencing choice between centralized and distributed data coordination approaches;
 
-c) **security requirements** affecting data access patterns and authentication mechanisms;
+c) **AI application response requirements** affecting communication pattern selection and data processing architectures;
 
 d) **integration complexity** with existing building management systems and external utility interfaces.
 
-### B.3 Training and certification
+### B.5 Training and certification
 
 Organizations implementing WDPC should develop training programs covering:
 
-a) **temporal data analysis** and metadata management techniques;
+a) **temporal data analysis** and metadata management techniques for high-frequency monitoring;
 
-b) **instrumentation system operation** and data quality assessment;
+b) **instrumentation system operation** and data quality assessment across multiple communication architectures;
 
-c) **multi-system data correlation** and optimization interpretation;
+c) **component-level monitoring** understanding OCP Redfish frameworks and node-level architecture;
 
-d) **security procedures** for critical infrastructure data handling.
+d) **communication architecture selection** for different response time requirements and application needs;
+
+e) **security procedures** for critical infrastructure data handling across IoT and traditional API interfaces.
 
 ---
 
@@ -830,3 +997,4 @@ c) **grid efficiency improvements** through enhanced load forecasting and demand
 
 Data standardization enabled by WDPC can improve operational efficiency through consistent monitoring interfaces, reducing operational complexity for facility management staff while enabling coordinated optimization across multiple infrastructure domains.
 
+---
