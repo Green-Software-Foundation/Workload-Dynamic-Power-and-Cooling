@@ -863,3 +863,129 @@ c) **security framework effectiveness** under simulated attack conditions on dat
         "data_sharing_interfaces": {"type": "array", "items": {"type": "string"}},
         "optimization_endpoints": {"type": "array", "items": {"type": "string"}},
         "temporal_resolution_ms": {"type": "integer", "minimum": 100}
+
+      }
+    },
+    "external_system_status": {
+      "type": "object",
+      "properties": {
+        "grid_carbon_intensity_g_co2_kwh": {"type": "number", "minimum": 0},
+        "renewable_energy_available_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "municipal_heat_demand_kw": {"type": "number", "minimum": 0},
+        "demand_response_active": {"type": "boolean"}
+      }
+    },
+    "data_quality_indicators": {
+      "type": "object",
+      "properties": {
+        "measurement_accuracy": {"type": "string"},
+        "temporal_synchronization_status": {"type": "string"},
+        "sensor_health_status": {"type": "string"}
+      }
+    }
+  },
+  "required": ["WDPC_version", "message_type", "timestamp", "workload_id"]
+}
+```
+
+---
+
+## Annex B (informative) — Implementation guidelines
+
+### Phased deployment approach
+
+WDPC implementation should follow a phased approach addressing the identified data coordination challenges in order of complexity, with particular emphasis on iterative refinement of communication architectures based on performance requirements:
+
+**Phase 1**: Basic temporal data collection and standardization to establish consistent monitoring across workload-to-infrastructure pathways using RESTful API implementations as baseline
+
+**Phase 2**: Performance evaluation and identification of communication bottlenecks, particularly for AI applications requiring sub-second response times, with migration to IoT-based architectures for components where APIs prove inadequate
+
+**Phase 3**: Advanced data correlation and metadata tagging for multi-system coordination and analysis using optimized communication patterns
+
+**Phase 4**: External system data integration for grid services participation and municipal heat integration
+
+### Communication architecture selection methodology
+
+Organizations implementing WDPC should evaluate communication architectures using an iterative approach:
+
+a) **baseline implementation** using RESTful APIs for all components to establish functional data collection;
+
+b) **performance assessment** identifying specific components and data types where API response times cannot meet AI application requirements;
+
+c) **selective migration** to IoT communication patterns for chassis monitoring and component-level data collection requiring sub-second response times;
+
+d) **hybrid optimization** combining communication patterns based on specific requirements, such as:
+   - RESTful APIs for facility-level reporting and external system integration
+   - IoT patterns for node-level and component-level high-frequency monitoring
+   - Message bus architectures for continuous data streams between nodes and infrastructure coordination systems
+
+### Component identification and metrics definition
+
+Organizations implementing WDPC should systematically identify monitoring requirements:
+
+a) **component mapping** following the hierarchical architecture from facility to component level based on Open Compute Project (OCP) Redfish frameworks;
+
+b) **metrics specification** for each component level including:
+   - Node level: specific node power role, cumulative power meter, idle baseline power, peak load
+   - Component level: individual processor power, memory subsystem characteristics, PSU/BBU performance
+   - Chassis level: environmental metrics, sensors, assembly and control systems
+
+c) **communication pattern assignment** based on response time requirements and data frequency for each component type;
+
+d) **alternative solution identification** for components where baseline approaches prove inadequate for AI application requirements.
+
+### Data architecture pattern selection
+
+Organizations implementing WDPC should evaluate data architecture patterns based on:
+
+a) **temporal data requirements** determining appropriateness of time-series databases versus traditional relational approaches, with emphasis on sub-second data access capabilities;
+
+b) **system scale** influencing choice between centralized and distributed data coordination approaches;
+
+c) **AI application response requirements** affecting communication pattern selection and data processing architectures;
+
+d) **integration complexity** with existing building management systems and external utility interfaces.
+
+### Training and certification
+
+Organizations implementing WDPC should develop training programs covering:
+
+a) **temporal data analysis** and metadata management techniques for high-frequency monitoring;
+
+b) **instrumentation system operation** and data quality assessment across multiple communication architectures;
+
+c) **component-level monitoring** understanding OCP Redfish frameworks and node-level architecture;
+
+d) **communication architecture selection** for different response time requirements and application needs;
+
+e) **security procedures** for critical infrastructure data handling across IoT and traditional API interfaces.
+
+---
+
+## Annex C (informative) — Environmental impact assessment
+
+### Carbon footprint reduction potential
+
+WDPC implementation can enable significant carbon footprint reductions through:
+
+a) **improved data availability for renewable energy optimization** enabling 15% to 30% reduction in average grid carbon intensity;
+
+b) **enhanced coordination for demand response participation** reducing fossil fuel peaker plant operation;
+
+c) **standardized waste heat recovery data** supporting municipal heating system integration.
+
+### Energy efficiency improvements potential
+
+Expected energy efficiency improvements through coordinated data availability include:
+
+a) **power usage effectiveness (PUE) improvements** of 0.1 to 0.3 through enhanced thermal management coordination;
+
+b) **operational efficiency gains** of 15% to 25% through improved workload-infrastructure coordination;
+
+c) **grid efficiency improvements** through enhanced load forecasting and demand response participation.
+
+### Operational improvements
+
+Data standardization enabled by WDPC can improve operational efficiency through consistent monitoring interfaces, reducing operational complexity for facility management staff while enabling coordinated optimization across multiple infrastructure domains.
+
+---
