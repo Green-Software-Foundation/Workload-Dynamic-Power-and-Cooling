@@ -881,3 +881,221 @@ c) **security framework effectiveness** under simulated attack conditions on dat
 ```
 
 ### Infrastructure data stream access schema
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "WDPC_version": {
+      "type": "string",
+      "enum": ["2.0"]
+    },
+    "message_type": {
+      "type": "string",
+      "enum": ["infrastructure_data_stream"]
+    },
+    "ticker_symbol": {
+      "type": "string",
+      "pattern": "^WDPC\\.[A-Z0-9]+\\.[A-Z0-9]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "workload_id": {
+      "type": "string"
+    },
+    "resource_availability": {
+      "type": "object",
+      "properties": {
+        "available_power_mw": {"type": "number", "minimum": 0},
+        "cooling_capacity_kw": {"type": "number", "minimum": 0},
+        "instrumentation_coverage": {"type": "number", "minimum": 0, "maximum": 100}
+      }
+    },
+    "infrastructure_status": {
+      "type": "object",
+      "properties": {
+        "current_utilization_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "thermal_capacity_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "monitoring_systems_active": {"type": "boolean"}
+      }
+    },
+    "autonomous_capabilities": {
+      "type": "object",
+      "properties": {
+        "data_streaming_interfaces": {"type": "array", "items": {"type": "string"}},
+        "policy_execution_endpoints": {"type": "array", "items": {"type": "string"}},
+        "temporal_resolution_ms": {"type": "integer", "minimum": 100}
+      }
+    },
+    "external_system_status": {
+      "type": "object",
+      "properties": {
+        "grid_carbon_intensity_g_co2_kwh": {"type": "number", "minimum": 0},
+        "renewable_energy_available_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "municipal_heat_demand_kw": {"type": "number", "minimum": 0},
+        "demand_response_active": {"type": "boolean"}
+      }
+    },
+    "data_quality_indicators": {
+      "type": "object",
+      "properties": {
+        "measurement_accuracy": {"type": "string"},
+        "temporal_synchronization_status": {"type": "string"},
+        "sensor_health_status": {"type": "string"}
+      }
+    }
+  },
+  "required": ["WDPC_version", "message_type", "ticker_symbol", "timestamp"]
+}
+```
+
+---
+
+## Annex B (informative) — Implementation guidelines
+
+### Phased deployment approach
+
+WDPC implementation should follow a phased approach addressing the identified data streaming challenges in order of complexity, with particular emphasis on iterative development of message bus architectures based on performance requirements:
+
+**Phase 1**: Basic temporal data streaming and standardization to establish consistent data publication across workload-to-infrastructure pathways using message bus implementations as primary approach
+
+**Phase 2**: Performance evaluation and identification of access bottlenecks, particularly for AI applications requiring sub-second access times, with optimization of ticker symbol architectures for components where baseline approaches prove inadequate
+
+**Phase 3**: Advanced autonomous policy deployment and metadata enhancement for multi-system coordination and analysis using optimized streaming patterns
+
+**Phase 4**: External system data integration for grid services participation and municipal heat integration through standardized data streaming
+
+### Message bus architecture selection methodology
+
+Organizations implementing WDPC should evaluate message bus architectures using an iterative approach:
+
+a) **baseline implementation** using standardized message bus patterns for all components to establish functional data streaming;
+
+b) **performance assessment** identifying specific components and data types where access times cannot meet AI application requirements;
+
+c) **selective optimization** of ticker symbol structures and streaming protocols for chassis monitoring and component-level data publication requiring sub-second access times;
+
+d) **hybrid optimization** combining streaming patterns based on specific requirements, such as:
+   - Message bus architectures for facility-level reporting and external system integration
+   - High-frequency ticker feeds for node-level and component-level monitoring
+   - Streaming protocols for continuous data flows between nodes and infrastructure systems
+
+### Component identification and data stream definition
+
+Organizations implementing WDPC should systematically identify data publication requirements:
+
+a) **component mapping** following the hierarchical architecture from facility to component level based on Open Compute Project (OCP) monitoring frameworks;
+
+b) **ticker symbol specification** for each component level including:
+   - Node level: specific node power role, cumulative power meter, idle baseline power, peak load
+   - Component level: individual processor power, memory subsystem characteristics, PSU/BBU performance
+   - Chassis level: environmental metrics, sensors, assembly and control systems
+
+c) **streaming pattern assignment** based on access time requirements and data frequency for each component type;
+
+d) **alternative implementation identification** for components where baseline approaches prove inadequate for AI application requirements.
+
+### Data architecture pattern selection
+
+Organizations implementing WDPC should evaluate data architecture patterns based on:
+
+a) **temporal data requirements** determining appropriateness of time-series streaming versus traditional storage approaches, with emphasis on sub-second data access capabilities;
+
+b) **system scale** influencing choice between centralized and distributed data streaming approaches;
+
+c) **AI application access requirements** affecting streaming protocol selection and data processing architectures;
+
+d) **integration complexity** with existing building management systems and external utility interfaces.
+
+### Policy framework deployment
+
+Organizations implementing WDPC should develop policy frameworks covering:
+
+a) **autonomous decision-making** policies for component-level optimization based on data stream inputs;
+
+b) **data streaming governance** and ticker symbol management across multiple organizational units;
+
+c) **component-level policy deployment** understanding autonomous optimization principles and policy conflict resolution;
+
+d) **streaming architecture management** for different access time requirements and application needs;
+
+e) **security procedures** for critical infrastructure data handling across distributed streaming and policy execution interfaces.
+
+---
+
+## Annex C (informative) — Environmental impact assessment
+
+### Carbon footprint reduction potential
+
+WDPC implementation can enable significant carbon footprint reductions through:
+
+a) **improved data availability for renewable energy optimization** enabling 15% to 30% reduction in average grid carbon intensity through autonomous policy-driven decisions;
+
+b) **enhanced autonomous participation in demand response** reducing fossil fuel peaker plant operation;
+
+c) **standardized waste heat recovery data streaming** supporting municipal heating system integration.
+
+### Energy efficiency improvements potential
+
+Expected energy efficiency improvements through autonomous data-driven optimization include:
+
+a) **power usage effectiveness (PUE) improvements** of 0.1 to 0.3 through enhanced thermal management coordination via streaming data;
+
+b) **operational efficiency gains** of 15% to 25% through improved workload-infrastructure autonomous optimization;
+
+c) **grid efficiency improvements** through enhanced load forecasting and autonomous demand response participation.
+
+### Operational improvements
+
+Data standardization enabled by WDPC can improve operational efficiency through consistent data streaming interfaces, reducing operational complexity for facility management staff while enabling autonomous optimization across multiple infrastructure domains without centralized coordination overhead.
+
+---
+
+## Annex D (informative) — Standard ticker symbols
+
+### Core infrastructure ticker symbols
+
+WDPC implementations should support the following standard ticker symbols as minimum requirements:
+
+**Table D.1 — Standard power monitoring ticker symbols**
+
+| Ticker Symbol | Description | Units | Update Frequency |
+|---|---|---|---|
+| WDPC.PWR.TOTAL | Total facility power consumption | MW | 100 ms |
+| WDPC.PWR.IT | IT equipment power consumption | MW | 100 ms |
+| WDPC.PWR.COOLING | Cooling system power consumption | MW | 1 s |
+| WDPC.PWR.GRID | Grid power draw | MW | 100 ms |
+| WDPC.PWR.ONSITE | On-site generation | MW | 100 ms |
+
+**Table D.2 — Standard thermal monitoring ticker symbols**
+
+| Ticker Symbol | Description | Units | Update Frequency |
+|---|---|---|---|
+| WDPC.THM.INLET | Cooling system inlet temperature | °C | 1 s |
+| WDPC.THM.OUTLET | Cooling system outlet temperature | °C | 1 s |
+| WDPC.THM.AMBIENT | Ambient temperature | °C | 1 s |
+| WDPC.THM.FLOW | Coolant flow rate | L/min | 1 s |
+
+**Table D.3 — Standard environmental ticker symbols**
+
+| Ticker Symbol | Description | Units | Update Frequency |
+|---|---|---|---|
+| WDPC.ENV.CARBON | Grid carbon intensity | g CO2/kWh | 15 min |
+| WDPC.ENV.RENEWABLE | Renewable energy percentage | % | 15 min |
+| WDPC.ENV.DEMAND | Demand response status | boolean | 1 min |
+
+### Custom ticker symbol guidelines
+
+Organizations may define custom ticker symbols following the naming convention:
+
+`WDPC.[CATEGORY].[SUBCATEGORY].[IDENTIFIER]`
+
+Where:
+- CATEGORY: PWR, THM, ENV, WKL, INFRA
+- SUBCATEGORY: Domain-specific grouping
+- IDENTIFIER: Specific measurement or signal
+
+Custom ticker symbols should include metadata specifying units, accuracy, and update frequency to ensure proper autonomous policy implementation.
