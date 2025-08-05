@@ -1,4 +1,4 @@
-# Workload Dynamic Power and Cooling (WDPC) 
+# Workload Dynamic Power and Cooling (WDPC) - Vx.y
 
 ## Introduction
 
@@ -6,40 +6,41 @@ Modern artificial intelligence (AI) and machine learning (ML) workloads create u
 
 Current data center infrastructure lacks consistent, standardized mechanisms for distributing critical operational data between workload management systems, power infrastructure, and cooling systems. This absence of standardized data distribution interfaces creates information silos that prevent effective autonomous optimization across the complete workload-to-infrastructure pathway.
 
-This Technical Specification establishes the Workload Dynamic Power and Cooling (WDPC) framework for standardized data distribution and autonomous coordination between computational workloads and infrastructure systems. WDPC addresses the fundamental challenge of creating consistent, temporal data standards that enable intelligent autonomous optimization through data availability rather than centralized control.
+This Technical Specification establishes the Workload Dynamic Power and Cooling (WDPC) framework for standardized data distribution through a central data bus architecture that connects all system components directly. WDPC addresses the fundamental challenge of creating consistent, temporal data standards that enable intelligent autonomous optimization through high-performance data availability rather than centralized control.
 
-The framework establishes three primary objectives: standardization of temporal data formats and metadata structures for power and cooling systems through distributed messaging; creation of consistent data publication and subscription interfaces across workload-to-infrastructure pathways; and enablement of autonomous optimization through standardized data availability rather than prescribed coordination mechanisms.
+The framework establishes three primary objectives: implementation of a central data bus architecture where all components connect directly for bidirectional data flow; standardization of Protocol Buffer (protobuf) data models and serialization for high-performance temporal data exchange; and enablement of marketplace-style frameworks for energy, carbon, and workload optimization through standardized data availability.
 
-WDPC provides the foundational data distribution infrastructure necessary for innovation in workload-infrastructure autonomous optimization while maintaining flexibility for diverse policy-driven implementation approaches across traditional organizational boundaries.
+WDPC provides the foundational data bus infrastructure necessary for innovation in workload-infrastructure autonomous optimization while supporting marketplace frameworks for energy trading, demand response, and sustainability optimization.
 
 ---
 
 ## Scope
 
-This Technical Specification establishes the Workload Dynamic Power and Cooling (WDPC) framework for standardized data distribution between computational workloads and energy infrastructure systems. WDPC addresses the critical need for consistent temporal data standards in environments where artificial intelligence (AI) and machine learning (ML) applications generate power fluctuations exceeding 200 MW within temporal intervals of 40 ms.
+This Technical Specification establishes the Workload Dynamic Power and Cooling (WDPC) framework for standardized data distribution through a central data bus architecture. WDPC addresses the critical need for high-performance temporal data standards in environments where artificial intelligence (AI) and machine learning (ML) applications generate power fluctuations exceeding 200 MW within temporal intervals of 40 ms.
 
 This specification covers:
 
-a) **temporal data standards and formats** for power consumption, thermal generation, and cooling system performance with standardized metadata and data stream structures;
+a) **central data bus architecture** enabling direct bidirectional connections between all system components including workloads, infrastructure, sensors, and external systems;
 
-b) **data publication and subscription interfaces** for monitoring and data distribution across workload-to-infrastructure pathways including power distribution, cooling systems, and environmental sensors;
+b) **Protocol Buffer (protobuf) data models** providing high-performance serialization with 2-6x faster processing and 30-70% smaller message sizes compared to JSON-based approaches;
 
-c) **message bus protocols** enabling consistent information flow between computational workloads, infrastructure management systems, and external utility interfaces through ticker-feed architectures;
+c) **hierarchical component data models** supporting standardized data definitions from facility-level down to individual component monitoring with consistent schema evolution;
 
-d) **hierarchical data granularity frameworks** supporting different resolution requirements from component-level monitoring to facility-level reporting through multi-level data streams;
+d) **marketplace framework integration** enabling energy trading, carbon optimization, and demand response coordination through standardized data availability;
 
-e) **metadata and data stream standards** for temporal data sources enabling autonomous optimization without prescriptive control implementations;
+e) **temporal data streaming protocols** supporting sub-100ms data publication requirements for AI workload optimization;
 
-f) **security frameworks** for critical infrastructure data communications in distributed messaging environments.
+f) **security frameworks** for critical infrastructure data communications in high-performance messaging environments.
 
 This specification is applicable to data centers with power capacities from 1 MW to 1,000 MW requiring autonomous workload and infrastructure data management for:
 
 — cloud computing workloads;  
 — high-performance computing applications;  
 — AI/ML training and inference operations;  
-— edge computing deployments.
+— edge computing deployments;
+— energy trading and marketplace applications.
 
-This specification focuses on data standardization and distribution rather than control system implementation. It establishes data availability frameworks that enable policy-driven autonomous optimization. It does not prescribe:
+This specification focuses on data standardization and high-performance distribution rather than control system implementation. It establishes data bus frameworks that enable policy-driven autonomous optimization and marketplace coordination. It does not prescribe:
 
 — specific control algorithms or optimization strategies;  
 — centralized coordination mechanisms or orchestrator implementations;
@@ -49,18 +50,47 @@ This specification focuses on data standardization and distribution rather than 
 
 ---
 
+## Normative references
+
+The following documents are referred to in the text in such a way that some or all of their content constitutes requirements of this specification. For dated references, only the edition cited applies. For undated references, the latest edition of the referenced document (including any amendments) applies.
+
+**Protocol Buffers Language Specification (Proto3)**, *Google Protocol Buffers Documentation*
+
+**Apache Kafka Protocol Specification**, *Apache Software Foundation*
+
+**IEC 61850-90-4**, *Communication networks and systems for power utility automation — Part 90-4: Network engineering guidelines*
+
+**IEC 62443-3-3**, *Industrial communication networks — Network and system security — Part 3-3: System security requirements and security levels*
+
+**IEEE 1547.1**, *Standard Conformance Test Procedures for Equipment Interconnecting Distributed Resources with Electric Power Systems*
+
+**MQTT Sparkplug B Specification**, *Eclipse Foundation*
+
+**Open Compute Project Redfish Monitoring Framework**, *Open Compute Project Foundation*
+
+---
+
 ## Terms and definitions
 
 For the purposes of this document, the following terms and definitions apply.
 
-### computational workload
-software process or application that consumes computational resources and generates predictable power and thermal demands within a data center facility
+### central data bus
+distributed communication architecture where all system components connect directly to a shared data ring, enabling bidirectional information flow without hierarchical intermediaries
 
-### data stream
-continuous flow of temporal data published to subscribers using standardized messaging protocols, enabling real-time monitoring and autonomous decision-making
+### computational workload
+software process or application that consumes computational resources and generates predictable power and thermal demands within a data center facility, capable of direct data bus communication
+
+### data bus architecture
+high-performance messaging infrastructure based on Protocol Buffer serialization enabling sub-100ms data exchange between all connected components
+
+### marketplace framework
+standardized data and communication infrastructure enabling energy trading, carbon optimization, and demand response coordination through autonomous policy-driven decisions
+
+### protobuf data model
+standardized message structure definition using Google Protocol Buffers enabling efficient serialization, schema evolution, and cross-platform compatibility
 
 ### demand response
-modification of electrical power consumption in response to grid operator requests or market signals through autonomous policy-driven actions
+modification of electrical power consumption in response to grid operator requests or market signals through autonomous policy-driven actions coordinated via data bus communications
 
 ### grid-destabilizing power event
 rapid change in electrical power consumption that exceeds grid operator stability thresholds
@@ -68,42 +98,36 @@ rapid change in electrical power consumption that exceeds grid operator stabilit
 *Note 1 to entry: Typically characterized by power changes exceeding 50 MW within temporal intervals less than 1 s.*
 
 ### intent-based signal
-bidirectional data communication that conveys operational intent, forecasting information, or policy requirements rather than current state measurements alone
+bidirectional protobuf message conveying operational intent, forecasting information, or policy requirements rather than current state measurements alone
 
 ### liquid cooling system
 thermal management system utilizing liquid coolant for heat transfer from computational hardware
 
 *Note 1 to entry: Includes single-phase systems using liquid coolant circulation and two-phase systems utilizing liquid-to-vapor phase transitions.*
 
-### message bus architecture
-distributed communication system where data producers publish information to topics or channels that multiple subscribers can access independently without centralized coordination
+### message bus implementation
+high-performance data bus utilizing Apache Kafka, Apache Pulsar, or equivalent systems with protobuf serialization for sub-second data distribution
 
 ### metric
-unidirectional measurement indicating the current status or historical performance of a system component
+unidirectional protobuf message indicating the current status or historical performance of a system component
 
 ### municipal heat network
 district heating system providing thermal energy distribution to municipal buildings and facilities
 
-### phase-change detection
-monitoring and verification of proper liquid-to-vapor transitions in two-phase cooling systems
-
 ### policy-driven optimization
-autonomous decision-making approach where individual system components act based on predefined policies and available data streams rather than centralized control commands
+autonomous decision-making approach where individual system components act based on predefined policies and available data bus information rather than centralized control commands
 
 ### power quality
 electrical characteristics of power supply including total harmonic distortion (THD), power factor, and voltage stability
 
-### predictive load analytics
-algorithmic analysis of historical power consumption patterns to forecast future power demands
-
-### renewable energy optimization
-coordination of computational workload scheduling with availability of low-carbon electricity generation through autonomous policy-based decisions
+### schema evolution
+Protocol Buffer capability enabling backward and forward compatibility during data model updates without service disruption
 
 ### signal
-bidirectional communication conveying intent, forecasting information, or policy requirements that influences future system behavior
+bidirectional protobuf message conveying intent, forecasting information, or policy requirements that influences future system behavior
 
 ### ticker symbol
-standardized identifier for specific data streams in message bus architectures, analogous to financial market data identifiers
+standardized identifier for specific data streams in data bus architectures, analogous to financial market data identifiers
 
 ### workload flexibility
 capability of computational workloads to adjust power consumption, timing, or resource allocation in response to infrastructure constraints or external signals through autonomous policy execution
@@ -112,198 +136,324 @@ capability of computational workloads to adjust power consumption, timing, or re
 
 ## General requirements
 
-### System architecture
+### Central data bus architecture
 
-The WDPC system shall implement a distributed data streaming architecture that addresses the fundamental challenge of making temporal data consistently available across workload-to-infrastructure pathways identified in high-performance computing environments.
+The WDPC system shall implement a central data bus architecture where all components connect directly to a shared data ring, eliminating hierarchical communication patterns and enabling bidirectional information flow between all system participants. This architecture addresses the critical insight from technical discussions that workloads must interface directly with the data bus rather than through server intermediaries, ensuring that sensors from racks and individual components have direct representation on the data ring.
 
-#### Data publication layer
+#### Data bus core infrastructure
 
-The data publication layer shall provide standardized data streaming endpoints enabling computational workloads and infrastructure components to publish operational data for subscriber access without centralized coordination.
+The central data bus shall provide high-performance messaging infrastructure utilizing:
 
-This layer shall implement:
+a) **Protocol Buffer serialization** achieving 2-6x faster processing and 30-70% message size reduction compared to JSON-based alternatives, following Google's proven methodology for defining serialized data on message buses as discussed in architectural reviews;
 
-a) **temporal data stream structures** for workload power profiling with temporal resolution of 100 ms or finer supporting AI workload transition tracking;
+b) **Message bus implementation** using Apache Kafka with Confluent Schema Registry or Apache Pulsar with native protobuf support, capable of processing 1+ million messages per second with sub-100 microsecond latency for financial-grade marketplace applications;
 
-b) **metadata tagging standards** enabling workload classification, priority assignment, and policy parameter communication through ticker symbol identification;
+c) **Sub-100ms data distribution** supporting AI workload optimization requirements through optimized protobuf processing, with specific performance targets of <10ms serialization for critical data streams and <5ms deserialization for component-level monitoring;
 
-c) **data format standardization** utilizing structured messaging with consistent schema for cross-platform compatibility;
+d) **Schema registry integration** enabling centralized protobuf schema management with backward and forward compatibility, supporting the three-step approach of data model definition, serialization standards, and bus characteristics specification;
 
-d) **publication interfaces** for workload monitoring and performance data distribution.
+#### Component connection requirements
 
-#### Data subscription layer
+All WDPC system components shall connect directly to the central data bus, implementing the architectural principle that eliminates server intermediaries and ensures all components have equal access to the data ring. This design addresses the critical requirement that workloads themselves must be represented on the ring as part of the data feed, not just computational outputs:
 
-The data subscription layer shall standardize data access patterns between power management, thermal management, and monitoring systems based on subscriber-defined requirements and autonomous policy implementations.
+a) **Workload systems** publishing power requirements, thermal characteristics, and operational intent directly to the data bus through standardized protobuf messages, enabling real-time workload-to-infrastructure signaling for AI training applications that can generate 200MW power fluctuations within 40ms intervals;
 
-This layer shall implement:
+b) **Infrastructure components** including servers, cooling systems, power distribution, and environmental sensors connecting independently to the central ring, avoiding the "SNMP trap" through direct data bus integration rather than hierarchical polling architectures;
 
-a) **temporal data stream access** capable of handling sub-second data streams from multiple infrastructure components;
+c) **External systems** including grid operators, municipal utilities, and renewable energy sources interfacing through standardized protobuf schemas at data bus boundaries, supporting the marketplace framework vision for energy and carbon trading coordination;
 
-b) **hierarchical data organization** supporting different granularity requirements from component-level to facility-level consumption;
+d) **Sensors and monitoring devices** from racks, nodes, and individual components publishing data streams directly to the central bus, ensuring comprehensive visibility from facility-level down to component-level monitoring without intermediary aggregation layers;
 
-c) **metadata preservation** maintaining data provenance and quality indicators across distributed access patterns;
+#### Bidirectional data flow
 
-d) **multi-stream data correlation** enabling autonomous analysis across power distribution, cooling systems, and environmental monitoring.
+The data bus architecture shall support bidirectional communication enabling common data representation that can flow seamlessly between IT and facility domains, addressing the reality that these domains are often managed by different organizations but require integrated data exchange:
 
-#### External data integration layer
+a) **Workload-to-infrastructure signaling** allowing computational processes to communicate resource requirements and constraints directly, enabling AI workloads to signal upcoming power transitions and thermal generation patterns to cooling systems for proactive optimization;
 
-The external data integration layer shall provide standardized interfaces for data exchange with grid operators, municipal utilities, and renewable energy systems through ticker-feed architectures.
+b) **Infrastructure-to-workload feedback** providing real-time capacity, thermal, and power availability information, supporting manufacturing workload scheduling based on grid conditions and renewable energy availability as discussed in utility provider integration scenarios;
 
-This layer shall implement:
+c) **Cross-component coordination** enabling direct communication between infrastructure elements for autonomous optimization, supporting the multi-sided marketplace vision where generators, consumers, and grid operators can coordinate through standardized data interfaces;
 
-a) **grid operator data streams** supporting load forecasting and demand response coordination;
+d) **External system integration** supporting grid services, demand response, and marketplace participation through the central data bus, enabling carbon intensity trading and sustainability derivatives as envisioned in the marketplace framework evolution;
 
-b) **municipal utility data distribution** for waste heat recovery and district heating integration;
+### Protocol Buffer data model framework
 
-c) **renewable energy data streams** with carbon intensity tracking and generation forecasting;
+WDPC implementations shall utilize Google Protocol Buffer (protobuf) data models providing high-performance serialization with standardized schema evolution capabilities, following the methodology established in successful industrial IoT implementations. This approach addresses the core challenge of data model definition identified in technical discussions, with serialization being the more straightforward secondary concern.
 
-d) **temporal data synchronization** ensuring consistent timing across external data sources.
+#### Core protobuf schema design
 
-#### Hardware instrumentation layer
+WDPC protobuf schemas shall implement hierarchical message structures with optimized field numbering, following industrial best practices that achieve 60-90% bandwidth reduction in IoT scenarios:
 
-The hardware instrumentation layer shall provide standardized interfaces for data publication from power systems, cooling systems, and environmental sensors across instrumentation points in the workload-to-infrastructure pathway.
+a) **Critical fields in positions 1-15** utilizing single-byte encoding for frequently accessed data including timestamps, component IDs, and power measurements, following the established pattern where field numbers 1-15 require only one byte for encoding versus higher numbers requiring additional bytes;
 
-This layer shall implement:
+b) **Reserved field management** preventing breaking changes during schema evolution through proper field number reservation, ensuring that third-party extensions can be added similar to Kubernetes operators without disrupting core functionality;
 
-a) **enhanced sensor data publication** extending measurement capabilities for WDPC-specific data streaming;
+c) **Hierarchical message nesting** supporting component-level to facility-level data organization, enabling the facility→rack→node→component hierarchy identified in Open Compute Project monitoring frameworks;
 
-b) **temporal data publication** with power measurement temporal resolution of 100 ms and accuracy requirements specified in accuracy requirements section;
+d) **Optimized data types** utilizing appropriate protobuf scalar types, repeated fields, and map structures for efficient encoding, with specific attention to temporal data that requires sub-100ms processing for AI workload optimization;
 
-c) **sensor data standardization** with consistent metadata tagging for temperature, flow, pressure, and power quality measurements;
+#### Schema evolution and compatibility
 
-d) **instrumentation point mapping** providing spatial and logical relationship data for autonomous analysis.
+Protobuf schema management shall ensure seamless system evolution supporting the "crawl, walk, run" approach where version 1.0 establishes foundational frameworks while enabling future marketplace concept integration:
 
-### Component architecture and monitoring requirements
+a) **Backward compatibility** enabling new consumers to read historical data without modification, supporting the transition from basic data collection to advanced marketplace applications without system disruption;
 
-#### Rack-level architecture
+b) **Forward compatibility** allowing older consumers to process new message versions gracefully, ensuring that initial implementations can continue operating when marketplace functionality is added in subsequent versions;
 
-WDPC systems shall implement hierarchical data publication from data center facility level down to individual component level, based on established Open Compute Project (OCP) monitoring frameworks for rack-level data aggregation.
+c) **Field number preservation** preventing reuse of deprecated field numbers across schema versions, maintaining data integrity during the evolution from facility management to multi-sided energy trading platforms;
 
-The hierarchy shall consist of:
+d) **Version control integration** supporting centralized schema registry with automated compatibility validation, enabling GitHub repository-based schema definitions as discussed in the data model framework approach;
 
-a) **Data center facility level** - Overall power distribution and environmental control systems data publication;
+#### High-performance serialization
 
-b) **Rack level** - Collection of nodes with shared power distribution and cooling infrastructure data streams;
+Protobuf implementation shall achieve:
 
-c) **Node level** - Individual computational units consisting of system and chassis components data publication;
+a) **Sub-100ms serialization and deserialization** for AI workload data processing requirements;
 
-d) **Component level** - Individual processors, memory modules, power supplies, and environmental sensors data streams.
+b) **Memory efficiency** utilizing arena-based allocation patterns where supported;
 
-#### Node component specifications
+c) **Language optimization** leveraging platform-specific protobuf optimizations (e.g., gogofaster for Go implementations);
 
-Each node shall provide data publication capabilities for the following core components:
+d) **Wire format optimization** minimizing message sizes through efficient field encoding and compression.
 
-a) **System components**:
-   - Memory modules with power consumption and thermal monitoring data streams
-   - Processors with individual power draw and thermal characteristics publication
-   - System-level metrics aggregation and ports monitoring data streams
+### Component architecture and data models
 
-b) **Chassis components**:
-   - Environment metrics sensors for temperature, humidity, and airflow data publication
-   - Power subsystems including Primary Supply Unit (PSU) and Battery Backup Unit (BBU) data streams
-   - Assembly and control systems for chassis-level data publication
+#### Facility-level data model
 
-c) **Node-level aggregation data streams**:
-   - Specific node power role identification
-   - Cumulative power meter for total node consumption
-   - Idle baseline power measurement
-   - Peak load monitoring and tracking
+Facility-level protobuf messages shall define:
 
-#### Monitoring granularity requirements
+```protobuf
+message FacilityStatus {
+  string facility_id = 1;                    // Critical field - single byte encoding
+  google.protobuf.Timestamp timestamp = 2;   // Frequent access
+  PowerDistribution power_system = 3;        // Primary facility data
+  ThermalManagement cooling_system = 4;      // Critical infrastructure
+  repeated RackSystem racks = 5;             // Hierarchical structure
+  
+  ExternalSystemIntegration grid_interface = 16;    // Less frequent access
+  map<string, string> facility_metadata = 17;       // Configuration data
+}
+```
 
-WDPC implementations shall support multiple granularity levels through differentiated data stream publication:
+#### Rack-level data model
 
-a) **Component-level data streams** for detailed analysis of individual processors, memory modules, and power supplies;
-
-b) **Node-level aggregation streams** for computational unit management and workload allocation;
-
-c) **Rack-level summary streams** for infrastructure planning and capacity management;
-
-d) **Facility-level reporting streams** for grid integration and external system coordination.
-
-### Data format requirements
-
-#### Temporal data structure and response requirements
-
-WDPC data shall address the fundamental temporal nature of workload-infrastructure coordination through standardized time-series data publication, with particular emphasis on the critical requirement that AI applications demand significantly faster data access and response capabilities than traditional summary data approaches.
-
-All WDPC temporal data shall utilize:
-
-a) **structured message formats** based on JSON syntax conforming to IETF RFC 7159 with mandatory timestamp fields and ticker symbol identification;
-
-b) **message bus communication architectures** including IoT-based messaging patterns for component-level monitoring where traditional API response times cannot meet sub-second requirements;
-
-c) **metadata tagging structures** enabling data source identification, quality indicators, and spatial relationship mapping;
-
-d) **hierarchical data organization** supporting multiple granularity levels from component monitoring to facility reporting through differentiated ticker symbols;
-
-e) **data provenance tracking** maintaining source identification and processing history through message metadata.
-
-#### Communication pattern requirements
-
-WDPC systems shall implement communication patterns based on response time requirements and autonomous access needs:
-
-a) **Message bus implementation** as primary approach for high-frequency data distribution with sub-second access requirements;
-
-b) **Ticker feed architectures** for component-level data collection and infrastructure coordination requiring continuous data availability;
-
-c) **Streaming data protocols** for high-frequency data streams between nodes and infrastructure systems;
-
-d) **RESTful API compatibility** for legacy systems and external integration where message bus access is not feasible.
-
-#### Temporal requirements for AI applications
-
-WDPC systems shall meet the temporal data handling requirements specified in Table 1, with particular emphasis on the critical understanding that summary data approaches are insufficient for AI applications that require rapid autonomous response loops and high-resolution monitoring capabilities.
-
-**Table 1 — Temporal requirements for WDPC data handling**
-
-| Data type | Temporal resolution | Publication accuracy | Access time requirement | Rationale |
+Rack-level protobuf messages shall define:
+
+```protobuf
+message RackSystem {
+  string rack_id = 1;                        // Critical identifier
+  google.protobuf.Timestamp timestamp = 2;   // Temporal data
+  PowerMetrics power_consumption = 3;        // Primary monitoring
+  ThermalMetrics thermal_status = 4;         // Environmental data
+  repeated NodeSystem nodes = 5;             // Component hierarchy
+  
+  NetworkInfrastructure networking = 16;     // Less critical data
+  map<string, double> sensor_readings = 17;  // Additional measurements
+}
+```
+
+#### Node-level data model
+
+Node-level protobuf messages shall define:
+
+```protobuf
+message NodeSystem {
+  string node_id = 1;                        // Critical identifier
+  google.protobuf.Timestamp timestamp = 2;   // Temporal synchronization
+  WorkloadMetrics active_workload = 3;       // Computational status
+  repeated ProcessorUnit cpus = 4;           // Processing components
+  repeated MemoryModule memory = 5;          // Memory subsystems
+  PowerSubsystem power_supply = 6;           // Power management
+  
+  ChassisEnvironment chassis_metrics = 16;   // Environmental monitoring
+  map<string, string> node_configuration = 17; // System parameters
+}
+```
+
+#### Component-level data models
+
+Individual component protobuf messages shall define:
+
+```protobuf
+message ProcessorUnit {
+  string processor_id = 1;                   // Component identifier
+  google.protobuf.Timestamp timestamp = 2;   // Measurement time
+  double power_consumption_watts = 3;        // Critical metric
+  double temperature_celsius = 4;           // Thermal monitoring
+  double utilization_percent = 5;           // Performance data
+  
+  ProcessorMetadata specifications = 16;     // Static information
+}
+
+message MemoryModule {
+  string memory_id = 1;                      // Component identifier
+  google.protobuf.Timestamp timestamp = 2;   // Measurement time
+  double power_consumption_watts = 3;        // Power monitoring
+  double temperature_celsius = 4;           // Thermal data
+  MemoryMetrics performance = 5;            // Operational metrics
+}
+```
+
+### Marketplace framework integration
+
+WDPC implementations shall support marketplace framework integration enabling energy trading, carbon optimization, and demand response coordination, following the NASDAQ-style framework approach where Green Software Foundation provides the infrastructure for markets rather than operating them directly. This addresses the vision evolution from data center management to inter-facility markets with multi-sided marketplace capabilities.
+
+#### Energy marketplace data models
+
+Energy marketplace protobuf messages shall support the multi-sided market vision involving generators, consumers, and grid operators, enabling derivative market possibilities for sustainability commitments:
+
+```protobuf
+message EnergyMarketData {
+  string market_id = 1;                      // Market identifier
+  google.protobuf.Timestamp timestamp = 2;   // Market data timestamp
+  EnergyPricing current_pricing = 3;         // Real-time pricing
+  CarbonIntensity grid_carbon = 4;          // Environmental metrics
+  repeated EnergyOffer available_offers = 5; // Market opportunities
+  GenerationCapacity available_generation = 6; // Supply-side data
+  
+  DemandResponseSignals dr_status = 16;      // Grid coordination
+  PGECoLocationData colocation_projects = 17; // Utility provider integration
+  map<string, double> market_metadata = 18;  // Additional market data
+}
+
+message EnergyOffer {
+  string offer_id = 1;                       // Unique offer identifier
+  double quantity_mwh = 2;                  // Energy quantity available
+  double price_per_mwh = 3;                 // Pricing information
+  google.protobuf.Timestamp delivery_start = 4; // Delivery window start
+  google.protobuf.Timestamp delivery_end = 5;   // Delivery window end
+  EnergySource source_type = 6;             // Generation source
+  double carbon_intensity_g_co2_kwh = 7;    // Environmental impact
+  
+  GeographicLocation location = 16;          // Physical location
+  map<string, string> contract_terms = 17;  // Trading conditions
+}
+```
+```
+
+#### Carbon optimization data models
+
+Carbon optimization protobuf messages shall support manufacturing workload scheduling based on grid conditions and enable carbon intensity trading as envisioned in the marketplace evolution:
+
+```protobuf
+message CarbonOptimization {
+  string optimization_id = 1;               // Optimization session
+  google.protobuf.Timestamp timestamp = 2;  // Current time
+  double current_carbon_intensity = 3;     // Real-time CI
+  repeated CarbonForecast predictions = 4;  // Forward-looking data
+  WorkloadSchedulingOptions options = 5;    // Optimization choices
+  CarbonTradingOpportunities trading = 6;   // Market-based optimization
+  
+  RenewableEnergyStatus renewables = 16;    // Clean energy status
+  SustainabilityDerivatives derivatives = 17; // Financial instruments
+  map<string, string> policy_preferences = 18; // Optimization policies
+}
+
+message CarbonTradingOpportunities {
+  repeated CarbonCredit available_credits = 1; // Carbon credit market
+  repeated CarbonOffset offset_projects = 2;   // Offset opportunities
+  CarbonPricing current_pricing = 3;          // Market pricing data
+  repeated SustainabilityCommitment commitments = 4; // Corporate commitments
+}
+
+message SustainabilityDerivatives {
+  repeated CarbonFuture carbon_futures = 1;   // Future carbon pricing
+  repeated RenewableOption renewable_options = 2; // Clean energy options
+  EmissionReductionSwaps emission_swaps = 3;  // Emissions trading
+}
+```
+```
+
+#### Demand response coordination
+
+Demand response protobuf messages shall support utility provider integration scenarios, including co-location projects with generation plants and load shifting based on generation availability:
+
+```protobuf
+message DemandResponseEvent {
+  string event_id = 1;                      // DR event identifier
+  google.protobuf.Timestamp start_time = 2; // Event timing
+  google.protobuf.Timestamp end_time = 3;   // Event duration
+  double target_reduction_mw = 4;          // Load reduction target
+  DRParticipationCapability capability = 5; // Facility response ability
+  UtilityProviderIntegration utility_data = 6; // PG&E-style integration
+  
+  GridOperatorRequirements requirements = 16; // Detailed specifications
+  CoLocationOpportunities colocation = 17;    // Generation plant coordination
+  map<string, double> incentive_structure = 18; // Economic parameters
+}
+
+message UtilityProviderIntegration {
+  string utility_provider_id = 1;          // Utility identifier (e.g., PG&E)
+  repeated GenerationAsset generation_assets = 2; // Co-located generation
+  LoadShiftingCapability load_flexibility = 3;    // Load shifting potential
+  RenewableIntegration renewable_sources = 4;     // Clean energy coordination
+  DistrictHeatingIntegration heat_recovery = 5;   // Heat recovery systems
+}
+
+message CoLocationOpportunities {
+  repeated GenerationFacility nearby_generation = 1; // Local generation
+  double transmission_efficiency = 2;               // Grid efficiency
+  LoadBalancingServices grid_services = 3;         // Ancillary services
+  EnergyStorageCoordination storage_systems = 4;   // Battery coordination
+}
+```
+```
+
+### Temporal data streaming requirements
+
+WDPC systems shall meet high-performance temporal data requirements specified in Table 1, utilizing protobuf serialization for optimal performance.
+
+**Table 1 — Temporal requirements for WDPC protobuf data handling**
+
+| Data type | Temporal resolution | Protobuf serialization time | Access time requirement | Rationale |
 |---|---|---|---|---|
-| Node power profiling | 100 ms | ±0.5% | <250 ms | AI workload rapid power transitions require sub-second monitoring |
-| Component-level monitoring | 100 ms | ±0.5% | <500 ms | Individual processor/memory power tracking for optimization |
-| Thermal monitoring | 1 s | ±0.1°C | <1 s | Coordinate cooling system response to heat generation |
-| Infrastructure status | 1 s | Varies by sensor | <2 s | Maintain facility operational awareness |
-| External coordination | 15 min | Varies by source | <5 s | Support grid operator and utility integration |
+| Node power profiling | 100 ms | <10 ms | <100 ms | AI workload rapid power transitions |
+| Component-level monitoring | 100 ms | <5 ms | <150 ms | Individual processor/memory optimization |
+| Thermal monitoring | 1 s | <20 ms | <500 ms | Cooling system response coordination |
+| Infrastructure status | 1 s | <30 ms | <1 s | Facility operational awareness |
+| External coordination | 15 min | <100 ms | <5 s | Grid operator and utility integration |
 
-Temporal synchronization across all WDPC components shall achieve accuracy within ±1 millisecond utilizing Network Time Protocol (NTP) or Precision Time Protocol (PTP) conforming to ITU-T G.8275.1.
+Temporal synchronization across all WDPC components shall achieve accuracy within ±1 millisecond utilizing Network Time Protocol (NTP) or Precision Time Protocol (PTP).
 
-#### Ticker symbol architecture requirements
+### Message bus implementation requirements
 
-WDPC implementations shall implement ticker symbol identification for standardized data stream access:
+WDPC implementations shall utilize high-performance message bus systems with protobuf integration, supporting the financial-grade performance requirements needed for marketplace applications while maintaining the industrial reliability required for data center infrastructure management.
 
-a) **Standard ticker symbols** for well-understood data streams that all implementations should publish;
+#### Apache Kafka integration
 
-b) **Custom ticker extension** capabilities allowing implementation-specific data stream creation;
+Kafka-based implementations shall provide marketplace-grade performance suitable for energy trading and carbon optimization:
 
-c) **Metadata standards** for ticker symbol registration including units, reporting intervals, and data quality indicators;
+a) **Confluent Schema Registry** integration for centralized protobuf schema management with automated compatibility validation, enabling the GitHub repository-based schema evolution approach discussed in data model framework sessions;
 
-d) **Namespace management** for avoiding ticker symbol conflicts across organizational boundaries.
+b) **1+ million messages per second** processing capability per partition with sub-100 microsecond latency achieving financial trading system performance levels, supporting real-time energy market data distribution and carbon intensity trading;
 
-#### Accuracy requirements
+c) **Multi-tenant topic organization** enabling separate data streams for facility operations, marketplace coordination, and external system integration while maintaining data isolation between organizational domains;
 
-WDPC systems shall achieve the measurement accuracy specified in Table 2.
+d) **Automatic protobuf serialization/deserialization** through Kafka Connect plugins with schema evolution support, ensuring that marketplace functionality can be added without disrupting existing facility management operations;
 
-**Table 2 — Accuracy requirements for WDPC measurements**
+#### Apache Pulsar integration
 
-| Measurement type | Accuracy requirement | Operating range | Calibration interval |
-|---|---|---|---|
-| Power measurement | ±0.5 % of reading | 1 kW to 1000 MW | 12 months |
-| Temperature measurement | ±0.1 °C | -10°C to 125°C | 6 months |
-| Flow rate measurement | ±1.0 % of reading | 0 to 5000 L/min | 12 months |
-| Pressure measurement | ±0.25 % of full scale | 0 to 10 bar | 12 months |
+Pulsar-based implementations shall provide ultra-high performance suitable for the most demanding marketplace applications requiring sub-microsecond latencies:
 
-### Security requirements
+a) **Native protobuf support** with built-in schema registry capabilities eliminating external dependencies, supporting the streamlined architecture where data model definition leads to serialization and bus characteristics;
 
-WDPC implementations shall implement security measures conforming to IEC 62443-3-3 for industrial communication networks, addressing the critical infrastructure data protection concerns identified in distributed messaging environments.
+b) **2.5x maximum throughput** compared to equivalent Kafka configurations with 100x lower publish latency at P99.99 percentiles, enabling high-frequency energy trading and real-time carbon intensity optimization;
 
-Security implementations shall include:
+c) **Geo-replication capabilities** supporting multi-region marketplace coordination and utility provider integration across different grid operators and energy markets;
 
-a) **mutual authentication** using X.509 digital certificates for all infrastructure data communications;
+d) **Function-based stream processing** enabling real-time analytics for marketplace decision-making, carbon optimization algorithms, and demand response coordination without external processing systems;
 
-b) **data integrity verification** utilizing HMAC-SHA256 for all temporal data transmissions;
+#### Industrial IoT integration
 
-c) **network segmentation** isolating WDPC data traffic from general data center network traffic;
+For edge and industrial applications requiring integration with existing SCADA and building management systems, implementations shall utilize proven industrial messaging standards:
 
-d) **intrusion detection** with automated response capabilities for anomalous data access patterns in message bus architectures.
+a) **MQTT Sparkplug B protocol** with protobuf payload encoding following Eclipse Foundation specifications, achieving 60-80% network traffic reduction through report-by-exception principles and eliminating the "SNMP trap" of excessive polling;
+
+b) **Industrial-grade reliability** with device birth/death certificates and auto-discovery capabilities, supporting the component hierarchy from facility-level down to individual sensor integration identified in Open Compute Project frameworks;
+
+c) **Edge gateway optimization** utilizing thin-edge.io and similar lightweight protobuf processing suitable for industrial gateway devices with limited computational resources, enabling sensors from racks and components to connect directly to the central data ring;
+
+d) **Legacy system integration** bridging existing building management systems and SCADA infrastructure with modern protobuf-based data bus architecture, ensuring that current facility investments can participate in future marketplace applications;
 
 ---
 
@@ -313,334 +463,235 @@ d) **intrusion detection** with automated response capabilities for anomalous da
 
 #### General
 
-The workload data publication protocol shall enable computational workloads to publish power requirements and operational characteristics through standardized temporal data streams that enable autonomous optimization without prescriptive coordination implementation, with particular emphasis on meeting the high-speed access requirements of AI applications.
+The workload data publication protocol shall enable computational workloads to publish power requirements and operational characteristics through standardized protobuf data streams that connect directly to the central data bus, supporting autonomous optimization without prescriptive coordination.
 
-#### Node-level data publication message
+#### Workload data protobuf schema
 
-Computational workloads shall publish operational characteristics at the node level using the message structure specified in Annex A.1, including the critical metrics identified for AI workload monitoring.
+Computational workloads shall publish operational characteristics using the protobuf message structure:
 
-The node-level data publication message shall include:
+```protobuf
+message WorkloadDataPublication {
+  string workload_id = 1;                    // Critical workload identifier
+  google.protobuf.Timestamp timestamp = 2;   // Publication time
+  WorkloadType workload_type = 3;           // Computational classification
+  PowerProfile power_requirements = 4;      // Power characteristics
+  ThermalProfile thermal_generation = 5;    // Heat generation data
+  OperationalCharacteristics flexibility = 6; // Scheduling flexibility
+  
+  repeated IntentSignal future_intent = 16;  // Predictive signaling
+  map<string, string> policy_preferences = 17; // Optimization policies
+}
 
-a) **workload identification** with standardized taxonomy for computational workload types (AI training, inference serving, HPC applications) and associated ticker symbols;
+enum WorkloadType {
+  AI_TRAINING = 0;
+  AI_INFERENCE = 1;
+  HPC_COMPUTATION = 2;
+  TRADITIONAL_COMPUTE = 3;
+  BATCH_PROCESSING = 4;
+}
 
-b) **node power profiling** including specific node power role, cumulative power meter data, idle baseline power, and peak load characteristics with 100 ms temporal resolution;
+message PowerProfile {
+  double peak_power_mw = 1;                 // Maximum power requirement
+  double baseline_power_mw = 2;             // Minimum power consumption
+  double ramp_rate_mw_per_sec = 3;         // Power transition rate
+  int32 duration_estimate_sec = 4;          // Expected runtime
+  int32 temporal_resolution_ms = 5;         // Monitoring granularity
+}
+```
 
-c) **component-level characteristics** specifying individual processor, memory, and chassis power consumption and thermal requirements;
+#### Infrastructure subscription access
 
-d) **operational characteristics** including performance flexibility, timing tolerance, and resource scalability at both node and component levels;
+Infrastructure management systems shall access workload data publications through standardized protobuf message subscriptions:
 
-e) **intent-based signals** for priority classification, resource requirements, and policy preferences through predictive data streams.
+```protobuf
+message InfrastructureDataStream {
+  string infrastructure_id = 1;             // Infrastructure identifier
+  google.protobuf.Timestamp timestamp = 2;  // Current timestamp
+  ResourceAvailability resources = 3;       // Available capacity
+  InfrastructureStatus current_status = 4;  // Operational state
+  AutonomousCapabilities capabilities = 5;  // Optimization interfaces
+  
+  ExternalSystemStatus external_systems = 16; // Grid/utility status
+  map<string, double> data_quality_indicators = 17; // Quality metrics
+}
 
-#### Infrastructure data subscription access
-
-Infrastructure management systems shall access workload data publications through standardized subscription mechanisms utilizing message bus architectures optimized for response time requirements.
-
-Infrastructure data subscription shall provide access to:
-
-a) **resource availability data streams** including power circuit capacity, cooling system availability, and instrumentation coverage at node and component levels;
-
-b) **infrastructure status streams** specifying current utilization of processors, memory, power subsystems (PSU, BBU), and chassis components;
-
-c) **autonomous capability data** describing available optimization interfaces and policy execution capabilities through ticker feed access;
-
-d) **external system status streams** providing grid conditions, renewable energy availability, and municipal integration status.
+message ResourceAvailability {
+  double available_power_mw = 1;            // Power circuit capacity
+  double cooling_capacity_kw = 2;          // Thermal management capacity
+  double instrumentation_coverage_percent = 3; // Monitoring coverage
+  repeated NodeCapacity node_availability = 4; // Per-node resources
+}
+```
 
 ### Component-level data streaming protocol
 
 #### High-speed component data publication
 
-Component-level monitoring systems shall implement standardized data publication addressing the identified requirement that AI applications demand faster data access and response capabilities than traditional summary data approaches.
+Component-level monitoring systems shall implement standardized protobuf data publication addressing AI applications' sub-second data requirements:
 
-Component monitoring protocols shall provide:
+```protobuf
+message ComponentDataStream {
+  string component_id = 1;                  // Component identifier
+  google.protobuf.Timestamp timestamp = 2;  // Measurement timestamp
+  ComponentType type = 3;                   // Component classification
+  PowerMetrics power_data = 4;             // Power consumption
+  ThermalMetrics thermal_data = 5;         // Temperature monitoring
+  PerformanceMetrics performance = 6;      // Operational metrics
+  
+  ComponentHealth health_status = 16;       // Diagnostic information
+  map<string, double> extended_metrics = 17; // Additional measurements
+}
 
-a) **processor-level power data streams** with 100 ms resolution tracking individual CPU and accelerator power consumption;
+enum ComponentType {
+  PROCESSOR_CPU = 0;
+  PROCESSOR_GPU = 1;
+  MEMORY_RAM = 2;
+  MEMORY_STORAGE = 3;
+  POWER_SUPPLY = 4;
+  COOLING_FAN = 5;
+  TEMPERATURE_SENSOR = 6;
+}
 
-b) **memory subsystem data publication** including power consumption, thermal characteristics, and performance metrics for RAM and storage components;
-
-c) **power subsystem data streams** providing real-time data from PSU and BBU systems with sub-second publication rates;
-
-d) **chassis environmental data streams** including temperature, airflow, and humidity sensors with message bus publication for sub-500ms access requirements.
-
-#### Communication architecture implementation
-
-Component-level data streaming shall implement communication architectures based on specific response time requirements:
-
-a) **Message bus patterns** for chassis monitoring and high-frequency component data publication requiring sub-500ms access times;
-
-b) **Ticker feed architectures** for component data distribution with continuous availability requirements;
-
-c) **Streaming protocols** for node-to-infrastructure coordination requiring continuous data availability;
-
-d) **Hybrid communication strategies** optimizing protocol selection based on component type, data frequency, and access time constraints.
+message PowerMetrics {
+  double instantaneous_power_watts = 1;     // Real-time power draw
+  double average_power_watts = 2;          // Recent average
+  double peak_power_watts = 3;             // Maximum observed
+  double power_efficiency_percent = 4;     // Efficiency rating
+}
+```
 
 ### Infrastructure data streaming protocol
 
 #### Power system data publication
 
-Power management systems shall implement standardized data publication addressing the identified challenge of 200+ MW power swings tracking and analysis at multiple hierarchical levels.
+Power management systems shall implement standardized protobuf data publication for multi-level power monitoring:
 
-Power data streaming protocols shall provide:
+```protobuf
+message PowerSystemData {
+  string power_system_id = 1;              // Power system identifier
+  google.protobuf.Timestamp timestamp = 2; // Measurement time
+  repeated PowerMeasurement measurements = 3; // Hierarchical power data
+  PowerQuality quality_metrics = 4;        // Power quality indicators
+  GridInterface grid_connection = 5;       // Grid interaction data
+  
+  DemandResponseStatus dr_status = 16;     // DR participation
+  map<string, double> power_metadata = 17; // System parameters
+}
 
-a) **temporal power monitoring streams** with 100 ms resolution and accuracy conforming to Table 1 at component, node, rack, and facility levels;
+message PowerMeasurement {
+  string measurement_point_id = 1;         // Measurement location
+  MeasurementLevel level = 2;              // Hierarchy level
+  double power_consumption_mw = 3;         // Power reading
+  double voltage_v = 4;                   // Voltage measurement
+  double current_a = 5;                   // Current measurement
+  double frequency_hz = 6;                // Frequency measurement
+}
 
-b) **power quality data streams** including total harmonic distortion, power factor, and voltage stability measurements;
+enum MeasurementLevel {
+  FACILITY_TOTAL = 0;
+  DISTRIBUTION_CIRCUIT = 1;
+  RACK_LEVEL = 2;
+  NODE_LEVEL = 3;
+  COMPONENT_LEVEL = 4;
+}
+```
 
-c) **instrumentation point data publication** identifying measurement locations and sensor characteristics across the hierarchical architecture;
+#### Thermal data streaming protocol
 
-d) **aggregation data streams** providing facility-level and circuit-level power consumption summaries with drill-down capabilities to component level.
+Thermal management systems shall publish protobuf data for comprehensive cooling coordination:
 
-#### External system data streaming
+```protobuf
+message ThermalSystemData {
+  string thermal_system_id = 1;            // Thermal system identifier
+  google.protobuf.Timestamp timestamp = 2; // Measurement timestamp
+  repeated TemperatureMeasurement temperatures = 3; // Temperature data
+  repeated FlowMeasurement coolant_flows = 4; // Flow measurements
+  CoolingSystemStatus system_status = 5;   // System operational state
+  
+  MunicipalHeatIntegration heat_recovery = 16; // District heating
+  map<string, double> thermal_efficiency = 17; // Performance metrics
+}
 
-External system data streaming protocols shall implement standardized data publication interfaces with utility operators conforming to IEC 61850-90-4.
+message TemperatureMeasurement {
+  string sensor_id = 1;                    // Sensor identifier
+  SensorLocation location = 2;             // Physical location
+  double temperature_celsius = 3;          // Temperature reading
+  double temperature_accuracy = 4;         // Measurement accuracy
+  SensorType sensor_type = 5;             // Sensor technology
+}
 
-External data streaming shall provide:
-
-a) **grid status data streams** enabling infrastructure operators to access real-time grid conditions and constraints;
-
-b) **renewable energy data publication** providing carbon intensity forecasts and generation availability;
-
-c) **municipal utility data streams** supporting district heating coordination and waste heat utilization;
-
-d) **demand response data publication** enabling autonomous load management through standardized data availability.
-
-### Thermal data streaming protocol
-
-#### Cooling system data publication
-
-Thermal management systems shall publish data across air-based and liquid-based cooling systems through standardized temporal data streams.
-
-Cooling data streaming shall implement:
-
-a) **thermal monitoring streams** with temperature accuracy conforming to Table 1 and temporal resolution of 1 second;
-
-b) **flow and pressure data publication** supporting both air and liquid cooling system analysis with accuracy requirements specified in accuracy requirements section;
-
-c) **spatial correlation data streams** providing sensor location and coverage area information;
-
-d) **phase-change monitoring data publication** for two-phase cooling systems with vapor quality and condensation tracking.
-
-#### Municipal heat integration data protocol
-
-Systems providing municipal heat integration shall implement data streaming protocols enabling district heating network integration.
-
-Municipal heat integration data shall provide:
-
-a) **heat quality data streams** ensuring supply temperature monitoring and contamination prevention tracking;
-
-b) **thermal energy measurement data publication** with accuracy requirements for commercial applications;
-
-c) **capacity coordination data streams** matching municipal demand with data center heat availability;
-
-d) **environmental compliance data publication** supporting regional regulatory requirements.
-
----
-
-## Hardware data interface specifications
-
-### Data Publication Controller (DPC) requirements
-
-#### WDPC data streaming implementation
-
-Data Publication Controllers shall implement the data streaming capabilities specified in Table 3 to address the identified need for standardized hardware data publication interfaces.
-
-**Table 3 — Mandatory WDPC data streaming capabilities**
-
-| Data Stream | Ticker Symbol | Function |
-|---|---|---|
-| Real-time power measurement | WDPC.PWR.RT | Real-time power measurement data publication |
-| Workload operational status | WDPC.WKL.STATUS | Workload operational data streaming |
-| Thermal system monitoring | WDPC.THM.STATUS | Thermal system monitoring data publication |
-| Detailed sensor measurements | WDPC.THM.SENSORS | Detailed sensor measurement data streaming |
-| Infrastructure utilization | WDPC.INFRA.STATUS | Infrastructure utilization data publication |
-| Sensor metadata | WDPC.META.SENSORS | Sensor location and capability data streaming |
-
-#### Power monitoring data streaming
-
-Data Publication Controllers shall provide power monitoring data streaming capabilities including:
-
-a) **temporal power measurement streams** with resolution of 100 ms addressing AI workload monitoring requirements;
-
-b) **power quality monitoring streams** including total harmonic distortion (THD) and power factor measurement;
-
-c) **instrumentation metadata streams** providing sensor location, accuracy specifications, and calibration status.
-
-#### Thermal data streaming extensions
-
-Data Publication Controllers shall provide thermal monitoring data streaming capabilities including:
-
-a) **temporal thermal monitoring streams** for temperature and flow measurement with metadata tagging;
-
-b) **spatial correlation data publication** for sensor location mapping and coverage area definition;
-
-c) **system integration data streams** for municipal utility coordination and heat recovery tracking.
-
-### Sensor requirements
-
-#### Temperature sensors
-
-Temperature sensors shall meet the specifications in Table 4.
-
-**Table 4 — Temperature sensor specifications**
-
-| Application | Accuracy | Publication rate | Range |
-|---|---|---|---|
-| Inlet coolant | ±0.1 °C | 1 Hz minimum | 5 °C to 25 °C |
-| Outlet coolant | ±0.1 °C | 1 Hz minimum | 15 °C to 95 °C |
-| Silicon junction | ±0.5 °C | 10 Hz minimum | 0 °C to 125 °C |
-
-#### Flow sensors
-
-Flow sensors shall achieve ±1 % accuracy across 0 L/min to 5 000 L/min range with data publication rates not exceeding 1 s.
-
-#### Pressure sensors
-
-Pressure sensors shall achieve ±0.25 % full-scale accuracy across 0 bar to 10 bar range with temperature compensation and continuous data streaming capability.
+enum SensorLocation {
+  COOLANT_INLET = 0;
+  COOLANT_OUTLET = 1;
+  AMBIENT_AIR = 2;
+  SILICON_JUNCTION = 3;
+  HEAT_EXCHANGER = 4;
+}
+```
 
 ---
 
-## External data integration requirements
-
-### Grid operator data streaming
-
-#### Load data publication
-
-Data center facilities shall provide grid operators with standardized load data streams addressing the identified limitations in grid visibility and capacity planning.
-
-#### Temporal data resolution
-
-Load data streams shall provide:
-
-a) **hourly resolution streams** for 24 h to 48 h ahead forecasting support;
-
-b) **15 min resolution streams** for 4 h ahead operational coordination;
-
-c) **1 min resolution streams** for immediate status reporting.
-
-#### Data quality requirements
-
-Load data streams shall achieve:
-
-a) **measurement accuracy** conforming to Table 1 specifications;
-
-b) **temporal synchronization** within ±1 millisecond of coordinated universal time;
-
-c) **metadata completeness** including data source identification and quality indicators through ticker symbol standards.
-
-### Demand response data streaming
-
-#### Capability data publication
-
-Data center facilities shall provide demand response capability data streams enabling autonomous load coordination within time intervals specified by grid operators.
-
-#### Data communication protocols
-
-Demand response data communications shall utilize secure, authenticated protocols conforming to IEC 61850-90-4 with message bus architecture support.
-
-### Renewable energy data integration
-
-Data center facilities should implement renewable energy data streaming enabling optimization of low-carbon electricity consumption through standardized data availability and autonomous policy-based decisions.
-
----
-
-## Thermal management specifications
-
-### Liquid cooling systems
-
-#### Single-phase systems
-
-Single-phase liquid cooling systems shall provide:
-
-a) **continuous coolant circulation** with flow rate control accuracy of ±1 % and data streaming capability;
-
-b) **inlet temperature control** within ±0.5 °C of setpoint with continuous monitoring data publication;
-
-c) **heat recovery capabilities** for municipal integration where applicable with data streaming support.
-
-#### Two-phase systems
-
-Two-phase liquid cooling systems shall provide:
-
-a) **phase-change detection** and monitoring capabilities with data streaming;
-
-b) **vapor quality control** and condensation management with continuous data publication;
-
-c) **pressure regulation** within specified operating ranges addressing safety requirements with monitoring data streams.
-
-### Heat recovery systems
-
-#### Municipal integration
-
-Heat recovery systems providing municipal integration shall:
-
-a) **deliver thermal energy** at temperatures specified by municipal heating networks (70°C to 90°C) with data streaming capability;
-
-b) **maintain heat quality standards** preventing contamination of municipal systems with continuous monitoring data publication;
-
-c) **provide thermal energy measurement** with accuracy of ±2 % and continuous data streaming.
-
-#### Efficiency requirements
-
-Heat recovery systems should achieve minimum 60 % thermal energy recovery efficiency for waste heat utilization with data publication for autonomous optimization.
-
----
-
-## Policy framework requirements
-
-### General policy framework
-
-WDPC implementations shall support policy-driven autonomous optimization where individual system components make decisions based on available data streams and predefined policies rather than centralized control commands.
-
-### Policy definition standards
-
-#### Policy specification format
-
-Policies shall be defined using standardized formats that specify:
-
-a) **data stream dependencies** identifying required ticker symbols and data streams;
-
-b) **decision criteria** defining conditions and thresholds for autonomous actions;
-
-c) **action specifications** describing permissible responses to data stream conditions;
-
-d) **conflict resolution** mechanisms for handling policy interactions.
-
-#### Policy distribution mechanisms
-
-Policy distribution shall utilize:
-
-a) **configuration management systems** for policy deployment and updates;
-
-b) **version control mechanisms** ensuring policy consistency across components;
-
-c) **rollback capabilities** for policy error recovery;
-
-d) **audit trails** for policy execution tracking.
-
-### Autonomous optimization requirements
-
-#### Component-level autonomy
-
-Individual components shall implement autonomous optimization capabilities including:
-
-a) **data stream subscription** for relevant operational parameters;
-
-b) **policy evaluation engines** for real-time decision making;
-
-c) **action execution capabilities** within defined operational boundaries;
-
-d) **status reporting** of autonomous actions taken.
-
-#### Facility-level coordination
-
-Facility-level coordination shall emerge from individual component autonomous actions guided by:
-
-a) **shared data stream access** providing common operational awareness;
-
-b) **compatible policy frameworks** ensuring complementary autonomous decisions;
-
-c) **feedback mechanisms** allowing component learning from collective outcomes;
-
-d) **emergency override capabilities** for safety-critical situations.
+## External system integration
+
+### Grid operator integration
+
+#### Grid data protobuf schemas
+
+Grid operator integration shall utilize standardized protobuf messages for bidirectional communication:
+
+```protobuf
+message GridOperatorData {
+  string grid_operator_id = 1;             // Utility identifier
+  google.protobuf.Timestamp timestamp = 2; // Data timestamp
+  GridStatus current_status = 3;           // Real-time grid state
+  repeated GridForecast forecasts = 4;     // Forward-looking data
+  DemandResponseRequests dr_requests = 5;  // Load management requests
+  
+  RenewableGenerationStatus renewables = 16; // Clean energy status
+  map<string, double> grid_parameters = 17; // Grid characteristics
+}
+
+message GridStatus {
+  double system_frequency_hz = 1;          // Grid frequency
+  double carbon_intensity_g_co2_kwh = 2;  // Real-time carbon intensity
+  double renewable_percentage = 3;         // Clean energy mix
+  GridStabilityIndicator stability = 4;    // System stability
+  repeated RegionalPricing pricing = 5;    // Energy pricing data
+}
+
+enum GridStabilityIndicator {
+  STABLE = 0;
+  MODERATE_STRESS = 1;
+  HIGH_STRESS = 2;
+  EMERGENCY = 3;
+}
+```
+
+### Municipal utility integration
+
+#### Municipal heat integration
+
+Municipal heat recovery systems shall implement protobuf data exchange:
+
+```protobuf
+message MunicipalHeatData {
+  string municipal_system_id = 1;          // Municipal system identifier
+  google.protobuf.Timestamp timestamp = 2; // Data timestamp
+  HeatDemandForecast demand = 3;          // Municipal heat demand
+  HeatQualityRequirements quality = 4;     // Quality specifications
+  HeatDeliveryCapacity capacity = 5;       // System capacity
+  
+  DistrictHeatingNetwork network_status = 16; // Network operational state
+  map<string, double> pricing_structure = 17; // Heat pricing data
+}
+
+message HeatQualityRequirements {
+  double supply_temperature_min_c = 1;     // Minimum supply temperature
+  double supply_temperature_max_c = 2;     // Maximum supply temperature
+  double return_temperature_max_c = 3;     // Maximum return temperature
+  repeated string contaminant_limits = 4;  // Water quality limits
+}
+```
 
 ---
 
@@ -648,454 +699,183 @@ d) **emergency override capabilities** for safety-critical situations.
 
 ### General security framework
 
-WDPC implementations shall implement security measures conforming to IEC 62443-3-3 addressing critical infrastructure protection requirements in distributed messaging environments.
+WDPC implementations shall implement security measures conforming to IEC 62443-3-3 for industrial communication networks, addressing critical infrastructure protection in high-performance protobuf messaging environments.
 
-### Authentication and authorization
+### Protobuf message security
 
-#### Mutual authentication
+#### Message authentication
 
-All WDPC communications shall implement mutual authentication using X.509 digital certificates addressing infrastructure security concerns in message bus architectures.
+All protobuf messages shall include authentication through:
 
-#### Role-based access control
+a) **Digital signatures** using X.509 certificates embedded in message metadata;
 
-WDPC systems shall implement role-based access control for:
+b) **HMAC-SHA256** integrity verification for all temporal data transmissions;
 
-a) **workload operators** with workload data publication permissions;
+c) **Message sequence numbering** preventing replay attacks in high-frequency data streams;
 
-b) **infrastructure managers** with facility data stream access capabilities;
+d) **Timestamp validation** ensuring message freshness within acceptable time windows.
 
-c) **grid operators** with demand response data stream access;
+#### Schema security
 
-d) **municipal utility partners** with heat recovery data stream access.
+Protobuf schema management shall ensure:
 
-### Communication security
+a) **Schema registry authentication** requiring mutual TLS for schema updates;
 
-#### Encryption
+b) **Schema versioning integrity** preventing unauthorized schema modifications;
 
-All WDPC communications shall utilize transport layer security (TLS) version 1.3 or later addressing data protection requirements in streaming architectures.
+c) **Access control lists** limiting schema access based on component roles;
 
-#### Message integrity
-
-WDPC messages shall include cryptographic signatures preventing unauthorized modification and ensuring authentic data publication.
-
-### Network security
-
-Network security implementations shall include:
-
-a) **network segmentation** isolating WDPC traffic through dedicated VLANs or overlay networks;
-
-b) **intrusion detection systems** monitoring traffic patterns and detecting anomalous behavior in message bus architectures;
-
-c) **emergency disconnection capabilities** maintaining facility safety during security incidents.
-
----
-
-## Conformity assessment
-
-### Conformity assessment framework
-
-Conformity assessment for WDPC implementations shall include the testing requirements specified in data streaming protocol conformance testing, hardware data interface compatibility testing, and interoperability testing sections.
-
-### Data streaming protocol conformance testing
-
-Data streaming protocol conformance testing shall verify:
-
-a) **correct implementation** of message formats and ticker symbol standards specified in Annex A;
-
-b) **compliance with temporal requirements** specified in Table 1;
-
-c) **metadata accuracy and completeness** specified in data stream requirements.
-
-### Hardware data interface compatibility testing
-
-Hardware data interface compatibility testing shall verify:
-
-a) **sensor data accuracy** under operational conditions;
-
-b) **data streaming interface compatibility** with message bus implementations;
-
-c) **temporal data publication reliability** including synchronization and data quality verification.
-
-### Interoperability testing
-
-Interoperability testing shall verify multi-vendor data streaming capabilities including:
-
-a) **mixed-vendor data streaming coordination** across different hardware manufacturers;
-
-b) **external system data interface compatibility** with various utility communication systems;
-
-c) **municipal system data integration functionality** for heat recovery applications.
+d) **Schema validation** ensuring only authorized protobuf definitions are deployed.
 
 ---
 
 ## Test methods
 
-### Data streaming protocol testing procedures
+### Protobuf performance testing
 
-#### Message format verification
+#### Serialization performance verification
 
-Data streaming protocol implementations shall be tested using standardized test vectors validating:
+Protobuf implementations shall be tested for:
 
-a) **JSON syntax compliance** ensuring proper message structure;
+a) **Serialization speed benchmarking** achieving sub-10ms encoding for critical data streams;
 
-b) **required field presence** and data type validation;
+b) **Deserialization performance** meeting sub-5ms decoding requirements for component data;
 
-c) **metadata completeness** and ticker symbol structure verification.
+c) **Memory efficiency testing** validating optimal memory usage patterns;
 
-#### Temporal data performance testing
+d) **Cross-language compatibility** ensuring consistent performance across implementation languages.
 
-Temporal data performance shall be verified using:
+#### Data bus performance testing
 
-a) **simulated workload data streams** with 200MW power variations within 40ms intervals;
+Data bus implementations shall validate:
 
-b) **external system data streaming scenarios** with various timing requirements;
+a) **Message throughput testing** achieving 1+ million messages per second capabilities;
 
-c) **multi-stream data correlation sequences** under operational stress conditions.
+b) **End-to-end latency measurement** validating sub-100ms data distribution;
 
-### Hardware data interface testing procedures
+c) **Schema evolution testing** ensuring backward/forward compatibility during updates;
 
-#### Sensor data accuracy verification
-
-Sensor data accuracy shall be verified using:
-
-a) **calibrated reference standards** traceable to national measurement institutes;
-
-b) **environmental testing** across specified operating ranges;
-
-c) **long-term data quality assessment** over minimum 12-month periods.
-
-#### System data integration testing
-
-System data integration testing shall validate:
-
-a) **end-to-end data streaming** across workload, infrastructure, and external systems;
-
-b) **data availability resilience** during communication failures;
-
-c) **security framework effectiveness** under simulated attack conditions on data streaming interfaces.
+d) **Fault tolerance validation** maintaining data integrity during component failures.
 
 ---
 
-## Annex A (normative) — Data message schemas
+## Annex A (normative) — Protobuf schema definitions
 
-### Workload data publication message schema
+### Core WDPC protobuf schemas
 
-```json
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "WDPC_version": {
-      "type": "string",
-      "enum": ["2.0"]
-    },
-    "message_type": {
-      "type": "string",
-      "enum": ["workload_data_publication"]
-    },
-    "ticker_symbol": {
-      "type": "string",
-      "pattern": "^WDPC\\.[A-Z0-9]+\\.[A-Z0-9]+$"
-    },
-    "timestamp": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "workload_id": {
-      "type": "string"
-    },
-    "workload_type": {
-      "type": "string",
-      "enum": ["ai_training", "ai_inference", "hpc", "traditional_compute"]
-    },
-    "power_profile": {
-      "type": "object",
-      "properties": {
-        "peak_power_mw": {"type": "number", "minimum": 0},
-        "baseline_power_mw": {"type": "number", "minimum": 0},
-        "ramp_rate_mw_per_sec": {"type": "number", "minimum": 0},
-        "duration_estimate_sec": {"type": "integer", "minimum": 0},
-        "temporal_resolution_ms": {"type": "integer", "minimum": 100}
-      },
-      "required": ["peak_power_mw", "baseline_power_mw", "ramp_rate_mw_per_sec"]
-    },
-    "thermal_profile": {
-      "type": "object",
-      "properties": {
-        "heat_generation_kw": {"type": "number", "minimum": 0},
-        "operating_temp_range_c": {
-          "type": "object",
-          "properties": {
-            "min": {"type": "number"},
-            "max": {"type": "number"},
-            "preferred": {"type": "number"}
-          }
-        }
-      }
-    },
-    "operational_characteristics": {
-      "type": "object",
-      "properties": {
-        "performance_flexibility": {"type": "boolean"},
-        "timing_tolerance_sec": {"type": "integer", "minimum": 0},
-        "resource_scalability": {"type": "boolean"},
-        "priority_level": {"type": "string", "enum": ["critical", "high", "normal", "low"]}
-      }
-    },
-    "intent_signals": {
-      "type": "object",
-      "properties": {
-        "predicted_power_profile": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "timestamp_offset_sec": {"type": "integer", "minimum": 0},
-              "predicted_power_mw": {"type": "number", "minimum": 0},
-              "confidence_level": {"type": "number", "minimum": 0, "maximum": 1}
-            }
-          }
-        },
-        "policy_preferences": {
-          "type": "object",
-          "properties": {
-            "carbon_optimization": {"type": "boolean"},
-            "cost_optimization": {"type": "boolean"},
-            "performance_priority": {"type": "boolean"}
-          }
-        }
-      }
-    },
-    "metadata_tags": {
-      "type": "object",
-      "properties": {
-        "application_domain": {"type": "string"},
-        "business_unit": {"type": "string"},
-        "cost_center": {"type": "string"},
-        "environmental_preferences": {"type": "array", "items": {"type": "string"}}
-      }
-    }
-  },
-  "required": ["WDPC_version", "message_type", "ticker_symbol", "timestamp", "workload_id", "workload_type", "power_profile"]
+#### wdpc_core.proto
+
+```protobuf
+syntax = "proto3";
+
+package wdpc.core.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Core WDPC message wrapper
+message WDPCMessage {
+  string message_id = 1;                    // Unique message identifier
+  google.protobuf.Timestamp timestamp = 2;  // Message timestamp
+  string source_component_id = 3;          // Publishing component
+  MessageType message_type = 4;            // Message classification
+  bytes payload = 5;                       // Serialized message payload
+  
+  MessageMetadata metadata = 16;           // Message metadata
+  map<string, string> custom_headers = 17; // Extended headers
+}
+
+enum MessageType {
+  WORKLOAD_DATA = 0;
+  INFRASTRUCTURE_STATUS = 1;
+  COMPONENT_METRICS = 2;
+  POWER_MEASUREMENT = 3;
+  THERMAL_DATA = 4;
+  EXTERNAL_SYSTEM = 5;
+  MARKETPLACE_DATA = 6;
+}
+
+message MessageMetadata {
+  string schema_version = 1;               // Protobuf schema version
+  string data_quality_indicator = 2;      // Data quality assessment
+  double measurement_accuracy = 3;        // Measurement precision
+  int32 retention_period_hours = 4;       // Data retention policy
 }
 ```
 
-### Infrastructure data stream access schema
+#### wdpc_workload.proto
 
-```json
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "WDPC_version": {
-      "type": "string",
-      "enum": ["2.0"]
-    },
-    "message_type": {
-      "type": "string",
-      "enum": ["infrastructure_data_stream"]
-    },
-    "ticker_symbol": {
-      "type": "string",
-      "pattern": "^WDPC\\.[A-Z0-9]+\\.[A-Z0-9]+$"
-    },
-    "timestamp": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "workload_id": {
-      "type": "string"
-    },
-    "resource_availability": {
-      "type": "object",
-      "properties": {
-        "available_power_mw": {"type": "number", "minimum": 0},
-        "cooling_capacity_kw": {"type": "number", "minimum": 0},
-        "instrumentation_coverage": {"type": "number", "minimum": 0, "maximum": 100}
-      }
-    },
-    "infrastructure_status": {
-      "type": "object",
-      "properties": {
-        "current_utilization_percent": {"type": "number", "minimum": 0, "maximum": 100},
-        "thermal_capacity_percent": {"type": "number", "minimum": 0, "maximum": 100},
-        "monitoring_systems_active": {"type": "boolean"}
-      }
-    },
-    "autonomous_capabilities": {
-      "type": "object",
-      "properties": {
-        "data_streaming_interfaces": {"type": "array", "items": {"type": "string"}},
-        "policy_execution_endpoints": {"type": "array", "items": {"type": "string"}},
-        "temporal_resolution_ms": {"type": "integer", "minimum": 100}
-      }
-    },
-    "external_system_status": {
-      "type": "object",
-      "properties": {
-        "grid_carbon_intensity_g_co2_kwh": {"type": "number", "minimum": 0},
-        "renewable_energy_available_percent": {"type": "number", "minimum": 0, "maximum": 100},
-        "municipal_heat_demand_kw": {"type": "number", "minimum": 0},
-        "demand_response_active": {"type": "boolean"}
-      }
-    },
-    "data_quality_indicators": {
-      "type": "object",
-      "properties": {
-        "measurement_accuracy": {"type": "string"},
-        "temporal_synchronization_status": {"type": "string"},
-        "sensor_health_status": {"type": "string"}
-      }
-    }
-  },
-  "required": ["WDPC_version", "message_type", "ticker_symbol", "timestamp"]
+```protobuf
+syntax = "proto3";
+
+package wdpc.workload.v1;
+
+import "google/protobuf/timestamp.proto";
+import "wdpc_core.proto";
+
+// Complete workload data publication message
+message WorkloadDataPublication {
+  string workload_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  WorkloadType workload_type = 3;
+  PowerProfile power_requirements = 4;
+  ThermalProfile thermal_generation = 5;
+  OperationalCharacteristics flexibility = 6;
+  repeated IntentSignal future_intent = 7;
+  
+  // Less frequent fields
+  WorkloadMetadata metadata = 16;
+  map<string, string> policy_preferences = 17;
+  repeated string dependencies = 18;
+}
+
+enum WorkloadType {
+  AI_TRAINING = 0;
+  AI_INFERENCE = 1;
+  HPC_COMPUTATION = 2;
+  TRADITIONAL_COMPUTE = 3;
+  BATCH_PROCESSING = 4;
+}
+
+message PowerProfile {
+  double peak_power_mw = 1;
+  double baseline_power_mw = 2;
+  double ramp_rate_mw_per_sec = 3;
+  int32 duration_estimate_sec = 4;
+  int32 temporal_resolution_ms = 5;
+  repeated PowerTransition transitions = 6;
+}
+
+message IntentSignal {
+  google.protobuf.Timestamp predicted_time = 1;
+  double predicted_power_mw = 2;
+  double confidence_level = 3;
+  string intent_description = 4;
 }
 ```
 
----
+#### wdpc_infrastructure.proto
 
-## Annex B (informative) — Implementation guidelines
+```protobuf
+syntax = "proto3";
 
-### Phased deployment approach
+package wdpc.infrastructure.v1;
 
-WDPC implementation should follow a phased approach addressing the identified data streaming challenges in order of complexity, with particular emphasis on iterative development of message bus architectures based on performance requirements:
+import "google/protobuf/timestamp.proto";
+import "wdpc_core.proto";
 
-**Phase 1**: Basic temporal data streaming and standardization to establish consistent data publication across workload-to-infrastructure pathways using message bus implementations as primary approach
+// Infrastructure status publication
+message InfrastructureStatus {
+  string infrastructure_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  repeated PowerSystemStatus power_systems = 3;
+  repeated ThermalSystemStatus thermal_systems = 4;
+  repeated ComponentStatus components = 5;
+  ResourceAvailability available_resources = 6;
+  
+  ExternalSystemIntegration external_status = 16;
+  map<string, double> facility_kpis = 17;
+}
 
-**Phase 2**: Performance evaluation and identification of access bottlenecks, particularly for AI applications requiring sub-second access times, with optimization of ticker symbol architectures for components where baseline approaches prove inadequate
-
-**Phase 3**: Advanced autonomous policy deployment and metadata enhancement for multi-system coordination and analysis using optimized streaming patterns
-
-**Phase 4**: External system data integration for grid services participation and municipal heat integration through standardized data streaming
-
-### Message bus architecture selection methodology
-
-Organizations implementing WDPC should evaluate message bus architectures using an iterative approach:
-
-a) **baseline implementation** using standardized message bus patterns for all components to establish functional data streaming;
-
-b) **performance assessment** identifying specific components and data types where access times cannot meet AI application requirements;
-
-c) **selective optimization** of ticker symbol structures and streaming protocols for chassis monitoring and component-level data publication requiring sub-second access times;
-
-d) **hybrid optimization** combining streaming patterns based on specific requirements, such as:
-   - Message bus architectures for facility-level reporting and external system integration
-   - High-frequency ticker feeds for node-level and component-level monitoring
-   - Streaming protocols for continuous data flows between nodes and infrastructure systems
-
-### Component identification and data stream definition
-
-Organizations implementing WDPC should systematically identify data publication requirements:
-
-a) **component mapping** following the hierarchical architecture from facility to component level based on Open Compute Project (OCP) monitoring frameworks;
-
-b) **ticker symbol specification** for each component level including:
-   - Node level: specific node power role, cumulative power meter, idle baseline power, peak load
-   - Component level: individual processor power, memory subsystem characteristics, PSU/BBU performance
-   - Chassis level: environmental metrics, sensors, assembly and control systems
-
-c) **streaming pattern assignment** based on access time requirements and data frequency for each component type;
-
-d) **alternative implementation identification** for components where baseline approaches prove inadequate for AI application requirements.
-
-### Data architecture pattern selection
-
-Organizations implementing WDPC should evaluate data architecture patterns based on:
-
-a) **temporal data requirements** determining appropriateness of time-series streaming versus traditional storage approaches, with emphasis on sub-second data access capabilities;
-
-b) **system scale** influencing choice between centralized and distributed data streaming approaches;
-
-c) **AI application access requirements** affecting streaming protocol selection and data processing architectures;
-
-d) **integration complexity** with existing building management systems and external utility interfaces.
-
-### Policy framework deployment
-
-Organizations implementing WDPC should develop policy frameworks covering:
-
-a) **autonomous decision-making** policies for component-level optimization based on data stream inputs;
-
-b) **data streaming governance** and ticker symbol management across multiple organizational units;
-
-c) **component-level policy deployment** understanding autonomous optimization principles and policy conflict resolution;
-
-d) **streaming architecture management** for different access time requirements and application needs;
-
-e) **security procedures** for critical infrastructure data handling across distributed streaming and policy execution interfaces.
-
----
-
-## Annex C (informative) — Environmental impact assessment
-
-### Carbon footprint reduction potential
-
-WDPC implementation can enable significant carbon footprint reductions through:
-
-a) **improved data availability for renewable energy optimization** enabling 15% to 30% reduction in average grid carbon intensity through autonomous policy-driven decisions;
-
-b) **enhanced autonomous participation in demand response** reducing fossil fuel peaker plant operation;
-
-c) **standardized waste heat recovery data streaming** supporting municipal heating system integration.
-
-### Energy efficiency improvements potential
-
-Expected energy efficiency improvements through autonomous data-driven optimization include:
-
-a) **power usage effectiveness (PUE) improvements** of 0.1 to 0.3 through enhanced thermal management coordination via streaming data;
-
-b) **operational efficiency gains** of 15% to 25% through improved workload-infrastructure autonomous optimization;
-
-c) **grid efficiency improvements** through enhanced load forecasting and autonomous demand response participation.
-
-### Operational improvements
-
-Data standardization enabled by WDPC can improve operational efficiency through consistent data streaming interfaces, reducing operational complexity for facility management staff while enabling autonomous optimization across multiple infrastructure domains without centralized coordination overhead.
-
----
-
-## Annex D (informative) — Standard ticker symbols
-
-### Core infrastructure ticker symbols
-
-WDPC implementations should support the following standard ticker symbols as minimum requirements:
-
-**Table D.1 — Standard power monitoring ticker symbols**
-
-| Ticker Symbol | Description | Units | Update Frequency |
-|---|---|---|---|
-| WDPC.PWR.TOTAL | Total facility power consumption | MW | 100 ms |
-| WDPC.PWR.IT | IT equipment power consumption | MW | 100 ms |
-| WDPC.PWR.COOLING | Cooling system power consumption | MW | 1 s |
-| WDPC.PWR.GRID | Grid power draw | MW | 100 ms |
-| WDPC.PWR.ONSITE | On-site generation | MW | 100 ms |
-
-**Table D.2 — Standard thermal monitoring ticker symbols**
-
-| Ticker Symbol | Description | Units | Update Frequency |
-|---|---|---|---|
-| WDPC.THM.INLET | Cooling system inlet temperature | °C | 1 s |
-| WDPC.THM.OUTLET | Cooling system outlet temperature | °C | 1 s |
-| WDPC.THM.AMBIENT | Ambient temperature | °C | 1 s |
-| WDPC.THM.FLOW | Coolant flow rate | L/min | 1 s |
-
-**Table D.3 — Standard environmental ticker symbols**
-
-| Ticker Symbol | Description | Units | Update Frequency |
-|---|---|---|---|
-| WDPC.ENV.CARBON | Grid carbon intensity | g CO2/kWh | 15 min |
-| WDPC.ENV.RENEWABLE | Renewable energy percentage | % | 15 min |
-| WDPC.ENV.DEMAND | Demand response status | boolean | 1 min |
-
-### Custom ticker symbol guidelines
-
-Organizations may define custom ticker symbols following the naming convention:
-
-`WDPC.[CATEGORY].[SUBCATEGORY].[IDENTIFIER]`
-
-Where:
-- CATEGORY: PWR, THM, ENV, WKL, INFRA
-- SUBCATEGORY: Domain-specific grouping
-- IDENTIFIER: Specific measurement or signal
-
-Custom ticker symbols should include metadata specifying units, accuracy, and update frequency to ensure proper autonomous policy implementation.
+message PowerSystemStatus {
+  string power_system_id = 1;
+  double total_consumption_mw
