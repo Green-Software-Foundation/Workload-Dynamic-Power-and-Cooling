@@ -2,15 +2,9 @@
 
 ## Introduction
 
-Modern artificial intelligence (AI) and machine learning (ML) workloads create unprecedented challenges for data center infrastructure coordination. AI training applications can generate power fluctuations exceeding 200 MW within 40 ms intervals, creating grid-destabilizing events equivalent to a quarter-million people suddenly appearing on the electrical grid.
+Modern artificial intelligence (AI) and machine learning (ML) workloads create unprecedented infrastructure coordination challenges in data centers, where training applications can generate power fluctuations exceeding 200 MW within 40 ms intervals—equivalent to a quarter-million people suddenly appearing on the electrical grid. The core problem is that current data center infrastructure lacks standardized mechanisms for distributing critical operational data between workload management systems, power infrastructure, and cooling systems, creating information silos that prevent effective autonomous optimization across the complete workload-to-infrastructure pathway. 
 
-Current data center infrastructure lacks consistent, standardized mechanisms for distributing critical operational data between workload management systems, power infrastructure, and cooling systems. This absence of standardized data distribution interfaces creates information silos that prevent effective autonomous optimization across the complete workload-to-infrastructure pathway.
-
-This Technical Specification establishes the Workload Dynamic Power and Cooling (WDPC) framework for standardized data distribution through a central data bus architecture that connects all system components directly. WDPC addresses the fundamental challenge of creating consistent, temporal data standards that enable intelligent autonomous optimization through high-performance data availability rather than centralized control.
-
-The framework establishes three primary objectives: implementation of a central data bus architecture where all components connect directly for bidirectional data flow; standardization of Protocol Buffer (protobuf) data models and serialization for high-performance temporal data exchange; and enablement of marketplace-style frameworks for energy, carbon, and workload optimization through standardized data availability.
-
-WDPC provides the foundational data bus infrastructure necessary for innovation in workload-infrastructure autonomous optimization while supporting marketplace frameworks for energy trading, demand response, and sustainability optimization.
+This Technical Specification establishes the Workload Dynamic Power and Cooling (WDPC) framework to solve this problem through a central data bus architecture that connects all system components directly, enabling bidirectional data flow using standardized Protocol Buffer (protobuf) data models for high-performance temporal data exchange, and supporting marketplace-style frameworks for energy, carbon, and workload optimization through consistent data availability rather than centralized control.
 
 ---
 
