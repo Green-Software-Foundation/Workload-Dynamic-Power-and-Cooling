@@ -329,7 +329,6 @@ message EnergyOffer {
   map<string, string> contract_terms = 17;  // Trading conditions
 }
 ```
-```
 
 #### Carbon optimization data models
 
@@ -361,7 +360,6 @@ message SustainabilityDerivatives {
   repeated RenewableOption renewable_options = 2; // Clean energy options
   EmissionReductionSwaps emission_swaps = 3;  // Emissions trading
 }
-```
 ```
 
 #### Demand response coordination
@@ -396,7 +394,6 @@ message CoLocationOpportunities {
   LoadBalancingServices grid_services = 3;         // Ancillary services
   EnergyStorageCoordination storage_systems = 4;   // Battery coordination
 }
-```
 ```
 
 ### Temporal data streaming requirements
