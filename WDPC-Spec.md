@@ -1,4 +1,4 @@
-# Workload Dynamic Power and Cooling (WDPC) - Vx.y
+# Workload Dynamic Power and Cooling (WDPC)
 
 ## Introduction
 
